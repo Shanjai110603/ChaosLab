@@ -1,0 +1,129 @@
+# CHAOS LAB
+
+**Build it. Trigger it. Cause chaos.**
+
+A cross-platform physics experiment puzzle game built with Godot 4.x.
+
+## Overview
+
+Chaos Lab is a hybrid-casual physics puzzle game where players manipulate objects in a laboratory arena, trigger chain reactions, and chase high scores. The core loop: **Observe → Plan → Place → GO → Chain Reaction → Score → Retry or Next**.
+
+## Platforms
+
+| Platform | Purpose | Status |
+|----------|---------|--------|
+| Windows  | Desktop release | 🔨 Development |
+| HTML5/Web | Instant play, testing, sharing | 🔨 Development |
+| Android  | Primary commercial mobile | 🔨 Development |
+
+## Getting Started
+
+### Prerequisites
+
+- [Godot 4.7+](https://godotengine.org/download/) (standard build, not .NET)
+
+### Running
+
+1. Open Godot
+2. Click **Import Existing Project**
+3. Navigate to this folder and select `project.godot`
+4. Press **Run** (F5)
+
+### Controls (Desktop)
+
+| Action | Key |
+|--------|-----|
+| Select/Drag | Mouse Left Click + Drag |
+| GO | Space |
+| Reset | R |
+| Undo | Z |
+| Pause | Escape |
+| Debug Overlay | F1 |
+| Skip Level (debug) | F2 |
+
+## Project Structure
+
+```
+chaos-lab/
+├── project.godot          # Godot project configuration
+├── scenes/                # Scene files (.tscn)
+│   ├── main/              # Main scene, root
+│   ├── gameplay/          # Arena, gameplay UI
+│   ├── objects/           # Physics object scenes
+│   ├── ui/                # Menus, HUD, overlays
+│   └── vfx/              # Visual effects
+├── scripts/               # GDScript source
+│   ├── core/              # Autoload singletons
+│   ├── objects/           # Object scripts
+│   ├── gameplay/          # Chain reaction, scoring, experiment
+│   ├── levels/            # Level loading, definitions
+│   ├── platform/          # Platform abstraction
+│   ├── ui/                # UI scripts
+│   └── vfx/              # VFX scripts
+├── levels/                # Level data (JSON)
+│   ├── campaign/          # Campaign levels by world
+│   ├── chaos/             # Chaos mode definitions
+│   └── daily/             # Daily challenge definitions
+├── assets/                # Art, audio, fonts
+│   ├── ASSET_MANIFEST.csv # Third-party asset tracking
+│   └── ...
+├── licenses/              # License documentation
+├── localization/          # Translation strings
+├── tests/                 # Automated tests
+├── tools/                 # Dev tools, validators
+├── docs/                  # Design docs
+└── build/                 # Export builds (gitignored)
+```
+
+## Architecture
+
+### Autoload Singletons
+
+| Singleton | Purpose |
+|-----------|---------|
+| `GameManager` | Game state machine, flow control |
+| `InputManager` | Unified input abstraction |
+| `PlatformService` | Platform-specific services (ads, IAP, share) |
+| `AudioManager` | Sound effects and music |
+| `SaveManager` | Local save/load with versioning |
+| `DebugManager` | Debug overlay and dev tools |
+
+### Object Hierarchy
+
+```
+GameObject (RigidBody2D)
+└── PhysicalObject
+    ├── Ball
+    ├── Box
+    ├── Barrel (explosive variant)
+    ├── Bomb (fuse + explosion)
+    ├── Rocket (thrust + direction)
+    └── Target (hit detection)
+```
+
+### Game States
+
+```
+MENU → LOADING → PLACING → SIMULATING → RESULT → PAUSED
+```
+
+## Development Phases
+
+- **Phase 1**: Project foundation ← Current
+- **Phase 2**: Physics prototype
+- **Phase 3**: Core gameplay (objectives, scoring, 20 levels)
+- **Phase 4**: Polish (VFX, audio, camera, haptics)
+- **Phase 5**: Progression (coins, unlocks, 100 levels)
+- **Phase 6**: Additional mechanics
+- **Phase 7**: Retention (Chaos Mode, Daily)
+- **Phase 8**: Monetization
+- **Phase 9**: Cross-platform QA
+- **Phase 10**: Release preparation
+
+## License
+
+All original code is proprietary. Third-party assets are documented in `assets/ASSET_MANIFEST.csv` and `licenses/`.
+
+## Version
+
+0.1.0 — Phase 1: Project Foundation

@@ -1,0 +1,29 @@
+# Godot 4.x
+.godot/
+
+# Exported builds
+build/
+*.pck
+*.zip
+
+# OS-specific
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Android
+*.apk
+*.aab
+*.keystore
+!debug.keystore
+
+# Web
+*.wasm
+*.js.map

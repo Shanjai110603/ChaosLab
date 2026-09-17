@@ -1,0 +1,51 @@
+{
+	"level_id": 1,
+	"world": 1,
+	"title": "First Experiment",
+	"description": "Drag the ball and press GO!",
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 300,
+			"y": 250,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "barrel",
+			"x": 700,
+			"y": 580,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "bomb",
+			"x": 950,
+			"y": 600,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "rocket",
+			"x": 1050,
+			"y": 550,
+			"rotation": -45,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 1350,
+			"y": 300
+		}
+	],
+	"score_targets": [50, 200, 500],
+	"time_limit": 15,
+	"allowed_objects": [],
+	"hints": [
+		"Drag the ball above the barrel",
+		"Press SPACE or tap GO"
+	]
+}

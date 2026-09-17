@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1e2e"/>
+      <stop offset="100%" style="stop-color:#0d1117"/>
+    </linearGradient>
+    <linearGradient id="flask" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a9eff"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="128" height="128" rx="20" fill="url(#bg)"/>
+  <!-- Explosion rays -->
+  <g transform="translate(64,58)" opacity="0.3">
+    <line x1="0" y1="-35" x2="0" y2="-45" stroke="#ff6b35" stroke-width="3"/>
+    <line x1="25" y1="-25" x2="32" y2="-32" stroke="#ff6b35" stroke-width="3"/>
+    <line x1="35" y1="0" x2="45" y2="0" stroke="#ff6b35" stroke-width="3"/>
+    <line x1="-25" y1="-25" x2="-32" y2="-32" stroke="#ff6b35" stroke-width="3"/>
+    <line x1="-35" y1="0" x2="-45" y2="0" stroke="#ff6b35" stroke-width="3"/>
+  </g>
+  <!-- Flask body -->
+  <path d="M52,30 L52,55 L38,80 Q35,86 40,90 L88,90 Q93,86 90,80 L76,55 L76,30 Z" fill="url(#flask)" opacity="0.9"/>
+  <!-- Flask neck -->
+  <rect x="52" y="22" width="24" height="12" rx="2" fill="#5bb5ff"/>
+  <!-- Bubbles in flask -->
+  <circle cx="55" cy="75" r="4" fill="#7dd3fc" opacity="0.6"/>
+  <circle cx="68" cy="70" r="3" fill="#7dd3fc" opacity="0.5"/>
+  <circle cx="75" cy="78" r="5" fill="#7dd3fc" opacity="0.4"/>
+  <!-- Explosion spark -->
+  <circle cx="64" cy="42" r="6" fill="#fbbf24"/>
+  <circle cx="64" cy="42" r="3" fill="#fff"/>
+  <!-- Text -->
+  <text x="64" y="112" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="#e2e8f0" text-anchor="middle">CHAOS</text>
+</svg>
