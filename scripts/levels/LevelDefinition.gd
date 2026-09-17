@@ -34,6 +34,9 @@ var time_limit: float = 15.0
 ## Allowed object types the player can use (empty = all).
 var allowed_objects: Array[String] = []
 
+## Starting inventory for player object tray: {"ball": 2, "ramp": 1, ...}
+var inventory: Dictionary = {}
+
 ## Optional tutorial hints.
 var hints: Array[String] = []
 
@@ -79,6 +82,8 @@ static func from_dict(data: Dictionary) -> LevelDefinition:
 		for a in ao:
 			def.allowed_objects.append(str(a))
 
+	def.inventory = data.get("inventory", {})
+
 	var hints_data: Variant = data.get("hints", [])
 	if hints_data is Array:
 		for h in hints_data:
@@ -101,5 +106,6 @@ func to_dict() -> Dictionary:
 		"score_targets": score_targets,
 		"time_limit": time_limit,
 		"allowed_objects": allowed_objects,
+		"inventory": inventory,
 		"hints": hints,
 	}

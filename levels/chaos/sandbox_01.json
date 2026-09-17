@@ -1,0 +1,71 @@
+{
+	"level_id": 999,
+	"world": 0,
+	"title": "Chaos Sandbox",
+	"description": "Infinite sandbox playground! Spawn, arrange, rotate, and trigger unlimited chain reactions!",
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 350,
+			"y": 200,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "ramp",
+			"x": 500,
+			"y": 450,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "barrel",
+			"x": 750,
+			"y": 580,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "bomb",
+			"x": 950,
+			"y": 580,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "rocket",
+			"x": 1150,
+			"y": 550,
+			"rotation": -45,
+			"draggable": true
+		}
+	],
+	"targets": [
+		{
+			"x": 1400,
+			"y": 300
+		},
+		{
+			"x": 1400,
+			"y": 580
+		}
+	],
+	"score_targets": [100, 500, 2000],
+	"time_limit": 0,
+	"allowed_objects": ["ball", "box", "barrel", "bomb", "rocket", "ramp"],
+	"inventory": {
+		"ball": -1,
+		"box": -1,
+		"barrel": -1,
+		"bomb": -1,
+		"rocket": -1,
+		"ramp": -1
+	},
+	"hints": [
+		"Use the bottom tray to spawn unlimited objects",
+		"Press R or use HUD buttons to rotate objects",
+		"Experiment with multi-stage chain reactions"
+	]
+}

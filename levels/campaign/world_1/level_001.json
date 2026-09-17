@@ -43,7 +43,11 @@
 	],
 	"score_targets": [50, 200, 500],
 	"time_limit": 15,
-	"allowed_objects": [],
+	"allowed_objects": ["ball", "ramp"],
+	"inventory": {
+		"ball": 1,
+		"ramp": 1
+	},
 	"hints": [
 		"Drag the ball above the barrel",
 		"Press SPACE or tap GO"

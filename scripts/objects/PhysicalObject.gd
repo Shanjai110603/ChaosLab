@@ -18,7 +18,9 @@ extends GameObject
 @export var object_color: Color = Color.WHITE
 @export var outline_color: Color = Color.BLACK
 @export var outline_width: float = 2.0
-@export var highlight_color: Color = Color(1.0, 0.9, 0.2, 0.5)
+@export var valid_highlight_color: Color = Color(0.0, 1.0, 0.8, 0.7)
+@export var invalid_highlight_color: Color = Color(1.0, 0.2, 0.2, 0.8)
+@export var highlight_color: Color = Color(0.0, 1.0, 0.8, 0.7)
 
 ## The main visual sprite/shape for this object.
 var _visual: Node2D = null

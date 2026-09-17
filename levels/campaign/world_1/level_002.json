@@ -1,0 +1,70 @@
+{
+	"level_id": 2,
+	"world": 1,
+	"title": "Domino Cascade",
+	"description": "Place the ramp to guide the ball into the domino pillars!",
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 280,
+			"y": 200,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "ramp",
+			"x": 420,
+			"y": 420,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "box",
+			"x": 680,
+			"y": 620,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "box",
+			"x": 780,
+			"y": 620,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "box",
+			"x": 880,
+			"y": 620,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "barrel",
+			"x": 1020,
+			"y": 600,
+			"rotation": 0,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 1380,
+			"y": 620
+		}
+	],
+	"score_targets": [100, 350, 750],
+	"time_limit": 15,
+	"allowed_objects": ["ball", "box", "ramp"],
+	"inventory": {
+		"ball": 1,
+		"ramp": 2,
+		"box": 2
+	},
+	"hints": [
+		"Angle the ramp so the rolling ball strikes the first box",
+		"Watch the domino chain topple the explosive barrel into the target"
+	]
+}

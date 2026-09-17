@@ -1,0 +1,70 @@
+{
+	"level_id": 4,
+	"world": 1,
+	"title": "Rocket Strike",
+	"description": "Trigger the rocket with a rolling impact to strike the fortified high bunker!",
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 300,
+			"y": 180,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "ramp",
+			"x": 480,
+			"y": 380,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "rocket",
+			"x": 680,
+			"y": 580,
+			"rotation": -60,
+			"draggable": true
+		},
+		{
+			"type": "box",
+			"x": 1150,
+			"y": 320,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "box",
+			"x": 1150,
+			"y": 240,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "barrel",
+			"x": 1150,
+			"y": 160,
+			"rotation": 0,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 1380,
+			"y": 180
+		}
+	],
+	"score_targets": [250, 700, 1500],
+	"time_limit": 15,
+	"allowed_objects": ["ball", "rocket", "ramp", "bomb"],
+	"inventory": {
+		"ball": 1,
+		"ramp": 2,
+		"rocket": 1
+	},
+	"hints": [
+		"Align the rocket towards the high fortress",
+		"Drop the ball down the ramp onto the rocket tail to ignite the thrusters"
+	]
+}

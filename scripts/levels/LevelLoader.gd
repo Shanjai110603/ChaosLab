@@ -10,6 +10,7 @@ const OBJECT_SCENES: Dictionary = {
 	"barrel": "res://scenes/objects/Barrel.tscn",
 	"bomb": "res://scenes/objects/Bomb.tscn",
 	"rocket": "res://scenes/objects/Rocket.tscn",
+	"ramp": "res://scenes/objects/Ramp.tscn",
 }
 
 const TARGET_SCENE: String = "res://scenes/objects/Target.tscn"
@@ -102,6 +103,12 @@ func instantiate_level(level_def: LevelDefinition, parent: Node2D) -> Dictionary
 			parent.add_child(target)
 			target.global_position = Vector2(tgt_data.get("x", 0), tgt_data.get("y", 0))
 			targets.append(target)
+
+	# Update object tray inventory if available
+	if not level_def.inventory.is_empty() and parent.is_inside_tree():
+		var ui := parent.get_tree().root.find_child("GameplayUI", true, false)
+		if ui and ui.object_tray:
+			ui.object_tray.set_inventory(level_def.inventory)
 
 	print("[LevelLoader] Level %d loaded: %d objects, %d targets" % [
 		level_def.level_id, game_objects.size(), targets.size()

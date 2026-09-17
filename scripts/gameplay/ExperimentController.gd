@@ -158,15 +158,26 @@ func _end_experiment() -> void:
 	experiment_result.emit(result)
 
 
+## Register a newly spawned game object.
+func register_object(obj: GameObject) -> void:
+	if obj not in game_objects:
+		game_objects.append(obj)
+		if not obj.chain_event.is_connected(_on_chain_event):
+			obj.chain_event.connect(_on_chain_event.bind(obj))
+
+
 ## Reset the experiment for a fresh attempt.
 func _reset_experiment() -> void:
 	_simulation_time = 0.0
 	_settlement_time = 0.0
 	chain_manager.reset()
 
-	# Reset all objects
+	# Restore all objects to their pre-GO placement snapshot
 	for obj in game_objects:
-		obj.reset_to_initial()
+		if obj.has_method("restore_sim_snapshot"):
+			obj.restore_sim_snapshot()
+		else:
+			obj.reset_to_initial()
 
 	# Reset all targets
 	for target in targets:

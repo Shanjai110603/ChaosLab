@@ -1,0 +1,64 @@
+{
+	"level_id": 3,
+	"world": 1,
+	"title": "Explosive Cannonade",
+	"description": "Detonate the central bomb to blast objects across the chamber into multiple targets!",
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "bomb",
+			"x": 650,
+			"y": 620,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "barrel",
+			"x": 800,
+			"y": 590,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "barrel",
+			"x": 950,
+			"y": 590,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "box",
+			"x": 520,
+			"y": 620,
+			"rotation": 0,
+			"draggable": true
+		}
+	],
+	"targets": [
+		{
+			"x": 1200,
+			"y": 610
+		},
+		{
+			"x": 1350,
+			"y": 420
+		},
+		{
+			"x": 1050,
+			"y": 280
+		}
+	],
+	"score_targets": [200, 600, 1200],
+	"time_limit": 15,
+	"allowed_objects": ["bomb", "barrel", "ball", "ramp"],
+	"inventory": {
+		"ball": 2,
+		"bomb": 1,
+		"ramp": 1
+	},
+	"hints": [
+		"Position the bomb between the movable box and the barrels",
+		"Use shockwave blast impulse to trigger all 3 targets simultaneously"
+	]
+}

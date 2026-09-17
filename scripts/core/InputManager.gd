@@ -10,17 +10,25 @@ signal object_selected(object: Node2D, position: Vector2)
 signal object_dragged(object: Node2D, position: Vector2)
 ## Emitted when a drag operation ends.
 signal object_released(object: Node2D, position: Vector2)
+## Emitted when an object is rotated.
+signal object_rotated(object: Node2D, degrees: float)
 ## Emitted on any tap/click that doesn't hit a draggable object.
 signal empty_tap(position: Vector2)
+## Emitted when grid snap state changes.
+signal grid_snap_toggled(enabled: bool)
 
 ## Whether the player is currently dragging an object.
 var is_dragging: bool = false
-## The object currently being dragged (or null).
+## The object currently being dragged or selected.
 var dragged_object: Node2D = null
 ## Offset from object origin to grab point.
 var drag_offset: Vector2 = Vector2.ZERO
 ## The object currently hovered (desktop only).
 var hovered_object: Node2D = null
+
+## Grid snap settings.
+var grid_snap_enabled: bool = false
+var grid_size: float = 30.0
 
 ## Minimum drag distance to distinguish tap from drag.
 const DRAG_THRESHOLD: float = 5.0
@@ -32,7 +40,7 @@ var _drag_started: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	print("[InputManager] Initialized")
+	print("[InputManager] Initialized with rotation & grid-snap support")
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -58,11 +66,37 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	# Handle UNDO action
 	if event.is_action_pressed("undo"):
-		# Undo is handled by ExperimentController listening to input
 		get_viewport().set_input_as_handled()
 		return
 
-	# Handle mouse/touch input for object dragging
+	# Toggle Grid Snap with 'G' key
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_G:
+			toggle_grid_snap()
+			get_viewport().set_input_as_handled()
+			return
+
+		# Rotate object with 'R' key during PLACING state
+		if event.keycode == KEY_R and GameManager.current_state == GameManager.GameState.PLACING:
+			var rot_step: float = -45.0 if event.shift_pressed else 45.0
+			rotate_selected_object(rot_step)
+			get_viewport().set_input_as_handled()
+			return
+
+	# Mouse wheel rotation while dragging or hovering an object
+	if event is InputEventMouseButton and GameManager.current_state == GameManager.GameState.PLACING:
+		var mb := event as InputEventMouseButton
+		if mb.pressed:
+			if mb.button_index == MOUSE_BUTTON_WHEEL_UP:
+				rotate_selected_object(15.0)
+				get_viewport().set_input_as_handled()
+				return
+			elif mb.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				rotate_selected_object(-15.0)
+				get_viewport().set_input_as_handled()
+				return
+
+	# Mouse/touch dragging input during PLACING state
 	if GameManager.current_state != GameManager.GameState.PLACING:
 		return
 
@@ -74,6 +108,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		_handle_touch(event as InputEventScreenTouch)
 	elif event is InputEventScreenDrag:
 		_handle_touch_drag(event as InputEventScreenDrag)
+
+
+func rotate_selected_object(degrees: float) -> void:
+	if dragged_object and dragged_object.has_method("rotate_by_degrees"):
+		dragged_object.rotate_by_degrees(degrees)
+		object_rotated.emit(dragged_object, degrees)
+
+
+func toggle_grid_snap() -> bool:
+	grid_snap_enabled = not grid_snap_enabled
+	grid_snap_toggled.emit(grid_snap_enabled)
+	return grid_snap_enabled
 
 
 func _handle_mouse_button(event: InputEventMouseButton) -> void:
@@ -145,7 +191,6 @@ func _try_select_at(screen_pos: Vector2) -> void:
 	var canvas_transform := viewport.get_canvas_transform()
 	var world_pos: Vector2 = canvas_transform.affine_inverse() * screen_pos
 
-	# Use physics space to find objects at the position
 	var space_state := viewport.get_world_2d().direct_space_state
 	var query := PhysicsPointQueryParameters2D.new()
 	query.position = world_pos
@@ -169,7 +214,6 @@ func _start_drag(object: Node2D, world_pos: Vector2) -> void:
 
 ## End the current drag operation.
 func _end_drag() -> void:
-	dragged_object = null
 	is_dragging = false
 	drag_offset = Vector2.ZERO
 	_is_pressing = false

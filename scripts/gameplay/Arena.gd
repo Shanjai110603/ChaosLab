@@ -41,6 +41,11 @@ func _ready() -> void:
 	GameManager.state_changed.connect(_on_state_changed)
 	GameManager.level_started.connect(_on_level_started)
 
+	# Find GameplayUI and connect object spawn signal
+	var ui := get_tree().root.find_child("GameplayUI", true, false)
+	if ui and ui.has_signal("object_spawn_requested"):
+		ui.object_spawn_requested.connect(spawn_object)
+
 	# Draw the arena background
 	queue_redraw()
 
@@ -208,3 +213,30 @@ func _on_state_changed(_old: GameManager.GameState, _new: GameManager.GameState)
 ## Handle level start request.
 func _on_level_started(level_id: int) -> void:
 	_load_level(level_id)
+
+
+## Dynamically spawn an object into the arena (from object tray).
+func spawn_object(object_type: String, world_pos: Vector2) -> GameObject:
+	var type_clean := object_type.strip_edges().to_lower()
+	var scene_name := type_clean.capitalize()
+	var scene_path := "res://scenes/objects/%s.tscn" % scene_name
+	
+	var scene := load(scene_path) as PackedScene
+	if not scene:
+		print("[Arena] Could not load object scene: %s" % scene_path)
+		return null
+		
+	var obj := scene.instantiate() as GameObject
+	if not obj:
+		return null
+		
+	obj.global_position = world_pos
+	objects_container.add_child(obj)
+	
+	if experiment_controller:
+		experiment_controller.register_object(obj)
+		
+	InputManager._start_drag(obj, world_pos)
+	print("[Arena] Spawned dynamic %s at %s" % [object_type, str(world_pos)])
+	return obj
+
