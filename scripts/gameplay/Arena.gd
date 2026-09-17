@@ -52,27 +52,66 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-	# Arena background
 	var bg_rect := Rect2(arena_offset, Vector2(arena_width, arena_height))
-	draw_rect(bg_rect, Color(0.08, 0.1, 0.14))
-
-	# Grid lines for laboratory feel
-	var grid_color := Color(0.12, 0.15, 0.2, 0.3)
-	var grid_spacing := 80.0
-
+	
+	# Deep laboratory background with subtle inner vignette
+	draw_rect(bg_rect, Color(0.04, 0.06, 0.09, 1.0))
+	
+	# Blueprint laboratory grid
+	var grid_color := Color(0.08, 0.16, 0.24, 0.45)
+	var major_grid_color := Color(0.12, 0.28, 0.42, 0.65)
+	var grid_spacing := 60.0
+	
+	var col_idx := 0
 	var x := arena_offset.x
 	while x <= arena_offset.x + arena_width:
-		draw_line(Vector2(x, arena_offset.y), Vector2(x, arena_offset.y + arena_height), grid_color, 1.0)
+		var c := major_grid_color if (col_idx % 4 == 0) else grid_color
+		var width := 1.5 if (col_idx % 4 == 0) else 1.0
+		draw_line(Vector2(x, arena_offset.y), Vector2(x, arena_offset.y + arena_height), c, width)
 		x += grid_spacing
-
+		col_idx += 1
+	
+	var row_idx := 0
 	var y := arena_offset.y
 	while y <= arena_offset.y + arena_height:
-		draw_line(Vector2(arena_offset.x, y), Vector2(arena_offset.x + arena_width, y), grid_color, 1.0)
+		var c := major_grid_color if (row_idx % 4 == 0) else grid_color
+		var width := 1.5 if (row_idx % 4 == 0) else 1.0
+		draw_line(Vector2(arena_offset.x, y), Vector2(arena_offset.x + arena_width, y), c, width)
 		y += grid_spacing
-
-	# Arena border
-	var border_color := Color(0.3, 0.5, 0.7, 0.8)
-	draw_rect(bg_rect, border_color, false, 3.0)
+		row_idx += 1
+	
+	# Soft neon cyan inner aura
+	draw_rect(bg_rect.grow(-2), Color(0.0, 0.85, 1.0, 0.04), false, 4.0)
+	draw_rect(bg_rect, Color(0.0, 0.65, 0.95, 0.75), false, 2.0)
+	
+	# Cybernetic corner brackets
+	var bracket_len := 32.0
+	var corner_color := Color(0.0, 1.0, 0.85, 0.95)
+	var corners := [
+		arena_offset,
+		Vector2(arena_offset.x + arena_width, arena_offset.y),
+		Vector2(arena_offset.x, arena_offset.y + arena_height),
+		Vector2(arena_offset.x + arena_width, arena_offset.y + arena_height)
+	]
+	
+	# Top-left
+	draw_line(corners[0], corners[0] + Vector2(bracket_len, 0), corner_color, 3.5)
+	draw_line(corners[0], corners[0] + Vector2(0, bracket_len), corner_color, 3.5)
+	# Top-right
+	draw_line(corners[1], corners[1] + Vector2(-bracket_len, 0), corner_color, 3.5)
+	draw_line(corners[1], corners[1] + Vector2(0, bracket_len), corner_color, 3.5)
+	# Bottom-left
+	draw_line(corners[2], corners[2] + Vector2(bracket_len, 0), corner_color, 3.5)
+	draw_line(corners[2], corners[2] + Vector2(0, -bracket_len), corner_color, 3.5)
+	# Bottom-right
+	draw_line(corners[3], corners[3] + Vector2(-bracket_len, 0), corner_color, 3.5)
+	draw_line(corners[3], corners[3] + Vector2(0, -bracket_len), corner_color, 3.5)
+	
+	# Laboratory center target crosshair
+	var center := arena_offset + Vector2(arena_width, arena_height) * 0.5
+	draw_line(center - Vector2(16, 0), center + Vector2(16, 0), Color(0.0, 0.85, 1.0, 0.25), 1.0)
+	draw_line(center - Vector2(0, 16), center + Vector2(0, 16), Color(0.0, 0.85, 1.0, 0.25), 1.0)
+	draw_arc(center, 24.0, 0, TAU, 32, Color(0.0, 0.85, 1.0, 0.15), 1.0)
 
 
 ## Load and instantiate a level.
