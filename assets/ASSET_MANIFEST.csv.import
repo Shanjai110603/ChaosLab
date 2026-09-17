@@ -1,0 +1,16 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://clfq2q2n5p4rg"
+
+[deps]
+
+source_file="res://assets/ASSET_MANIFEST.csv"
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true
