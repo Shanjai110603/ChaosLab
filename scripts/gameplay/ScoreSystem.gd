@@ -71,6 +71,8 @@ static func evaluate_level(
 	var coins: int = 0
 	if is_complete:
 		coins = calculate_coins(stars, chain)
+		if SaveManager.is_vip():
+			coins *= 2
 
 	var label: String = ""
 	if not is_complete:

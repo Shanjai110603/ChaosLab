@@ -113,6 +113,11 @@ func _create_default_data() -> void:
 			"last_completed_date": "",
 			"streak": 0,
 		},
+		"purchases": {
+			"remove_ads": false,
+			"vip_pass": false,
+			"order_history": [],
+		},
 	}
 	print("[SaveManager] Created default save data")
 
@@ -132,6 +137,12 @@ func _migrate_if_needed() -> void:
 	#     _migrate_v2_to_v3()
 
 	data["save_version"] = SAVE_VERSION
+	if not data.has("purchases"):
+		data["purchases"] = {
+			"remove_ads": false,
+			"vip_pass": false,
+			"order_history": [],
+		}
 	save_data()
 
 
@@ -279,6 +290,76 @@ func equip_cosmetic(slot: String, skin_id: String) -> void:
 ## Get the currently equipped cosmetic for a slot.
 func get_equipped_cosmetic(slot: String) -> String:
 	return data.get("equipped", {}).get(slot, "%s_default" % slot)
+
+
+# --- Monetization & Entitlements ---
+
+## Whether player has removed ads (via Remove Ads or VIP Pass).
+func is_ads_removed() -> bool:
+	if not data.has("purchases"):
+		return false
+	return data["purchases"].get("remove_ads", false) or is_vip()
+
+
+## Whether player owns the VIP Scientist Pass.
+func is_vip() -> bool:
+	if not data.has("purchases"):
+		return false
+	return data["purchases"].get("vip_pass", false)
+
+
+## Grant a purchased commercial product.
+func grant_purchase(product_id: String) -> bool:
+	if not data.has("purchases"):
+		data["purchases"] = {"remove_ads": false, "vip_pass": false, "order_history": []}
+
+	var purchases: Dictionary = data["purchases"]
+	if not purchases.has("order_history"):
+		purchases["order_history"] = []
+
+	var success := false
+	match product_id:
+		"coin_pack_small":
+			add_coins(500)
+			success = true
+		"coin_pack_medium":
+			add_coins(1500)
+			success = true
+		"coin_pack_large":
+			add_coins(5000)
+			success = true
+		"remove_ads":
+			purchases["remove_ads"] = true
+			success = true
+		"vip_pass":
+			purchases["vip_pass"] = true
+			purchases["remove_ads"] = true
+			add_coins(1000)  # VIP Welcome bonus
+			# Unlock exclusive VIP Gold skins
+			unlock_skin("bomb_atomic")
+			unlock_skin("ball_quantum")
+			unlock_skin("theme_blueprint")
+			success = true
+		_:
+			push_warning("[SaveManager] Unknown product ID: %s" % product_id)
+			return false
+
+	if success:
+		purchases["order_history"].append({
+			"product_id": product_id,
+			"timestamp": Time.get_unix_time_from_system(),
+		})
+		save_data()
+		print("[SaveManager] Successfully granted purchase: %s" % product_id)
+
+	return success
+
+
+## Restore previous purchases.
+func restore_purchases(product_ids: Array) -> void:
+	for pid in product_ids:
+		if pid is String:
+			grant_purchase(pid)
 
 
 ## Get a setting value.

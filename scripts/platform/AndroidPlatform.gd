@@ -12,15 +12,17 @@ func supports_ads() -> bool:
 	return true  # Future: AdMob integration
 
 
-func show_rewarded_ad(callback: Callable) -> void:
-	# TODO: Integrate AdMob rewarded ads
-	push_warning("[AndroidPlatform] AdMob not yet integrated — simulating reward")
+func show_rewarded_ad(callback: Callable, placement: String = "default") -> void:
+	# Future: Native AdMob rewarded ads
+	push_warning("[AndroidPlatform] AdMob rewarded ad requested (%s) — simulating reward" % placement)
 	callback.call(true)
 
 
-func show_interstitial() -> void:
-	# TODO: Integrate AdMob interstitials
-	push_warning("[AndroidPlatform] AdMob not yet integrated — skipping interstitial")
+func show_interstitial(placement: String = "default", on_closed: Callable = Callable()) -> void:
+	# Future: Native AdMob interstitials
+	push_warning("[AndroidPlatform] AdMob interstitial requested (%s) — skipping" % placement)
+	if on_closed.is_valid():
+		on_closed.call()
 
 
 func supports_iap() -> bool:

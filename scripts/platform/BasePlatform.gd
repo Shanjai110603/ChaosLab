@@ -15,14 +15,16 @@ func supports_ads() -> bool:
 
 
 ## Show a rewarded ad. Calls callback(true) if reward earned, callback(false) otherwise.
-func show_rewarded_ad(callback: Callable) -> void:
-	push_warning("[BasePlatform] Rewarded ads not supported on this platform")
+func show_rewarded_ad(callback: Callable, placement: String = "default") -> void:
+	push_warning("[BasePlatform] Rewarded ads not supported on this platform (%s)" % placement)
 	callback.call(false)
 
 
 ## Show an interstitial ad.
-func show_interstitial() -> void:
-	push_warning("[BasePlatform] Interstitial ads not supported on this platform")
+func show_interstitial(placement: String = "default", on_closed: Callable = Callable()) -> void:
+	push_warning("[BasePlatform] Interstitial ads not supported on this platform (%s)" % placement)
+	if on_closed.is_valid():
+		on_closed.call()
 
 
 ## Whether this platform supports in-app purchases.

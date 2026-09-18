@@ -118,8 +118,8 @@ MENU → LOADING → PLACING → SIMULATING → RESULT → PAUSED
 - **Phase 5**: Progression (coins, shop/unlocks, 100 levels) ✓ Complete
 - **Phase 6**: Additional mechanics (magnets, portals, lasers, anti-gravity) ✓ Complete
 - **Phase 7**: Retention (Daily Experiments, Streaks, 12 Achievements) ✓ Complete
-- **Phase 8**: Monetization (Rewarded ads, Interstitials, IAP, VIP pass) ← Next
-- **Phase 9**: Cross-platform QA
+- **Phase 8**: Monetization (Rewarded ads, Interstitials, IAP, VIP pass) ✓ Complete
+- **Phase 9**: Cross-platform QA & Performance Profiling ← Next
 - **Phase 10**: Release preparation
 
 ## License
@@ -128,4 +128,4 @@ All original code is proprietary. Third-party assets are documented in `assets/A
 
 ## Version
 
-0.7.0 — Phase 7: Retention (Daily Experiments, 7-Day Streaks & Laboratory Milestones)
+0.8.0 — Phase 8: Monetization & Store Integration (Rewarded Ads, Interstitials & VIP Pass)

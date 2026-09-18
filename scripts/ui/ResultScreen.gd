@@ -14,9 +14,13 @@ var _raw_score_label: Label = null
 var _par_bonus_label: Label = null
 var _stars_container: HBoxContainer = null
 var _coins_label: Label = null
+var _double_btn: Button = null
 var _retry_btn: Button = null
 var _select_btn: Button = null
 var _next_btn: Button = null
+
+var _earned_coins: int = 0
+var _double_claimed: bool = false
 
 
 func _ready() -> void:
@@ -108,6 +112,22 @@ func _create_ui() -> void:
 	_coins_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(_coins_label)
 
+	# 2X Rewarded Ad Doubler Button
+	_double_btn = Button.new()
+	_double_btn.text = "🎬 DOUBLE COINS (2X)"
+	_double_btn.custom_minimum_size = Vector2(240, 42)
+	_double_btn.focus_mode = Control.FOCUS_NONE
+	var d_style := StyleBoxFlat.new()
+	d_style.bg_color = Color(0.85, 0.55, 0.05, 0.95)
+	d_style.border_color = Color(1.0, 0.9, 0.3)
+	d_style.set_border_width_all(1)
+	d_style.set_corner_radius_all(10)
+	_double_btn.add_theme_stylebox_override("normal", d_style)
+	_double_btn.add_theme_font_size_override("font_size", 14)
+	_double_btn.add_theme_color_override("font_color", Color.WHITE)
+	_double_btn.pressed.connect(_on_double_pressed)
+	vbox.add_child(_double_btn)
+
 	vbox.add_child(HSeparator.new())
 
 	# Action Buttons
@@ -173,6 +193,15 @@ func show_result(result: Dictionary) -> void:
 	_par_bonus_label.text = "Par Efficiency Bonus: +%d" % par_bonus if par_bonus > 0 else ""
 	_coins_label.text = "+%d COINS" % coins if coins > 0 else ""
 
+	_earned_coins = coins
+	_double_claimed = false
+	if complete and coins > 0:
+		_double_btn.visible = true
+		_double_btn.disabled = false
+		_double_btn.text = "🎬 DOUBLE (+%d 🪙)" % coins
+	else:
+		_double_btn.visible = false
+
 	_animate_stars(stars)
 
 	# 3-Star Celebration Juice
@@ -184,6 +213,22 @@ func show_result(result: Dictionary) -> void:
 
 	_next_btn.visible = complete
 	_next_btn.disabled = not complete
+
+
+func _on_double_pressed() -> void:
+	if _double_claimed or _earned_coins <= 0:
+		return
+	AudioManager.play_ui_blip("click")
+	PlatformService.show_rewarded_ad("result_double_coins", func(success: bool):
+		if success:
+			SaveManager.add_coins(_earned_coins)
+			_double_claimed = true
+			_double_btn.text = "✓ 2X CLAIMED"
+			_double_btn.disabled = true
+			_coins_label.text = "+%d COINS (DOUBLED! 2X)" % (_earned_coins * 2)
+			ConfettiEffect.spawn(self)
+			AudioManager.play_fanfare()
+	)
 
 
 func _animate_stars(star_count: int) -> void:
@@ -221,11 +266,17 @@ func _on_retry() -> void:
 
 
 func _on_next() -> void:
-	visible = false
-	GameManager.next_level()
-	next_requested.emit()
+	PlatformService.on_level_completed()
+	PlatformService.show_interstitial("next_level", func():
+		visible = false
+		GameManager.next_level()
+		next_requested.emit()
+	)
 
 
 func _on_level_select() -> void:
-	visible = false
-	level_select_requested.emit()
+	PlatformService.on_level_completed()
+	PlatformService.show_interstitial("level_select", func():
+		visible = false
+		level_select_requested.emit()
+	)

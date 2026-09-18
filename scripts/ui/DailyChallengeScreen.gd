@@ -12,7 +12,9 @@ var _modifier_desc_label: Label = null
 var _modifier_icon_label: Label = null
 var _roadmap_container: HBoxContainer = null
 var _start_button: Button = null
+var _double_bonus_btn: Button = null
 var _coins_label: Label = null
+var _bonus_doubled_today: bool = false
 
 const COLOR_BG := Color(0.03, 0.05, 0.08, 0.98)
 const COLOR_GOLD := Color(1.0, 0.85, 0.25)
@@ -180,7 +182,7 @@ func _create_ui() -> void:
 
 	# Action Button
 	_start_button = Button.new()
-	_start_button.custom_minimum_size = Vector2(340, 60)
+	_start_button.custom_minimum_size = Vector2(340, 56)
 	_start_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_start_button.focus_mode = Control.FOCUS_NONE
 	_start_button.add_theme_font_size_override("font_size", 18)
@@ -189,6 +191,39 @@ func _create_ui() -> void:
 		start_daily_requested.emit()
 	)
 	vbox.add_child(_start_button)
+
+	_double_bonus_btn = Button.new()
+	_double_bonus_btn.custom_minimum_size = Vector2(340, 48)
+	_double_bonus_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_double_bonus_btn.focus_mode = Control.FOCUS_NONE
+	var db_style := StyleBoxFlat.new()
+	db_style.bg_color = Color(0.85, 0.55, 0.05, 0.95)
+	db_style.border_color = Color(1.0, 0.9, 0.3)
+	db_style.set_border_width_all(1)
+	db_style.set_corner_radius_all(10)
+	_double_bonus_btn.add_theme_stylebox_override("normal", db_style)
+	_double_bonus_btn.add_theme_font_size_override("font_size", 15)
+	_double_bonus_btn.add_theme_color_override("font_color", Color.WHITE)
+	_double_bonus_btn.pressed.connect(_on_double_bonus_pressed)
+	_double_bonus_btn.visible = false
+	vbox.add_child(_double_bonus_btn)
+
+
+func _on_double_bonus_pressed() -> void:
+	if _bonus_doubled_today:
+		return
+	AudioManager.play_ui_blip("click")
+	var daily_mgr = get_node_or_null("/root/DailyChallengeManager")
+	var streak: int = daily_mgr.get_streak() if daily_mgr else 1
+	var bonus_amount: int = daily_mgr.get_streak_reward(streak) if daily_mgr else 100
+
+	PlatformService.show_rewarded_ad("daily_bonus_doubler", func(success: bool):
+		if success:
+			SaveManager.add_coins(bonus_amount)
+			_bonus_doubled_today = true
+			AudioManager.play_fanfare()
+			_refresh_display()
+	)
 
 
 func _refresh_display() -> void:
@@ -276,13 +311,21 @@ func _refresh_display() -> void:
 
 		_roadmap_container.add_child(card)
 
-	# Action Button
+	# Action Buttons
 	if completed_today:
 		_start_button.text = "✓ EXPERIMENT COMPLETED TODAY"
 		_start_button.disabled = true
+		_double_bonus_btn.visible = true
+		if _bonus_doubled_today:
+			_double_bonus_btn.text = "✓ 2X BONUS CLAIMED"
+			_double_bonus_btn.disabled = true
+		else:
+			_double_bonus_btn.text = "🎬 DOUBLE TODAY'S BONUS (2X)"
+			_double_bonus_btn.disabled = false
 	else:
 		_start_button.text = "▶ START DAILY EXPERIMENT"
 		_start_button.disabled = false
+		_double_bonus_btn.visible = false
 		var start_style := StyleBoxFlat.new()
 		start_style.bg_color = Color(0.1, 0.45, 0.75, 0.95)
 		start_style.border_color = COLOR_CYAN

@@ -39,7 +39,7 @@ for root, _, files in os.walk(scenes_dir):
                 scene_count += 1
                 print(f"  [PASS] {f} ({len(lines)} lines)")
 print(f"Total valid scene files: {scene_count}")
-assert scene_count >= 17, f"Expected at least 17 scene files, found {scene_count}"
+assert scene_count >= 18, f"Expected at least 18 scene files, found {scene_count}"
 
 # 3. Check all GDScript files
 print("\n[3] Checking GDScript (.gd) files...")
@@ -52,8 +52,8 @@ required_features = {
     "ConfettiEffect.gd": "ConfettiEffect",
     "CameraShake.gd": "hit_stop",
     "CosmeticManager.gd": "CATALOG",
-    "ShopScreen.gd": "_create_skin_card",
-    "SaveManager.gd": "can_afford",
+    "ShopScreen.gd": "SLOT_SUPPLIES",
+    "SaveManager.gd": "is_vip",
     "LevelSelectScreen.gd": "MAX_WORLDS",
     "Magnet.gd": "magnetic_force",
     "Portal.gd": "portal_tag",
@@ -61,8 +61,12 @@ required_features = {
     "Laser.gd": "max_bounces",
     "DailyChallengeManager.gd": "generate_daily_level_definition",
     "AchievementManager.gd": "claim_reward",
-    "DailyChallengeScreen.gd": "start_daily_requested",
+    "DailyChallengeScreen.gd": "_double_bonus_btn",
     "AchievementsScreen.gd": "LABORATORY MILESTONES",
+    "AdSimulationOverlay.gd": "AdSimulationOverlay",
+    "PlatformService.gd": "show_interstitial",
+    "ResultScreen.gd": "_on_double_pressed",
+    "GameplayUI.gd": "_on_hint_pressed",
 }
 found_features = set()
 

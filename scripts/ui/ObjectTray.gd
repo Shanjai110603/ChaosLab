@@ -53,6 +53,16 @@ func set_inventory(items: Dictionary) -> void:
 	_rebuild_cards()
 
 
+## Add quantity to an inventory item and rebuild cards.
+func add_item(item_type: String, amount: int = 1) -> void:
+	var current: int = inventory.get(item_type, 0)
+	if current >= 0:
+		inventory[item_type] = current + amount
+	else:
+		inventory[item_type] = amount
+	_rebuild_cards()
+
+
 func _rebuild_cards() -> void:
 	if not _card_container:
 		return

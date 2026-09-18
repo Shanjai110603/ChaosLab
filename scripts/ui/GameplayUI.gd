@@ -29,6 +29,8 @@ var title_label: Label = null
 var object_tray: ObjectTray = null
 ## Grid snap button.
 var grid_button: Button = null
+## Rewarded hint / extra item button.
+var hint_button: Button = null
 ## Speed buttons.
 var speed_buttons: Dictionary = {}
 
@@ -303,6 +305,12 @@ func _create_bottom_bar(root: Control) -> void:
 		grid_button.modulate = Color(0.0, 1.0, 0.85, 1.0) if enabled else Color.WHITE
 	)
 	tools_box.add_child(grid_button)
+
+	hint_button = _create_action_button("🎬 +1 ITEM", Color(0.85, 0.55, 0.1), 95, 46)
+	hint_button.add_theme_font_size_override("font_size", 13)
+	hint_button.pressed.connect(_on_hint_pressed)
+	tools_box.add_child(hint_button)
+
 	bottom_bar.add_child(tools_box)
 
 	# Spacer
@@ -439,6 +447,8 @@ func _update_for_state(state: GameManager.GameState) -> void:
 			go_button.text = "▶  GO"
 			reset_button.disabled = false
 			undo_button.disabled = false
+			if hint_button:
+				hint_button.visible = true
 			state_label.text = "● READY"
 			state_label.add_theme_color_override("font_color", COLOR_GO)
 			_hide_chain_display()
@@ -448,6 +458,8 @@ func _update_for_state(state: GameManager.GameState) -> void:
 			go_button.text = "⚡ RUNNING"
 			reset_button.disabled = false
 			undo_button.disabled = true
+			if hint_button:
+				hint_button.visible = false
 			state_label.text = "◉ SIMULATING"
 			state_label.add_theme_color_override("font_color", COLOR_GOLD)
 
@@ -456,6 +468,8 @@ func _update_for_state(state: GameManager.GameState) -> void:
 			go_button.text = "✓ DONE"
 			reset_button.disabled = true
 			undo_button.disabled = true
+			if hint_button:
+				hint_button.visible = false
 			state_label.text = "★ RESULT"
 			state_label.add_theme_color_override("font_color", COLOR_ACCENT)
 
@@ -508,3 +522,16 @@ func _on_undo_pressed() -> void:
 
 func _on_pause_pressed() -> void:
 	GameManager.pause()
+
+
+func _on_hint_pressed() -> void:
+	if GameManager.current_state != GameManager.GameState.PLACING:
+		return
+	AudioManager.play_ui_blip("click")
+	PlatformService.show_rewarded_ad("gameplay_bonus_item", func(success: bool):
+		if success:
+			AudioManager.play_fanfare()
+			if object_tray:
+				object_tray.add_item("bomb", 1)
+			FloatingText.spawn(self, Vector2(640, 500), "+1 BONUS BOMB!", Color(1.0, 0.85, 0.25))
+	)
