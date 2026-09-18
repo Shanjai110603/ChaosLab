@@ -32,6 +32,8 @@ var grid_size: float = 30.0
 
 ## Minimum drag distance to distinguish tap from drag.
 const DRAG_THRESHOLD: float = 5.0
+## Minimum touch drag distance for touchscreen deadzone calibration.
+const TOUCH_DRAG_THRESHOLD: float = 8.0
 
 var _press_position: Vector2 = Vector2.ZERO
 var _is_pressing: bool = false
@@ -175,7 +177,7 @@ func _handle_touch_drag(event: InputEventScreenDrag) -> void:
 		return
 
 	var distance := event.position.distance_to(_press_position)
-	if distance > DRAG_THRESHOLD:
+	if distance > TOUCH_DRAG_THRESHOLD:
 		_drag_started = true
 
 	if _drag_started and is_dragging and dragged_object:

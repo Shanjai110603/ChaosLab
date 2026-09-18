@@ -77,6 +77,16 @@ func _create_ui() -> void:
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
 
+	# Apply mobile safe area padding for devices with camera cutouts or notches
+	if OS.has_feature("mobile"):
+		var safe_area := DisplayServer.get_display_safe_area()
+		var screen_size := DisplayServer.screen_get_size()
+		if screen_size.x > 0 and screen_size.y > 0:
+			var left_margin: float = float(safe_area.position.x) / float(screen_size.x) * 1920.0
+			var right_margin: float = float(screen_size.x - safe_area.end.x) / float(screen_size.x) * 1920.0
+			root.offset_left = left_margin
+			root.offset_right = -right_margin
+
 	_create_top_bar(root)
 	_create_chain_display(root)
 	_create_object_tray(root)

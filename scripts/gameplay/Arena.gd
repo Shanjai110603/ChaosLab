@@ -247,6 +247,10 @@ func _clear_objects() -> void:
 	if objects_container:
 		for child in objects_container.get_children():
 			child.queue_free()
+	# Clean any lingering temporary VFX children
+	for child in get_children():
+		if child is ImpactSpark or child is FloatingText or child is ExplosionEffect:
+			child.queue_free()
 
 
 ## Handle game state changes.

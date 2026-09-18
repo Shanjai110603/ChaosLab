@@ -3,16 +3,23 @@
 class_name ImpactSpark
 extends Node2D
 
+static var active_count: int = 0
+const MAX_ACTIVE_SPARKS: int = 24
+
 var _sparks: Array[Dictionary] = []
 var _duration: float = 0.25
 var _time: float = 0.0
 
 
 static func create_at(pos: Vector2, parent: Node, color: Color = Color(1.0, 0.85, 0.3), count: int = 12) -> ImpactSpark:
+	if active_count >= MAX_ACTIVE_SPARKS:
+		return null
 	var spark := ImpactSpark.new()
 	spark.global_position = pos
 	spark._init_sparks(color, count)
 	parent.add_child(spark)
+	active_count += 1
+	spark.tree_exited.connect(func(): active_count = maxi(0, active_count - 1))
 	return spark
 
 

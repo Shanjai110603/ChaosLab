@@ -119,8 +119,8 @@ MENU → LOADING → PLACING → SIMULATING → RESULT → PAUSED
 - **Phase 6**: Additional mechanics (magnets, portals, lasers, anti-gravity) ✓ Complete
 - **Phase 7**: Retention (Daily Experiments, Streaks, 12 Achievements) ✓ Complete
 - **Phase 8**: Monetization (Rewarded ads, Interstitials, IAP, VIP pass) ✓ Complete
-- **Phase 9**: Cross-platform QA & Performance Profiling ← Next
-- **Phase 10**: Release preparation
+- **Phase 9**: Cross-platform QA, Optimization & Export Presets ✓ Complete
+- **Phase 10**: Release Preparation & Store Metadata ← Next
 
 ## License
 
@@ -128,4 +128,4 @@ All original code is proprietary. Third-party assets are documented in `assets/A
 
 ## Version
 
-0.8.0 — Phase 8: Monetization & Store Integration (Rewarded Ads, Interstitials & VIP Pass)
+0.9.0 — Phase 9: Cross-Platform QA, Optimization & Export Packaging (Windows, Web & Android)

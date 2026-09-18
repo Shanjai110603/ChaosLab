@@ -3,13 +3,20 @@
 class_name FloatingText
 extends Node2D
 
+static var active_count: int = 0
+const MAX_ACTIVE_TEXTS: int = 16
+
 var label: Label = null
 
 
 static func spawn(parent: Node, text: String, world_pos: Vector2, color: Color = Color(1.0, 0.85, 0.2), font_size: int = 22) -> FloatingText:
+	if active_count >= MAX_ACTIVE_TEXTS:
+		return null
 	var ft := FloatingText.new()
 	ft.global_position = world_pos
 	parent.add_child(ft)
+	active_count += 1
+	ft.tree_exited.connect(func(): active_count = maxi(0, active_count - 1))
 	ft._animate(text, color, font_size)
 	return ft
 

@@ -18,7 +18,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="Chaos Lab"
 config/description="Build it. Trigger it. Cause chaos. A physics experiment puzzle game."
-config/version="0.1.0"
+config/version="0.9.0"
 config/tags=PackedStringArray("2d", "physics", "puzzle")
 run/main_scene="res://scenes/main/Main.tscn"
 config/features=PackedStringArray("4.7")
@@ -42,6 +42,14 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/handheld/orientation=5
+
+[physics]
+
+2d/sleep_threshold_linear=10.0
+2d/sleep_threshold_angular=0.15
+2d/time_before_sleep=0.4
+2d/solver/solver_iterations=10
 
 [input]
 
