@@ -38,7 +38,7 @@ def test_cross_platform_suite():
     with open("project.godot", "r", encoding="utf-8") as fh:
         godot_cfg = fh.read()
 
-    assert 'config/version="0.9.0"' in godot_cfg, "Version string in project.godot is not 0.9.0"
+    assert 'config/version="1.0.0"' in godot_cfg, "Version string in project.godot is not 1.0.0"
     assert 'window/handheld/orientation=5' in godot_cfg, "Sensor landscape orientation missing"
     assert '2d/sleep_threshold_linear=10.0' in godot_cfg, "Physics linear sleep threshold missing"
     assert '2d/time_before_sleep=0.4' in godot_cfg, "Physics time before sleep missing"

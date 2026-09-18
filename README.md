@@ -120,7 +120,13 @@ MENU → LOADING → PLACING → SIMULATING → RESULT → PAUSED
 - **Phase 7**: Retention (Daily Experiments, Streaks, 12 Achievements) ✓ Complete
 - **Phase 8**: Monetization (Rewarded ads, Interstitials, IAP, VIP pass) ✓ Complete
 - **Phase 9**: Cross-platform QA, Optimization & Export Presets ✓ Complete
-- **Phase 10**: Release Preparation & Store Metadata ← Next
+- **Phase 10**: Release Preparation, Store Kit & Production Launch ✓ Complete
+
+## Store Kit & Graphics
+
+- Commercial store listing metadata: `docs/store/STORE_LISTING.md`
+- Official promotional feature graphic (1024x500): `assets/chaos_lab_feature_graphic.jpg`
+- Release changelog: `CHANGELOG.md`
 
 ## License
 
@@ -128,4 +134,4 @@ All original code is proprietary. Third-party assets are documented in `assets/A
 
 ## Version
 
-0.9.0 — Phase 9: Cross-Platform QA, Optimization & Export Packaging (Windows, Web & Android)
+1.0.0 — Production Release (All 10 Phases Complete)
