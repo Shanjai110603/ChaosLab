@@ -112,8 +112,8 @@ MENU → LOADING → PLACING → SIMULATING → RESULT → PAUSED
 - **Phase 1**: Project foundation ✓ Complete
 - **Phase 2**: Physics prototype ✓ Complete
 - **Phase 3**: Core gameplay (objectives, scoring, 20 levels) ✓ Complete
-- **Phase 4**: Polish (VFX, audio, camera, haptics) ← Next
-- **Phase 5**: Progression (coins, unlocks, 100 levels)
+- **Phase 4**: Polish (VFX, audio synthesis, camera juice, haptics) ✓ Complete
+- **Phase 5**: Progression (coins, shop/unlocks, 100 levels) ← Next
 - **Phase 6**: Additional mechanics
 - **Phase 7**: Retention (Chaos Mode, Daily)
 - **Phase 8**: Monetization
@@ -126,4 +126,4 @@ All original code is proprietary. Third-party assets are documented in `assets/A
 
 ## Version
 
-0.3.0 — Phase 3: Core Gameplay & 20 Campaign Levels
+0.4.0 — Phase 4: Polish (Audio Synthesis, VFX, Camera Juice & Haptics)
