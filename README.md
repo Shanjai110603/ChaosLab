@@ -86,6 +86,8 @@ chaos-lab/
 | `PlatformService` | Platform-specific services (ads, IAP, share) |
 | `AudioManager` | Sound effects and music |
 | `SaveManager` | Local save/load with versioning |
+| `DailyChallengeManager` | Daily seed generation, modifiers, and streak progression |
+| `AchievementManager` | 12 Commercial milestones, progress tracking, coin bounties |
 | `DebugManager` | Debug overlay and dev tools |
 
 ### Object Hierarchy
@@ -115,8 +117,8 @@ MENU → LOADING → PLACING → SIMULATING → RESULT → PAUSED
 - **Phase 4**: Polish (VFX, audio synthesis, camera juice, haptics) ✓ Complete
 - **Phase 5**: Progression (coins, shop/unlocks, 100 levels) ✓ Complete
 - **Phase 6**: Additional mechanics (magnets, portals, lasers, anti-gravity) ✓ Complete
-- **Phase 7**: Retention (Daily Experiments, Endless Chaos Mode, Streaks) ← Next
-- **Phase 8**: Monetization
+- **Phase 7**: Retention (Daily Experiments, Streaks, 12 Achievements) ✓ Complete
+- **Phase 8**: Monetization (Rewarded ads, Interstitials, IAP, VIP pass) ← Next
 - **Phase 9**: Cross-platform QA
 - **Phase 10**: Release preparation
 
@@ -126,4 +128,4 @@ All original code is proprietary. Third-party assets are documented in `assets/A
 
 ## Version
 
-0.6.0 — Phase 6: Advanced Mechanics (Magnets, Portals, Anti-Gravity & Lasers)
+0.7.0 — Phase 7: Retention (Daily Experiments, 7-Day Streaks & Laboratory Milestones)

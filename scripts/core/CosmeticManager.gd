@@ -183,6 +183,10 @@ func unlock_skin(skin_id: String) -> bool:
 	if SaveManager.spend_coins(price):
 		SaveManager.unlock_skin(skin_id)
 		skin_unlocked.emit(skin_id)
+		if get_node_or_null("/root/AchievementManager"):
+			var ach_mgr = get_node_or_null("/root/AchievementManager")
+			ach_mgr.add_progress("ARMORY_NOVICE", 1)
+			ach_mgr.add_progress("FASHIONISTA", 1)
 		return true
 
 	return false

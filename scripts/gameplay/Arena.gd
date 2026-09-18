@@ -175,6 +175,36 @@ func _load_level(level_id: int) -> void:
 	print("[Arena] Level %d loaded" % level_id)
 
 
+## Load a custom LevelDefinition directly (used for Daily Experiments and Sandbox).
+func load_custom_level(def: LevelDefinition) -> void:
+	_clear_objects()
+	current_level = def
+	arena_width = current_level.arena_width
+	arena_height = current_level.arena_height
+	_create_walls()
+
+	var result := level_loader.instantiate_level(current_level, objects_container)
+	var game_objects: Array[GameObject] = []
+	for obj in result["objects"]:
+		if obj is GameObject:
+			game_objects.append(obj)
+
+	var targets: Array[TargetObject] = []
+	for tgt in result["targets"]:
+		if tgt is TargetObject:
+			targets.append(tgt)
+
+	experiment_controller.setup_level(
+		current_level.to_dict(),
+		game_objects,
+		targets
+	)
+	GameManager.current_level_id = def.level_id
+	GameManager.change_state(GameManager.GameState.PLACING)
+	queue_redraw()
+	print("[Arena] Custom level '%s' loaded" % def.title)
+
+
 ## Create physics walls around the arena.
 func _create_walls() -> void:
 	# Remove existing walls

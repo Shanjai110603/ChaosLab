@@ -68,6 +68,8 @@ func _physics_process(_delta: float) -> void:
 		var attenuation := pow(1.0 - norm_dist, 1.4)
 		var impulse := force_dir * (magnetic_force * attenuation)
 		body.apply_central_force(impulse)
+		if get_node_or_null("/root/AchievementManager"):
+			get_node_or_null("/root/AchievementManager").add_progress("MAGNET_MASTER", 1)
 
 
 func _create_visual() -> void:

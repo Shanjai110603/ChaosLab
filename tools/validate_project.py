@@ -39,7 +39,7 @@ for root, _, files in os.walk(scenes_dir):
                 scene_count += 1
                 print(f"  [PASS] {f} ({len(lines)} lines)")
 print(f"Total valid scene files: {scene_count}")
-assert scene_count >= 15, f"Expected at least 15 scene files, found {scene_count}"
+assert scene_count >= 17, f"Expected at least 17 scene files, found {scene_count}"
 
 # 3. Check all GDScript files
 print("\n[3] Checking GDScript (.gd) files...")
@@ -59,6 +59,10 @@ required_features = {
     "Portal.gd": "portal_tag",
     "GravityPad.gd": "upward_acceleration",
     "Laser.gd": "max_bounces",
+    "DailyChallengeManager.gd": "generate_daily_level_definition",
+    "AchievementManager.gd": "claim_reward",
+    "DailyChallengeScreen.gd": "start_daily_requested",
+    "AchievementsScreen.gd": "LABORATORY MILESTONES",
 }
 found_features = set()
 

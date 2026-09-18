@@ -6,6 +6,8 @@ extends Control
 signal level_chosen(level_id: int)
 signal back_to_menu_requested()
 signal shop_requested()
+signal daily_requested()
+signal achievements_requested()
 
 var current_world: int = 1
 const MAX_WORLDS: int = 10
@@ -106,7 +108,7 @@ func _create_ui() -> void:
 	# Shop Button
 	var shop_btn := Button.new()
 	shop_btn.text = "🛒 ARMORY"
-	shop_btn.custom_minimum_size = Vector2(130, 44)
+	shop_btn.custom_minimum_size = Vector2(120, 44)
 	shop_btn.add_theme_font_size_override("font_size", 15)
 	shop_btn.focus_mode = Control.FOCUS_NONE
 	var shop_style := StyleBoxFlat.new()
@@ -120,6 +122,42 @@ func _create_ui() -> void:
 		shop_requested.emit()
 	)
 	top_bar.add_child(shop_btn)
+
+	# Daily Button
+	var daily_btn := Button.new()
+	daily_btn.text = "🔥 DAILY"
+	daily_btn.custom_minimum_size = Vector2(110, 44)
+	daily_btn.add_theme_font_size_override("font_size", 15)
+	daily_btn.focus_mode = Control.FOCUS_NONE
+	var daily_style := StyleBoxFlat.new()
+	daily_style.bg_color = Color(0.35, 0.15, 0.05, 0.9)
+	daily_style.border_color = Color(1.0, 0.45, 0.1)
+	daily_style.set_border_width_all(1)
+	daily_style.set_corner_radius_all(8)
+	daily_btn.add_theme_stylebox_override("normal", daily_style)
+	daily_btn.pressed.connect(func():
+		AudioManager.play_ui_blip("select")
+		daily_requested.emit()
+	)
+	top_bar.add_child(daily_btn)
+
+	# Trophies Button
+	var ach_btn := Button.new()
+	ach_btn.text = "🏆 TROPHIES"
+	ach_btn.custom_minimum_size = Vector2(130, 44)
+	ach_btn.add_theme_font_size_override("font_size", 15)
+	ach_btn.focus_mode = Control.FOCUS_NONE
+	var ach_style := StyleBoxFlat.new()
+	ach_style.bg_color = Color(0.28, 0.22, 0.05, 0.9)
+	ach_style.border_color = COLOR_GOLD
+	ach_style.set_border_width_all(1)
+	ach_style.set_corner_radius_all(8)
+	ach_btn.add_theme_stylebox_override("normal", ach_style)
+	ach_btn.pressed.connect(func():
+		AudioManager.play_ui_blip("select")
+		achievements_requested.emit()
+	)
+	top_bar.add_child(ach_btn)
 
 	# World selector carousel
 	var world_box := HBoxContainer.new()

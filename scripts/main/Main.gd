@@ -15,6 +15,10 @@ var result_screen: CanvasLayer = null
 var level_select_screen: Control = null
 ## The shop screen.
 var shop_screen: Control = null
+## The daily challenge screen.
+var daily_screen: Control = null
+## The achievements screen.
+var achievements_screen: Control = null
 ## Camera.
 var camera: Camera2D = null
 ## Camera shake component.
@@ -77,6 +81,10 @@ func _ready() -> void:
 		level_select_screen.back_to_menu_requested.connect(_on_level_select_back)
 		if level_select_screen.has_signal("shop_requested"):
 			level_select_screen.shop_requested.connect(_show_shop)
+		if level_select_screen.has_signal("daily_requested"):
+			level_select_screen.daily_requested.connect(_show_daily)
+		if level_select_screen.has_signal("achievements_requested"):
+			level_select_screen.achievements_requested.connect(_show_achievements)
 
 	# Create Shop screen
 	var shop_scene := load("res://scenes/ui/ShopScreen.tscn") as PackedScene
@@ -87,6 +95,28 @@ func _ready() -> void:
 		add_child(shop_screen)
 		if shop_screen.has_signal("closed"):
 			shop_screen.closed.connect(_on_shop_closed)
+
+	# Create Daily Challenge screen
+	var daily_scene := load("res://scenes/ui/DailyChallengeScreen.tscn") as PackedScene
+	if daily_scene:
+		daily_screen = daily_scene.instantiate() as Control
+		daily_screen.name = "DailyChallengeScreen"
+		daily_screen.visible = false
+		add_child(daily_screen)
+		if daily_screen.has_signal("closed"):
+			daily_screen.closed.connect(_on_daily_closed)
+		if daily_screen.has_signal("start_daily_requested"):
+			daily_screen.start_daily_requested.connect(_on_start_daily_requested)
+
+	# Create Achievements screen
+	var ach_scene := load("res://scenes/ui/AchievementsScreen.tscn") as PackedScene
+	if ach_scene:
+		achievements_screen = ach_scene.instantiate() as Control
+		achievements_screen.name = "AchievementsScreen"
+		achievements_screen.visible = false
+		add_child(achievements_screen)
+		if achievements_screen.has_signal("closed"):
+			achievements_screen.closed.connect(_on_achievements_closed)
 
 	# Create ScreenVignette for chromatic impact flashes
 	var vignette := ScreenVignette.new()
@@ -145,6 +175,58 @@ func _on_shop_closed() -> void:
 			arena.visible = true
 
 
+func _show_daily() -> void:
+	if daily_screen:
+		daily_screen.visible = true
+		daily_screen._refresh_display()
+	if level_select_screen:
+		level_select_screen.visible = false
+	if gameplay_ui:
+		gameplay_ui.visible = false
+	if arena:
+		arena.visible = false
+
+
+func _on_daily_closed() -> void:
+	if daily_screen:
+		daily_screen.visible = false
+	if level_select_screen:
+		level_select_screen.visible = true
+		level_select_screen._refresh_display()
+
+
+func _on_start_daily_requested() -> void:
+	if daily_screen:
+		daily_screen.visible = false
+	if arena and get_node_or_null("/root/DailyChallengeManager"):
+		var daily_mgr = get_node_or_null("/root/DailyChallengeManager")
+		var def = daily_mgr.generate_daily_level_definition()
+		arena.visible = true
+		arena.load_custom_level(def)
+	if gameplay_ui:
+		gameplay_ui.visible = true
+
+
+func _show_achievements() -> void:
+	if achievements_screen:
+		achievements_screen.visible = true
+		achievements_screen._refresh_display()
+	if level_select_screen:
+		level_select_screen.visible = false
+	if gameplay_ui:
+		gameplay_ui.visible = false
+	if arena:
+		arena.visible = false
+
+
+func _on_achievements_closed() -> void:
+	if achievements_screen:
+		achievements_screen.visible = false
+	if level_select_screen:
+		level_select_screen.visible = true
+		level_select_screen._refresh_display()
+
+
 func _on_level_chosen(level_id: int) -> void:
 	if level_select_screen:
 		level_select_screen.visible = false
@@ -168,6 +250,23 @@ func _on_experiment_result(result: Dictionary) -> void:
 	if result_screen and result_screen.has_method("show_result"):
 		result_screen.show_result(result)
 
+	# Retention hooks
+	var is_success: bool = result.get("success", false)
+	if is_success:
+		if arena and arena.current_level and arena.current_level.level_id == 990:
+			if get_node_or_null("/root/DailyChallengeManager"):
+				get_node_or_null("/root/DailyChallengeManager").record_daily_completed()
+
+		if get_node_or_null("/root/AchievementManager"):
+			var ach_mgr = get_node_or_null("/root/AchievementManager")
+			ach_mgr.add_progress("FIRST_SPARK", 1)
+			if result.get("duration", 99.0) <= 5.0:
+				ach_mgr.add_progress("SPEED_DEMON", 1)
+			if result.get("par_bonus", 0) > 0:
+				ach_mgr.add_progress("PAR_PERFECTIONIST", 1)
+			if SaveManager.get_world_stars(1) >= 30:
+				ach_mgr.add_progress("WORLD_MASTER", 30)
+
 
 func _on_chain_updated(chain_count: int, total_score: int) -> void:
 	if gameplay_ui and gameplay_ui.has_method("update_chain"):
@@ -176,16 +275,28 @@ func _on_chain_updated(chain_count: int, total_score: int) -> void:
 			label = arena.experiment_controller.chain_manager.get_chain_label()
 		gameplay_ui.update_chain(chain_count, total_score, label)
 
+	if get_node_or_null("/root/AchievementManager"):
+		var ach_mgr = get_node_or_null("/root/AchievementManager")
+		if chain_count >= 5:
+			ach_mgr.add_progress("CHAIN_PRO", 5)
+		if chain_count >= 8:
+			ach_mgr.add_progress("CHAIN_GOD", 8)
+
 
 func _on_chain_event(event: Dictionary) -> void:
 	var event_type: String = event.get("type", "")
 	match event_type:
 		"explosion":
 			CameraShake.shake(0.8)
+			if get_node_or_null("/root/AchievementManager"):
+				get_node_or_null("/root/AchievementManager").add_progress("PYROMANIAC", 1)
 		"collision":
 			CameraShake.shake(0.2)
 		"launch":
 			CameraShake.shake(0.35)
+		"teleport":
+			if get_node_or_null("/root/AchievementManager"):
+				get_node_or_null("/root/AchievementManager").add_progress("PORTAL_TRAVELER", 1)
 
 
 func _physics_process(delta: float) -> void:

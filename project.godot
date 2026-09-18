@@ -32,6 +32,8 @@ PlatformService="*res://scripts/platform/PlatformService.gd"
 AudioManager="*res://scripts/core/AudioManager.gd"
 SaveManager="*res://scripts/core/SaveManager.gd"
 CosmeticManager="*res://scripts/core/CosmeticManager.gd"
+DailyChallengeManager="*res://scripts/core/DailyChallengeManager.gd"
+AchievementManager="*res://scripts/core/AchievementManager.gd"
 DebugManager="*res://scripts/core/DebugManager.gd"
 
 [display]
