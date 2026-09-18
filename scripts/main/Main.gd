@@ -77,13 +77,19 @@ func _ready() -> void:
 	result_screen.set_script(result_script)
 	add_child(result_screen)
 
+	# Create ScreensLayer for full-screen UI overlays
+	var screens_layer := CanvasLayer.new()
+	screens_layer.name = "ScreensLayer"
+	screens_layer.layer = 25
+	add_child(screens_layer)
+
 	# Create Level Select screen
 	var level_select_scene := load("res://scenes/ui/LevelSelectScreen.tscn") as PackedScene
 	if level_select_scene:
 		level_select_screen = level_select_scene.instantiate() as Control
 		level_select_screen.name = "LevelSelectScreen"
 		level_select_screen.visible = false
-		add_child(level_select_screen)
+		screens_layer.add_child(level_select_screen)
 		level_select_screen.level_chosen.connect(_on_level_chosen)
 		level_select_screen.back_to_menu_requested.connect(_on_level_select_back)
 		if level_select_screen.has_signal("shop_requested"):
@@ -99,7 +105,7 @@ func _ready() -> void:
 		shop_screen = shop_scene.instantiate() as Control
 		shop_screen.name = "ShopScreen"
 		shop_screen.visible = false
-		add_child(shop_screen)
+		screens_layer.add_child(shop_screen)
 		if shop_screen.has_signal("closed"):
 			shop_screen.closed.connect(_on_shop_closed)
 
@@ -109,7 +115,7 @@ func _ready() -> void:
 		daily_screen = daily_scene.instantiate() as Control
 		daily_screen.name = "DailyChallengeScreen"
 		daily_screen.visible = false
-		add_child(daily_screen)
+		screens_layer.add_child(daily_screen)
 		if daily_screen.has_signal("closed"):
 			daily_screen.closed.connect(_on_daily_closed)
 		if daily_screen.has_signal("start_daily_requested"):
@@ -121,7 +127,7 @@ func _ready() -> void:
 		achievements_screen = ach_scene.instantiate() as Control
 		achievements_screen.name = "AchievementsScreen"
 		achievements_screen.visible = false
-		add_child(achievements_screen)
+		screens_layer.add_child(achievements_screen)
 		if achievements_screen.has_signal("closed"):
 			achievements_screen.closed.connect(_on_achievements_closed)
 

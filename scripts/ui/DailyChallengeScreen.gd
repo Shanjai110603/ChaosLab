@@ -28,6 +28,7 @@ func _ready() -> void:
 
 
 func _create_ui() -> void:
+	custom_minimum_size = Vector2(1920, 1080)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 
 	# Background

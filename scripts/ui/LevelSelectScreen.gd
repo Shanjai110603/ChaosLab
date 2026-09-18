@@ -45,6 +45,7 @@ func _ready() -> void:
 
 
 func _create_ui() -> void:
+	custom_minimum_size = Vector2(1920, 1080)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 
 	# Fullscreen dark lab background
@@ -71,8 +72,8 @@ func _create_ui() -> void:
 	vbox.add_child(top_bar)
 
 	var back_btn := Button.new()
-	back_btn.text = "← MENU"
-	back_btn.custom_minimum_size = Vector2(120, 44)
+	back_btn.text = "← BACK TO LAB"
+	back_btn.custom_minimum_size = Vector2(140, 44)
 	back_btn.add_theme_font_size_override("font_size", 16)
 	back_btn.focus_mode = Control.FOCUS_NONE
 	back_btn.pressed.connect(func():
@@ -207,7 +208,9 @@ func _create_ui() -> void:
 
 	# Grid Container for Level Cards (5 columns x 2 rows)
 	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(1760, 800)
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_child(scroll)
 
 	var center_margin := MarginContainer.new()
