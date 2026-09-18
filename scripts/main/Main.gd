@@ -1,5 +1,6 @@
 ## Main — root scene for Chaos Lab.
-## Manages screen transitions and instantiates Arena + UI layers.
+## Manages screen transitions between Gameplay, Level Select, and Overlays.
+class_name MainClass
 extends Node2D
 
 ## The arena instance.
@@ -10,6 +11,8 @@ var gameplay_ui: CanvasLayer = null
 var pause_menu: CanvasLayer = null
 ## The result screen.
 var result_screen: CanvasLayer = null
+## The level select screen.
+var level_select_screen: Control = null
 ## Camera.
 var camera: Camera2D = null
 ## Camera shake component.
@@ -18,7 +21,7 @@ var camera_shake: CameraShake = null
 
 func _ready() -> void:
 	# Set background color
-	RenderingServer.set_default_clear_color(Color(0.06, 0.07, 0.1))
+	RenderingServer.set_default_clear_color(Color(0.04, 0.06, 0.09))
 
 	# Create camera
 	camera = Camera2D.new()
@@ -61,27 +64,66 @@ func _ready() -> void:
 	result_screen.set_script(result_script)
 	add_child(result_screen)
 
+	# Create Level Select screen
+	var level_select_scene := load("res://scenes/ui/LevelSelectScreen.tscn") as PackedScene
+	if level_select_scene:
+		level_select_screen = level_select_scene.instantiate() as Control
+		level_select_screen.name = "LevelSelectScreen"
+		level_select_screen.visible = false
+		add_child(level_select_screen)
+		level_select_screen.level_chosen.connect(_on_level_chosen)
+		level_select_screen.back_to_menu_requested.connect(_on_level_select_back)
+
+	# Connect result screen signals
+	if result_screen:
+		if result_screen.has_signal("level_select_requested"):
+			result_screen.level_select_requested.connect(_show_level_select)
+
 	# Connect experiment result to result screen
-	await get_tree().process_frame  # Wait for arena to initialize
+	await get_tree().process_frame
 	if arena and arena.experiment_controller:
 		arena.experiment_controller.experiment_result.connect(_on_experiment_result)
-		# Connect chain updates to gameplay UI
 		arena.experiment_controller.chain_manager.chain_updated.connect(_on_chain_updated)
 		arena.experiment_controller.chain_manager.chain_event_registered.connect(_on_chain_event)
-		# Give UI a reference to experiment controller
 		gameplay_ui.experiment_controller = arena.experiment_controller
 
-	print("[Main] Chaos Lab initialized!")
-	print("[Main] Controls: SPACE=GO, R=RESET, Z=UNDO, ESC=PAUSE, F1=DEBUG")
+	print("[Main] Chaos Lab initialized with 20 Campaign levels & Level Select!")
 
 
-## Handle experiment result — show result screen.
+func _show_level_select() -> void:
+	if level_select_screen:
+		level_select_screen.visible = true
+		level_select_screen._refresh_display()
+	if gameplay_ui:
+		gameplay_ui.visible = false
+	if arena:
+		arena.visible = false
+
+
+func _on_level_chosen(level_id: int) -> void:
+	if level_select_screen:
+		level_select_screen.visible = false
+	if arena:
+		arena.visible = true
+		arena._load_level(level_id)
+	if gameplay_ui:
+		gameplay_ui.visible = true
+
+
+func _on_level_select_back() -> void:
+	if level_select_screen:
+		level_select_screen.visible = false
+	if arena:
+		arena.visible = true
+	if gameplay_ui:
+		gameplay_ui.visible = true
+
+
 func _on_experiment_result(result: Dictionary) -> void:
 	if result_screen and result_screen.has_method("show_result"):
 		result_screen.show_result(result)
 
 
-## Handle chain updates — update HUD.
 func _on_chain_updated(chain_count: int, total_score: int) -> void:
 	if gameplay_ui and gameplay_ui.has_method("update_chain"):
 		var label: String = ""
@@ -90,18 +132,12 @@ func _on_chain_updated(chain_count: int, total_score: int) -> void:
 		gameplay_ui.update_chain(chain_count, total_score, label)
 
 
-## Handle chain events — trigger VFX and camera shake.
 func _on_chain_event(event: Dictionary) -> void:
 	var event_type: String = event.get("type", "")
 	match event_type:
 		"explosion":
-			if camera_shake:
-				camera_shake.shake(8.0, 4.0)
-			# Spawn explosion VFX at the source position
-			# (In a future iteration, we'll get the position from the event)
+			CameraShake.shake(0.8)
 		"collision":
-			if camera_shake:
-				camera_shake.shake(2.0, 8.0)
+			CameraShake.shake(0.2)
 		"launch":
-			if camera_shake:
-				camera_shake.shake(3.0, 6.0)
+			CameraShake.shake(0.35)

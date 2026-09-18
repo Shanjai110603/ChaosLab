@@ -140,7 +140,18 @@ func _end_experiment() -> void:
 		return
 
 	var chain_result := chain_manager.get_result()
-	var result := ScoreSystem.evaluate_level(chain_result, total_targets, score_targets)
+	
+	# Calculate unused items for par efficiency bonus
+	var unused_items := 0
+	if is_inside_tree():
+		var ui := get_tree().root.find_child("GameplayUI", true, false)
+		if ui and ui.object_tray:
+			for item in ui.object_tray.inventory.keys():
+				var cnt: int = ui.object_tray.inventory[item]
+				if cnt > 0:
+					unused_items += cnt
+
+	var result := ScoreSystem.evaluate_level(chain_result, total_targets, score_targets, unused_items)
 
 	# Save result if completed
 	if result["complete"]:

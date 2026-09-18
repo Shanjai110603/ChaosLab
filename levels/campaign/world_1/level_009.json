@@ -1,0 +1,65 @@
+{
+	"level_id": 9,
+	"world": 1,
+	"world_title": "The Mechanics Lab",
+	"title": "Pinball Run",
+	"description": "Bank the high-elasticity sphere off angled baffles to trigger an ascending cascade of targets!",
+	"par_objects": 3,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 300,
+			"y": 160,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "box",
+			"x": 720,
+			"y": 380,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "box",
+			"x": 980,
+			"y": 500,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "barrel",
+			"x": 1220,
+			"y": 620,
+			"rotation": 0,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 720,
+			"y": 240
+		},
+		{
+			"x": 980,
+			"y": 360
+		},
+		{
+			"x": 1440,
+			"y": 620
+		}
+	],
+	"score_targets": [350, 850, 1800],
+	"time_limit": 15,
+	"allowed_objects": ["ramp", "ball"],
+	"inventory": {
+		"ramp": 3,
+		"ball": 1
+	},
+	"hints": [
+		"Angle ramps to launch the ball upward into each target step",
+		"Keep velocity high so the final bounce strikes the barrel"
+	]
+}

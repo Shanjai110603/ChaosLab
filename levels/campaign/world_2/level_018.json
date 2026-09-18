@@ -1,0 +1,68 @@
+{
+	"level_id": 18,
+	"world": 2,
+	"world_title": "Kinetic Ballistics",
+	"title": "Laser Corridor",
+	"description": "High-speed rocket navigation along a fortified tunnel. Avoid premature barrier strikes to breach the inner sanctuary!",
+	"par_objects": 2,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 260,
+			"y": 200,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "rocket",
+			"x": 480,
+			"y": 520,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "box",
+			"x": 820,
+			"y": 420,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "box",
+			"x": 1120,
+			"y": 600,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "bomb",
+			"x": 1320,
+			"y": 520,
+			"rotation": 0,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 1450,
+			"y": 520
+		},
+		{
+			"x": 1450,
+			"y": 220
+		}
+	],
+	"score_targets": [450, 1200, 2600],
+	"time_limit": 15,
+	"allowed_objects": ["ramp", "ball"],
+	"inventory": {
+		"ramp": 2,
+		"ball": 1
+	},
+	"hints": [
+		"Align the rocket horizontally through the narrow opening",
+		"Direct the rocket into the terminal bomb to clear both targets"
+	]
+}

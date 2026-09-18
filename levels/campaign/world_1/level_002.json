@@ -1,8 +1,10 @@
 {
 	"level_id": 2,
 	"world": 1,
+	"world_title": "The Mechanics Lab",
 	"title": "Domino Cascade",
 	"description": "Place the ramp to guide the ball into the domino pillars!",
+	"par_objects": 2,
 	"arena_width": 1600,
 	"arena_height": 800,
 	"objects": [

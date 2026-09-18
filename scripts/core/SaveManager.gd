@@ -146,6 +146,38 @@ func get_level_best_score(level_id: int) -> int:
 	return level_data.get("score", 0)
 
 
+## Whether a level is currently unlocked for play.
+func is_level_unlocked(level_id: int) -> bool:
+	if level_id <= 1:
+		return true
+	var current: int = data.get("progress", {}).get("current_level", 1)
+	if level_id <= current:
+		return true
+	# Also check if previous level was cleared with stars
+	var prev_stars := get_level_stars(level_id - 1)
+	return prev_stars > 0
+
+
+## Get total stars earned across all levels.
+func get_total_stars() -> int:
+	var total := 0
+	var completed: Dictionary = data.get("progress", {}).get("completed_levels", {})
+	for key in completed.keys():
+		var info: Dictionary = completed[key]
+		total += info.get("stars", 0)
+	return total
+
+
+## Get total stars earned in a specific world (1 = levels 1-10, 2 = levels 11-20).
+func get_world_stars(world: int) -> int:
+	var total := 0
+	var start_id := (world - 1) * 10 + 1
+	var end_id := start_id + 9
+	for id in range(start_id, end_id + 1):
+		total += get_level_stars(id)
+	return total
+
+
 ## Save a level completion result (only updates if better).
 func save_level_result(level_id: int, score: int, chain: int, stars: int) -> void:
 	if not data.has("progress"):

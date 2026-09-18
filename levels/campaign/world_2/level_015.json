@@ -1,0 +1,66 @@
+{
+	"level_id": 15,
+	"world": 2,
+	"world_title": "Kinetic Ballistics",
+	"title": "Triple Detonation",
+	"description": "Three fortified bastions at varying altitudes. Plant explosive charges to shatter all three in one sequence!",
+	"par_objects": 3,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 300,
+			"y": 180,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "bomb",
+			"x": 600,
+			"y": 620,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "barrel",
+			"x": 860,
+			"y": 500,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "bomb",
+			"x": 1120,
+			"y": 380,
+			"rotation": 0,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 720,
+			"y": 260
+		},
+		{
+			"x": 1050,
+			"y": 620
+		},
+		{
+			"x": 1420,
+			"y": 380
+		}
+	],
+	"score_targets": [450, 1100, 2400],
+	"time_limit": 15,
+	"allowed_objects": ["bomb", "ramp", "ball"],
+	"inventory": {
+		"bomb": 2,
+		"ramp": 2,
+		"ball": 1
+	},
+	"hints": [
+		"Position bombs to create cascading radial impulses upward and outward",
+		"Timing is critical: let the lower blast launch debris into the upper fuse"
+	]
+}

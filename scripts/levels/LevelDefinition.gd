@@ -7,10 +7,16 @@ extends RefCounted
 var level_id: int = 0
 ## World number (1-10).
 var world: int = 1
+## World title.
+var world_title: String = "The Mechanics Lab"
 ## Display title.
 var title: String = ""
 ## Description/hint text.
 var description: String = ""
+## Target par count of placed objects for maximum bonus.
+var par_objects: int = 3
+## Minimum stars required to unlock this level (0 = unlocked by default).
+var unlock_threshold_stars: int = 0
 
 ## Arena dimensions.
 var arena_width: float = 1600.0
@@ -46,8 +52,11 @@ static func from_dict(data: Dictionary) -> LevelDefinition:
 	var def := LevelDefinition.new()
 	def.level_id = data.get("level_id", 0)
 	def.world = data.get("world", 1)
+	def.world_title = data.get("world_title", "The Mechanics Lab" if def.world == 1 else "Kinetic Ballistics")
 	def.title = data.get("title", "Experiment %d" % def.level_id)
 	def.description = data.get("description", "")
+	def.par_objects = data.get("par_objects", 3)
+	def.unlock_threshold_stars = data.get("unlock_threshold_stars", 0)
 	def.arena_width = data.get("arena_width", 1600.0)
 	def.arena_height = data.get("arena_height", 800.0)
 
@@ -97,8 +106,11 @@ func to_dict() -> Dictionary:
 	return {
 		"level_id": level_id,
 		"world": world,
+		"world_title": world_title,
 		"title": title,
 		"description": description,
+		"par_objects": par_objects,
+		"unlock_threshold_stars": unlock_threshold_stars,
 		"arena_width": arena_width,
 		"arena_height": arena_height,
 		"objects": objects,

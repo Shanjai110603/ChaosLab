@@ -1,0 +1,62 @@
+{
+	"level_id": 5,
+	"world": 1,
+	"world_title": "The Mechanics Lab",
+	"title": "The Pendulum",
+	"description": "Drop heavy boxes from overhead platforms to launch balls up into elevated targets!",
+	"par_objects": 2,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "box",
+			"x": 380,
+			"y": 180,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "ramp",
+			"x": 580,
+			"y": 480,
+			"rotation": -30,
+			"draggable": true
+		},
+		{
+			"type": "ball",
+			"x": 580,
+			"y": 380,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "barrel",
+			"x": 920,
+			"y": 600,
+			"rotation": 0,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 1320,
+			"y": 360
+		},
+		{
+			"x": 1320,
+			"y": 600
+		}
+	],
+	"score_targets": [150, 400, 900],
+	"time_limit": 15,
+	"allowed_objects": ["box", "ball", "ramp"],
+	"inventory": {
+		"box": 1,
+		"ball": 1,
+		"ramp": 1
+	},
+	"hints": [
+		"Drop the heavy box to strike the ramp lever",
+		"Use the kinetic impulse to trigger both upper and lower targets"
+	]
+}

@@ -1,0 +1,82 @@
+{
+	"level_id": 10,
+	"world": 1,
+	"world_title": "The Mechanics Lab",
+	"title": "Mega Reaction",
+	"description": "World 1 Climax: Connect all laboratory elements into a grand cascading Rube-Goldberg chain reaction!",
+	"par_objects": 4,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 260,
+			"y": 180,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "ramp",
+			"x": 420,
+			"y": 380,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "box",
+			"x": 650,
+			"y": 620,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "barrel",
+			"x": 840,
+			"y": 600,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "bomb",
+			"x": 1040,
+			"y": 620,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "rocket",
+			"x": 1220,
+			"y": 560,
+			"rotation": -55,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 560,
+			"y": 280
+		},
+		{
+			"x": 950,
+			"y": 420
+		},
+		{
+			"x": 1440,
+			"y": 220
+		}
+	],
+	"score_targets": [500, 1200, 2500],
+	"time_limit": 20,
+	"allowed_objects": ["ball", "ramp", "box", "bomb"],
+	"inventory": {
+		"ball": 2,
+		"ramp": 2,
+		"box": 1,
+		"bomb": 1
+	},
+	"hints": [
+		"Drop the ball to start the initial kinetic cascade",
+		"Ensure each explosion propels shrapnel into the next stage catalyst",
+		"Rocket impact will trigger the final high target"
+	]
+}

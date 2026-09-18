@@ -1,0 +1,73 @@
+{
+	"level_id": 19,
+	"world": 2,
+	"world_title": "Kinetic Ballistics",
+	"title": "Shockwave Chasm",
+	"description": "Blast heavy chemical drums across a yawning chasm into isolated target pillars!",
+	"par_objects": 3,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 260,
+			"y": 180,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "bomb",
+			"x": 480,
+			"y": 620,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "barrel",
+			"x": 620,
+			"y": 600,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "box",
+			"x": 960,
+			"y": 420,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "bomb",
+			"x": 1220,
+			"y": 600,
+			"rotation": 0,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 960,
+			"y": 240
+		},
+		{
+			"x": 1440,
+			"y": 600
+		},
+		{
+			"x": 1440,
+			"y": 320
+		}
+	],
+	"score_targets": [500, 1300, 2800],
+	"time_limit": 15,
+	"allowed_objects": ["bomb", "ramp", "ball"],
+	"inventory": {
+		"bomb": 2,
+		"ramp": 2,
+		"ball": 1
+	},
+	"hints": [
+		"Position a bomb right behind the barrel to launch it horizontally",
+		"Clear the central pylon before the secondary blast detonates the final targets"
+	]
+}

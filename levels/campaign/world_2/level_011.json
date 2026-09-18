@@ -1,0 +1,61 @@
+{
+	"level_id": 11,
+	"world": 2,
+	"world_title": "Kinetic Ballistics",
+	"title": "Rocket Relay",
+	"description": "Ignite a primary rocket whose flaming exhaust or impact detonates a secondary rocket across the arena!",
+	"par_objects": 2,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 300,
+			"y": 180,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "rocket",
+			"x": 500,
+			"y": 620,
+			"rotation": -70,
+			"draggable": true
+		},
+		{
+			"type": "box",
+			"x": 900,
+			"y": 420,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "rocket",
+			"x": 1050,
+			"y": 460,
+			"rotation": -40,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 1400,
+			"y": 250
+		},
+		{
+			"x": 1400,
+			"y": 600
+		}
+	],
+	"score_targets": [300, 800, 1800],
+	"time_limit": 15,
+	"allowed_objects": ["ramp", "ball", "box"],
+	"inventory": {
+		"ramp": 2,
+		"ball": 1
+	},
+	"hints": [
+		"Drop the ball to ignite the lower rocket",
+		"Direct the first rocket to strike the secondary launcher on the mid-platform"
+	]
+}

@@ -67,6 +67,32 @@ func load_level_data(level_id: int) -> LevelDefinition:
 	return LevelDefinition.from_dict(json.data)
 
 
+## Get metadata for all levels in a specific world.
+func get_levels_in_world(world: int) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var start_id := (world - 1) * 10 + 1
+	var end_id := start_id + 9
+
+	for id in range(start_id, end_id + 1):
+		var def := load_level_data(id)
+		if def and def.level_id > 0:
+			result.append({
+				"level_id": def.level_id,
+				"world": def.world,
+				"title": def.title,
+				"description": def.description,
+				"score_targets": def.score_targets,
+				"par_objects": def.par_objects,
+				"targets_count": def.target_positions.size(),
+			})
+	return result
+
+
+## Get total number of campaign levels across all worlds.
+func get_total_level_count() -> int:
+	return 20
+
+
 ## Instantiate all objects from a level definition into a parent node.
 ## Returns arrays of game_objects and targets.
 func instantiate_level(level_def: LevelDefinition, parent: Node2D) -> Dictionary:

@@ -1,8 +1,10 @@
 {
 	"level_id": 3,
 	"world": 1,
+	"world_title": "The Mechanics Lab",
 	"title": "Explosive Cannonade",
 	"description": "Detonate the central bomb to blast objects across the chamber into multiple targets!",
+	"par_objects": 2,
 	"arena_width": 1600,
 	"arena_height": 800,
 	"objects": [

@@ -1,8 +1,10 @@
 {
 	"level_id": 4,
 	"world": 1,
+	"world_title": "The Mechanics Lab",
 	"title": "Rocket Strike",
 	"description": "Trigger the rocket with a rolling impact to strike the fortified high bunker!",
+	"par_objects": 2,
 	"arena_width": 1600,
 	"arena_height": 800,
 	"objects": [

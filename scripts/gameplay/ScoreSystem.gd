@@ -1,25 +1,21 @@
 ## Score System.
-## Calculates final scores, star ratings, and coin rewards.
+## Calculates final scores, star ratings, par efficiency bonus, and coin rewards.
 class_name ScoreSystem
 extends RefCounted
 
-## Star rating thresholds (percentage of max possible score).
-const STAR_THRESHOLDS: Array[float] = [0.0, 0.3, 0.6, 0.85]
+## Points awarded per unused inventory item.
+const PAR_BONUS_PER_ITEM: int = 250
 
-## Base coin reward per star earned.
+## Coin rewards.
 const COINS_PER_STAR: int = 50
-## Bonus coins for a perfect (3-star) completion.
 const PERFECT_BONUS: int = 100
-## Bonus coins for chain of 10+.
-const CHAIN_BONUS_THRESHOLD: int = 10
-const CHAIN_BONUS_COINS: int = 50
+const CHAIN_BONUS_THRESHOLD: int = 8
+const CHAIN_BONUS_COINS: int = 75
 
 
 ## Calculate the star rating (1-3) based on score and level targets.
 static func calculate_stars(score: int, score_targets: Array) -> int:
-	# score_targets: [1_star_min, 2_star_min, 3_star_min]
 	if score_targets.size() < 3:
-		# Default thresholds if not specified
 		if score >= 500:
 			return 3
 		elif score >= 200:
@@ -40,59 +36,60 @@ static func calculate_stars(score: int, score_targets: Array) -> int:
 ## Calculate coin reward based on stars and chain performance.
 static func calculate_coins(stars: int, chain_count: int) -> int:
 	var coins: int = stars * COINS_PER_STAR
-
-	# Perfect bonus
 	if stars >= 3:
 		coins += PERFECT_BONUS
-
-	# Chain bonus
 	if chain_count >= CHAIN_BONUS_THRESHOLD:
 		coins += CHAIN_BONUS_COINS
-
 	return coins
 
 
-## Evaluate a level completion. Returns a result dictionary.
+## Evaluate a level completion with detailed breakdown.
 static func evaluate_level(
 	chain_result: Dictionary,
 	total_targets: int,
 	score_targets: Array,
+	unused_items: int = 0
 ) -> Dictionary:
-	var score: int = chain_result.get("total_score", 0)
+	var raw_score: int = chain_result.get("total_score", 0)
 	var chain: int = chain_result.get("chain_count", 0)
 	var targets_hit: int = chain_result.get("targets_hit", 0)
 
-	# Check completion
-	var is_complete: bool = targets_hit >= total_targets
+	var is_complete: bool = targets_hit >= total_targets and total_targets > 0
 
-	# Calculate stars (only if completed)
+	# Calculate par efficiency bonus
+	var par_bonus: int = 0
+	if is_complete and unused_items > 0:
+		par_bonus = unused_items * PAR_BONUS_PER_ITEM
+
+	var final_score: int = raw_score + par_bonus
+
 	var stars: int = 0
 	if is_complete:
-		stars = calculate_stars(score, score_targets)
-		stars = maxi(stars, 1)  # At least 1 star for completion
+		stars = calculate_stars(final_score, score_targets)
+		stars = maxi(stars, 1)  # At least 1 star for clearing the objectives
 
-	# Calculate coins
 	var coins: int = 0
 	if is_complete:
 		coins = calculate_coins(stars, chain)
 
-	# Determine result label
 	var label: String = ""
 	if not is_complete:
 		label = "INCOMPLETE"
 	elif stars >= 3:
-		label = "PERFECT!"
+		label = "PERFECT EXPERIMENT!"
 	elif stars >= 2:
-		label = "GREAT!"
+		label = "EXCELLENT!"
 	elif stars >= 1:
-		label = "COMPLETE!"
+		label = "EXPERIMENT COMPLETE!"
 
-	# Check for chaos rating (exceptional chain)
-	var chaos_rating: bool = chain >= 15
+	var chaos_rating: bool = chain >= 12
 
 	return {
 		"complete": is_complete,
-		"score": score,
+		"score": final_score,
+		"raw_score": raw_score,
+		"par_bonus": par_bonus,
+		"unused_items": unused_items,
 		"chain": chain,
 		"stars": stars,
 		"coins": coins,

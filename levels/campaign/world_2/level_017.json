@@ -1,0 +1,70 @@
+{
+	"level_id": 17,
+	"world": 2,
+	"world_title": "Kinetic Ballistics",
+	"title": "Counterweight",
+	"description": "A heavy counterweight rests above an explosive trap. Dislodge the pin to release the falling weight!",
+	"par_objects": 2,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 300,
+			"y": 180,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "box",
+			"x": 700,
+			"y": 200,
+			"rotation": 0,
+			"mass": 6.0,
+			"draggable": false
+		},
+		{
+			"type": "box",
+			"x": 700,
+			"y": 320,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "barrel",
+			"x": 700,
+			"y": 620,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "rocket",
+			"x": 1020,
+			"y": 620,
+			"rotation": -45,
+			"draggable": true
+		}
+	],
+	"targets": [
+		{
+			"x": 1400,
+			"y": 260
+		},
+		{
+			"x": 1400,
+			"y": 550
+		}
+	],
+	"score_targets": [450, 1150, 2500],
+	"time_limit": 15,
+	"allowed_objects": ["ball", "ramp", "bomb"],
+	"inventory": {
+		"ball": 1,
+		"ramp": 2,
+		"bomb": 1
+	},
+	"hints": [
+		"Knock out the middle box support to drop the 6kg counterweight",
+		"Crush the barrel at high velocity to ignite the rocket warhead"
+	]
+}

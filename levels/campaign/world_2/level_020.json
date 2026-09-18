@@ -1,0 +1,86 @@
+{
+	"level_id": 20,
+	"world": 2,
+	"world_title": "Kinetic Ballistics",
+	"title": "The Grand Collider",
+	"description": "World 2 Finale: Synchronize all laboratory forces across four chambers to trigger the ultimate chain reaction!",
+	"par_objects": 4,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 220,
+			"y": 160,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "ramp",
+			"x": 380,
+			"y": 360,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "barrel",
+			"x": 600,
+			"y": 580,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "bomb",
+			"x": 820,
+			"y": 580,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "rocket",
+			"x": 1020,
+			"y": 550,
+			"rotation": -45,
+			"draggable": false
+		},
+		{
+			"type": "rocket",
+			"x": 1260,
+			"y": 420,
+			"rotation": -90,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 600,
+			"y": 240
+		},
+		{
+			"x": 820,
+			"y": 320
+		},
+		{
+			"x": 1260,
+			"y": 180
+		},
+		{
+			"x": 1500,
+			"y": 420
+		}
+	],
+	"score_targets": [600, 1600, 3500],
+	"time_limit": 20,
+	"allowed_objects": ["ball", "ramp", "bomb", "box"],
+	"inventory": {
+		"ball": 2,
+		"ramp": 3,
+		"bomb": 1,
+		"box": 1
+	},
+	"hints": [
+		"Drop the catalyst sphere into the left chamber",
+		"Synchronize the double rocket launches to breach the upper and right chambers",
+		"Keep the multiplier active across all 4 targets for maximum 3-star rating"
+	]
+}

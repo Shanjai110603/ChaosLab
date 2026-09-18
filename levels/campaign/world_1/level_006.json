@@ -1,0 +1,54 @@
+{
+	"level_id": 6,
+	"world": 1,
+	"world_title": "The Mechanics Lab",
+	"title": "Ricochet Alley",
+	"description": "Arrange alternating angled ramps to bounce the speed sphere through the slalom corridor!",
+	"par_objects": 3,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 280,
+			"y": 160,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "box",
+			"x": 750,
+			"y": 420,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "barrel",
+			"x": 1120,
+			"y": 620,
+			"rotation": 0,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 960,
+			"y": 240
+		},
+		{
+			"x": 1400,
+			"y": 620
+		}
+	],
+	"score_targets": [200, 500, 1100],
+	"time_limit": 15,
+	"allowed_objects": ["ramp", "ball"],
+	"inventory": {
+		"ramp": 3,
+		"ball": 1
+	},
+	"hints": [
+		"Place ramps at 45 degree angles to redirect the ball",
+		"Clear the upper target before diving into the explosive barrel"
+	]
+}

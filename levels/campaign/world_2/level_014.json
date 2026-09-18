@@ -1,0 +1,65 @@
+{
+	"level_id": 14,
+	"world": 2,
+	"world_title": "Kinetic Ballistics",
+	"title": "Precision Launch",
+	"description": "Guide a rocket through narrow aperture slits to reach the shielded core target!",
+	"par_objects": 2,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 300,
+			"y": 200,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "rocket",
+			"x": 500,
+			"y": 620,
+			"rotation": -35,
+			"draggable": true
+		},
+		{
+			"type": "box",
+			"x": 920,
+			"y": 300,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "box",
+			"x": 920,
+			"y": 560,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "barrel",
+			"x": 1260,
+			"y": 420,
+			"rotation": 0,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 1440,
+			"y": 420
+		}
+	],
+	"score_targets": [350, 850, 1900],
+	"time_limit": 15,
+	"allowed_objects": ["ramp", "ball", "box"],
+	"inventory": {
+		"ramp": 2,
+		"ball": 1,
+		"box": 1
+	},
+	"hints": [
+		"Rotate the rocket to thread the needle between the two barrier boxes",
+		"Impact the fuel barrel to vaporize the fortified target zone"
+	]
+}

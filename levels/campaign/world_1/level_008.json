@@ -1,0 +1,61 @@
+{
+	"level_id": 8,
+	"world": 1,
+	"world_title": "The Mechanics Lab",
+	"title": "Dual Fuse",
+	"description": "Two volatile charges separated by a central partition. Split the trigger to detonate both wings!",
+	"par_objects": 2,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 400,
+			"y": 180,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "box",
+			"x": 800,
+			"y": 500,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "bomb",
+			"x": 600,
+			"y": 620,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "bomb",
+			"x": 1000,
+			"y": 620,
+			"rotation": 0,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 460,
+			"y": 620
+		},
+		{
+			"x": 1140,
+			"y": 620
+		}
+	],
+	"score_targets": [300, 750, 1600],
+	"time_limit": 15,
+	"allowed_objects": ["ball", "ramp"],
+	"inventory": {
+		"ball": 2,
+		"ramp": 2
+	},
+	"hints": [
+		"Place ramps to split momentum across the central divide",
+		"Synchronize the rolling spheres so both bomb fuses ignite"
+	]
+}

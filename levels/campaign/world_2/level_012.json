@@ -1,0 +1,61 @@
+{
+	"level_id": 12,
+	"world": 2,
+	"world_title": "Kinetic Ballistics",
+	"title": "The Catapult",
+	"description": "Drop heavy crates onto ramp lever fulcrums to catapult high-speed spheres skyward!",
+	"par_objects": 2,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "box",
+			"x": 460,
+			"y": 180,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "ramp",
+			"x": 620,
+			"y": 580,
+			"rotation": 180,
+			"draggable": true
+		},
+		{
+			"type": "ball",
+			"x": 700,
+			"y": 520,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "box",
+			"x": 1020,
+			"y": 360,
+			"rotation": 0,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 860,
+			"y": 180
+		},
+		{
+			"x": 1360,
+			"y": 320
+		}
+	],
+	"score_targets": [350, 900, 2000],
+	"time_limit": 15,
+	"allowed_objects": ["box", "ball", "ramp"],
+	"inventory": {
+		"box": 2,
+		"ball": 1
+	},
+	"hints": [
+		"Align the heavy crate directly above the lever arm",
+		"Use maximum kinetic force to vault the ball into the high target ceiling"
+	]
+}

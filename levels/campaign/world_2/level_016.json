@@ -1,0 +1,68 @@
+{
+	"level_id": 16,
+	"world": 2,
+	"world_title": "Kinetic Ballistics",
+	"title": "The Funnel",
+	"description": "Converge multiple rolling spheres into a central accelerator to blast through barrier gates!",
+	"par_objects": 3,
+	"arena_width": 1600,
+	"arena_height": 800,
+	"objects": [
+		{
+			"type": "ball",
+			"x": 260,
+			"y": 160,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "ball",
+			"x": 480,
+			"y": 160,
+			"rotation": 0,
+			"draggable": true
+		},
+		{
+			"type": "box",
+			"x": 820,
+			"y": 520,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "barrel",
+			"x": 1060,
+			"y": 620,
+			"rotation": 0,
+			"draggable": false
+		},
+		{
+			"type": "bomb",
+			"x": 1260,
+			"y": 620,
+			"rotation": 0,
+			"draggable": false
+		}
+	],
+	"targets": [
+		{
+			"x": 1440,
+			"y": 620
+		},
+		{
+			"x": 1440,
+			"y": 360
+		}
+	],
+	"score_targets": [400, 1050, 2300],
+	"time_limit": 15,
+	"allowed_objects": ["ramp", "ball"],
+	"inventory": {
+		"ramp": 3,
+		"ball": 1
+	},
+	"hints": [
+		"Funnel both balls into the same trajectory to double the impact momentum",
+		"Use the combined momentum to push the heavy box into the explosive cluster"
+	]
+}
