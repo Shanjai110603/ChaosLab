@@ -5,6 +5,10 @@ extends CanvasLayer
 
 signal object_spawn_requested(object_type: String, world_position: Vector2)
 signal level_select_requested()
+signal main_menu_requested()
+
+## NIX AI Lab Assistant companion instance.
+var nix_companion: NixCompanion = null
 
 ## Chain count label.
 var chain_label: Label = null
@@ -95,6 +99,16 @@ func _create_ui() -> void:
 	_create_object_tray(root)
 	_create_bottom_bar(root)
 
+	# Instance NIX AI Companion (docked at bottom-left above tray)
+	var nix_scene := load("res://scenes/ui/NixCompanion.tscn") as PackedScene
+	if nix_scene:
+		nix_companion = nix_scene.instantiate() as NixCompanion
+		nix_companion.name = "NixCompanion"
+		nix_companion.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+		nix_companion.offset_left = 32
+		nix_companion.offset_top = -240
+		root.add_child(nix_companion)
+
 
 func _create_top_bar(root: Control) -> void:
 	var top_bg := PanelContainer.new()
@@ -118,7 +132,7 @@ func _create_top_bar(root: Control) -> void:
 	root.add_child(top_bg)
 
 	var top_bar := HBoxContainer.new()
-	top_bar.add_theme_constant_override("separation", 16)
+	top_bar.add_theme_constant_override("separation", 14)
 	top_bar.alignment = BoxContainer.ALIGNMENT_CENTER
 	top_bg.add_child(top_bar)
 
@@ -127,8 +141,14 @@ func _create_top_bar(root: Control) -> void:
 	pause_button.pressed.connect(_on_pause_pressed)
 	top_bar.add_child(pause_button)
 
+	# Main Menu button (Home)
+	var menu_btn := _create_action_button("🏠 MENU", COLOR_PAUSE, 92, 38)
+	menu_btn.add_theme_font_size_override("font_size", 13)
+	menu_btn.pressed.connect(func(): main_menu_requested.emit())
+	top_bar.add_child(menu_btn)
+
 	# Levels / Campaign Menu button
-	var levels_btn := _create_action_button("☰ LEVELS", COLOR_PAUSE, 100, 38)
+	var levels_btn := _create_action_button("☰ LEVELS", COLOR_PAUSE, 96, 38)
 	levels_btn.add_theme_font_size_override("font_size", 13)
 	levels_btn.pressed.connect(func(): level_select_requested.emit())
 	top_bar.add_child(levels_btn)
@@ -525,6 +545,14 @@ func update_chain(chain_count: int, total_score: int, label_text: String = "") -
 		var tween := create_tween()
 		tween.tween_property(chain_label, "scale", Vector2(1.15, 1.15), 0.06).set_ease(Tween.EASE_OUT)
 		tween.tween_property(chain_label, "scale", Vector2.ONE, 0.12).set_ease(Tween.EASE_IN_OUT)
+
+		if nix_companion:
+			nix_companion.react_to_chain(chain_count)
+
+
+func greet_level(level_id: int, title: String, objective: String) -> void:
+	if nix_companion:
+		nix_companion.greet_level(level_id, title, objective)
 
 
 func _hide_chain_display() -> void:

@@ -39,7 +39,7 @@ for root, _, files in os.walk(scenes_dir):
                 scene_count += 1
                 print(f"  [PASS] {f} ({len(lines)} lines)")
 print(f"Total valid scene files: {scene_count}")
-assert scene_count >= 18, f"Expected at least 18 scene files, found {scene_count}"
+assert scene_count >= 22, f"Expected at least 22 scene files, found {scene_count}"
 
 # 3. Check all GDScript files
 print("\n[3] Checking GDScript (.gd) files...")
@@ -67,6 +67,12 @@ required_features = {
     "PlatformService.gd": "show_interstitial",
     "ResultScreen.gd": "_on_double_pressed",
     "GameplayUI.gd": "_on_hint_pressed",
+    "NixCompanion.gd": "NixCompanion",
+    "MainMenuScreen.gd": "MainMenuScreen",
+    "LabHubScreen.gd": "LabHubScreen",
+    "ChaosModeScreen.gd": "ChaosModeScreen",
+    "SettingsScreen.gd": "SettingsScreen",
+    "ChaosGenerator.gd": "ChaosGenerator",
 }
 found_features = set()
 

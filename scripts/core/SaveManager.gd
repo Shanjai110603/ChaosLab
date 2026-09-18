@@ -194,6 +194,26 @@ func get_world_stars(world: int) -> int:
 	return total
 
 
+## Whether a world is unlocked (World 1 is always unlocked; World N requires previous world or stars).
+func is_world_unlocked(world: int) -> bool:
+	if world <= 1:
+		return true
+	var worlds: Array = data.get("progress", {}).get("worlds_unlocked", [1])
+	if world in worlds:
+		return true
+	var current: int = data.get("progress", {}).get("current_level", 1)
+	if current >= (world - 1) * 10 + 1:
+		return true
+	return get_world_stars(world - 1) >= 12
+
+
+## Reset all progress and save data to defaults.
+func reset_data() -> void:
+	_create_default_data()
+	save_data()
+	data_loaded.emit()
+
+
 ## Save a level completion result (only updates if better).
 func save_level_result(level_id: int, score: int, chain: int, stars: int) -> void:
 	if not data.has("progress"):

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://c_nix_companion_01"]
+
+[ext_resource type="Script" path="res://scripts/ui/NixCompanion.gd" id="1_nix"]
+
+[node name="NixCompanion" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 380.0
+offset_bottom = 100.0
+mouse_filter = 2
+script = ExtResource("1_nix")
