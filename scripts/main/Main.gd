@@ -56,6 +56,13 @@ func _ready() -> void:
 	gameplay_ui.set_script(ui_script)
 	add_child(gameplay_ui)
 
+	# Connect arena and gameplay UI
+	if arena and gameplay_ui:
+		if gameplay_ui.has_signal("object_spawn_requested") and arena.has_method("spawn_object"):
+			gameplay_ui.object_spawn_requested.connect(arena.spawn_object)
+		if gameplay_ui.has_signal("level_select_requested"):
+			gameplay_ui.level_select_requested.connect(_show_level_select)
+
 	# Create pause menu
 	var pause_script := load("res://scripts/ui/PauseMenu.gd")
 	pause_menu = CanvasLayer.new()
@@ -135,6 +142,13 @@ func _ready() -> void:
 		arena.experiment_controller.chain_manager.chain_updated.connect(_on_chain_updated)
 		arena.experiment_controller.chain_manager.chain_event_registered.connect(_on_chain_event)
 		gameplay_ui.experiment_controller = arena.experiment_controller
+		if arena.current_level and gameplay_ui and gameplay_ui.object_tray:
+			if not arena.current_level.inventory.is_empty():
+				gameplay_ui.object_tray.set_inventory(arena.current_level.inventory)
+			if gameplay_ui.level_label:
+				gameplay_ui.level_label.text = "EXPERIMENT %d: %s" % [arena.current_level.level_id, arena.current_level.title.to_upper()]
+			if gameplay_ui.hint_banner and not arena.current_level.description.is_empty():
+				gameplay_ui.hint_banner.text = "🎯 Objective: %s" % arena.current_level.description
 
 	print("[Main] Chaos Lab initialized with 20 Campaign levels & Level Select!")
 
@@ -235,6 +249,13 @@ func _on_level_chosen(level_id: int) -> void:
 		arena._load_level(level_id)
 	if gameplay_ui:
 		gameplay_ui.visible = true
+		if arena and arena.current_level and gameplay_ui.object_tray:
+			if not arena.current_level.inventory.is_empty():
+				gameplay_ui.object_tray.set_inventory(arena.current_level.inventory)
+			if gameplay_ui.level_label:
+				gameplay_ui.level_label.text = "EXPERIMENT %d: %s" % [arena.current_level.level_id, arena.current_level.title.to_upper()]
+			if gameplay_ui.hint_banner and not arena.current_level.description.is_empty():
+				gameplay_ui.hint_banner.text = "🎯 Objective: %s" % arena.current_level.description
 
 
 func _on_level_select_back() -> void:

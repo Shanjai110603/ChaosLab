@@ -130,11 +130,10 @@ func _draw_bomb(node: Node2D) -> void:
 			node.draw_line(Vector2.ZERO, tip, accent_col, 3.0)
 		node.draw_circle(Vector2.ZERO, bomb_radius * 0.2, accent_col)
 	else:
-		# Hazardous skull / cross emblem
-		var emblem_col: Color = Color(1.0, 1.0, 1.0, 0.85) if _flash_on else accent_col
-		var es := bomb_radius * 0.35
-		node.draw_line(Vector2(-es, -es), Vector2(es, es), emblem_col, 2.5)
-		node.draw_line(Vector2(-es, es), Vector2(es, -es), emblem_col, 2.5)
+		# Glowing explosive core ring & spark dot
+		var emblem_col: Color = Color(1.0, 0.95, 0.5) if _flash_on else Color(1.0, 0.35, 0.2)
+		node.draw_arc(Vector2.ZERO, bomb_radius * 0.42, 0, TAU, 28, emblem_col, 2.0, true)
+		node.draw_circle(Vector2.ZERO, bomb_radius * 0.18, emblem_col)
 
 	# Brass / metallic neck collar
 	var neck_rect := Rect2(-5, -bomb_radius - 4, 10, 5)

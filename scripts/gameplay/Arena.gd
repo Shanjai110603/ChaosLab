@@ -266,8 +266,10 @@ func _on_level_started(level_id: int) -> void:
 ## Dynamically spawn an object into the arena (from object tray).
 func spawn_object(object_type: String, world_pos: Vector2) -> GameObject:
 	var type_clean := object_type.strip_edges().to_lower()
-	var scene_name := type_clean.capitalize()
-	var scene_path := "res://scenes/objects/%s.tscn" % scene_name
+	var scene_path: String = LevelLoader.OBJECT_SCENES.get(type_clean, "")
+	if scene_path.is_empty():
+		var scene_name := type_clean.replace("_", "").capitalize().replace(" ", "")
+		scene_path = "res://scenes/objects/%s.tscn" % scene_name
 	
 	var scene := load(scene_path) as PackedScene
 	if not scene:

@@ -4,6 +4,7 @@ class_name GameplayUIClass
 extends CanvasLayer
 
 signal object_spawn_requested(object_type: String, world_position: Vector2)
+signal level_select_requested()
 
 ## Chain count label.
 var chain_label: Label = null
@@ -13,6 +14,8 @@ var chain_mult_label: Label = null
 var score_label: Label = null
 ## Level label.
 var level_label: Label = null
+## Objective / hint banner.
+var hint_banner: Label = null
 ## State indicator.
 var state_label: Label = null
 ## GO button.
@@ -124,6 +127,12 @@ func _create_top_bar(root: Control) -> void:
 	pause_button.pressed.connect(_on_pause_pressed)
 	top_bar.add_child(pause_button)
 
+	# Levels / Campaign Menu button
+	var levels_btn := _create_action_button("☰ LEVELS", COLOR_PAUSE, 100, 38)
+	levels_btn.add_theme_font_size_override("font_size", 13)
+	levels_btn.pressed.connect(func(): level_select_requested.emit())
+	top_bar.add_child(levels_btn)
+
 	# Simulation Speed Selector (0.5x, 1x, 2x)
 	var speed_box := HBoxContainer.new()
 	speed_box.add_theme_constant_override("separation", 4)
@@ -147,25 +156,32 @@ func _create_top_bar(root: Control) -> void:
 	spacer1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top_bar.add_child(spacer1)
 
-	# Center: Title + Level
+	# Center: Title + Level + Hint
 	var center_box := VBoxContainer.new()
 	center_box.alignment = BoxContainer.ALIGNMENT_CENTER
-	center_box.add_theme_constant_override("separation", -2)
+	center_box.add_theme_constant_override("separation", 1)
 	top_bar.add_child(center_box)
 
 	title_label = Label.new()
-	title_label.text = "CHAOS LAB"
-	title_label.add_theme_font_size_override("font_size", 12)
-	title_label.add_theme_color_override("font_color", Color(0.5, 0.65, 0.85, 0.7))
+	title_label.text = "CHAOS LAB • PHYSICS ENGINE"
+	title_label.add_theme_font_size_override("font_size", 11)
+	title_label.add_theme_color_override("font_color", Color(0.45, 0.7, 1.0, 0.75))
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	center_box.add_child(title_label)
 
 	level_label = Label.new()
 	level_label.text = "EXPERIMENT 1"
-	level_label.add_theme_font_size_override("font_size", 20)
-	level_label.add_theme_color_override("font_color", Color(0.85, 0.9, 0.98))
+	level_label.add_theme_font_size_override("font_size", 19)
+	level_label.add_theme_color_override("font_color", Color(0.9, 0.95, 1.0))
 	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	center_box.add_child(level_label)
+
+	hint_banner = Label.new()
+	hint_banner.text = "🎯 Objective: Drag the blue ball above the barrel • Press TRIGGER CHAOS!"
+	hint_banner.add_theme_font_size_override("font_size", 12)
+	hint_banner.add_theme_color_override("font_color", Color(0.0, 0.95, 0.85, 0.9))
+	hint_banner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	center_box.add_child(hint_banner)
 
 	# Right spacer
 	var spacer2 := Control.new()
@@ -254,10 +270,10 @@ func _create_object_tray(root: Control) -> void:
 	object_tray.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 	object_tray.anchor_top = 1.0
 	object_tray.anchor_bottom = 1.0
-	object_tray.offset_top = -180
-	object_tray.offset_bottom = -92
-	object_tray.offset_left = 220
-	object_tray.offset_right = -220
+	object_tray.offset_top = -165
+	object_tray.offset_bottom = -76
+	object_tray.offset_left = 180
+	object_tray.offset_right = -180
 	root.add_child(object_tray)
 
 	object_tray.object_spawn_requested.connect(func(type: String, pos: Vector2):
@@ -269,10 +285,10 @@ func _create_bottom_bar(root: Control) -> void:
 	var bottom_bg := PanelContainer.new()
 	bottom_bg.name = "BottomBar"
 	bottom_bg.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	bottom_bg.custom_minimum_size.y = 86
+	bottom_bg.custom_minimum_size.y = 74
 	bottom_bg.set_anchor(SIDE_TOP, 1.0)
 	bottom_bg.set_anchor(SIDE_BOTTOM, 1.0)
-	bottom_bg.offset_top = -86
+	bottom_bg.offset_top = -74
 	bottom_bg.offset_bottom = 0
 
 	var bottom_style := StyleBoxFlat.new()
@@ -351,8 +367,8 @@ func _create_bottom_bar(root: Control) -> void:
 
 func _create_go_button() -> Button:
 	var btn := Button.new()
-	btn.text = "▶ GO"
-	btn.custom_minimum_size = Vector2(190, 54)
+	btn.text = "▶ TRIGGER CHAOS"
+	btn.custom_minimum_size = Vector2(240, 52)
 
 	var normal := StyleBoxFlat.new()
 	normal.bg_color = COLOR_GO
@@ -454,7 +470,7 @@ func _update_for_state(state: GameManager.GameState) -> void:
 	match state:
 		GameManager.GameState.PLACING:
 			go_button.disabled = false
-			go_button.text = "▶  GO"
+			go_button.text = "▶ TRIGGER CHAOS"
 			reset_button.disabled = false
 			undo_button.disabled = false
 			if hint_button:

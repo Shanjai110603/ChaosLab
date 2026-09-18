@@ -41,15 +41,8 @@ DebugManager="*res://scripts/core/DebugManager.gd"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/stretch/aspect="keep"
 window/handheld/orientation=5
-
-[physics]
-
-2d/sleep_threshold_linear=10.0
-2d/sleep_threshold_angular=0.15
-2d/time_before_sleep=0.4
-2d/solver/solver_iterations=10
 
 [input]
 
@@ -91,6 +84,13 @@ debug_skip_level={
 2d_physics/layer_3="targets"
 2d_physics/layer_4="blast_zones"
 2d_physics/layer_5="draggable"
+
+[physics]
+
+2d/sleep_threshold_linear=10.0
+2d/sleep_threshold_angular=0.15
+2d/time_before_sleep=0.4
+2d/solver/solver_iterations=10
 
 [rendering]
 
