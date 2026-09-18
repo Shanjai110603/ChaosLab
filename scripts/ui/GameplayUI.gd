@@ -543,5 +543,5 @@ func _on_hint_pressed() -> void:
 			AudioManager.play_fanfare()
 			if object_tray:
 				object_tray.add_item("bomb", 1)
-			FloatingText.spawn(self, Vector2(640, 500), "+1 BONUS BOMB!", Color(1.0, 0.85, 0.25))
+			FloatingText.spawn(self, "+1 BONUS BOMB!", Vector2(640, 500), Color(1.0, 0.85, 0.25))
 	)

@@ -3,7 +3,7 @@
 extends Node2D
 
 ## The container for spawned game objects.
-@onready var objects_container: Node2D = $ObjectsContainer
+var objects_container: Node2D = null
 ## The experiment controller.
 var experiment_controller: ExperimentController = null
 ## The level loader.

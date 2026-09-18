@@ -11,8 +11,6 @@ extends GameObject
 ## Bounce coefficient.
 @export var ramp_bounce: float = 0.25
 
-var _visual: Node2D = null
-
 
 func _init() -> void:
 	object_name = "Ramp"

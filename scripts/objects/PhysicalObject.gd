@@ -22,8 +22,6 @@ extends GameObject
 @export var invalid_highlight_color: Color = Color(1.0, 0.2, 0.2, 0.8)
 @export var highlight_color: Color = Color(0.0, 1.0, 0.8, 0.7)
 
-## The main visual sprite/shape for this object.
-var _visual: Node2D = null
 
 
 func _ready() -> void:

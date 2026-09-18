@@ -142,13 +142,20 @@ func _on_horizon_body_entered(body: Node2D) -> void:
 	target_portal._teleport_cooldowns[body] = now
 
 	# Compute entry and exit trajectories
-	var speed := body.linear_velocity.length()
+	var speed: float = 250.0
+	if body is RigidBody2D:
+		speed = (body as RigidBody2D).linear_velocity.length()
+	elif "linear_velocity" in body:
+		speed = body.linear_velocity.length()
 	var exit_forward := Vector2.UP.rotated(target_portal.global_rotation)
 	var exit_pos := target_portal.global_position + exit_forward * 45.0
 	var exit_velocity := exit_forward * maxf(speed, 250.0)
 
 	body.global_position = exit_pos
-	body.linear_velocity = exit_velocity
+	if body is RigidBody2D:
+		(body as RigidBody2D).linear_velocity = exit_velocity
+	elif "linear_velocity" in body:
+		body.linear_velocity = exit_velocity
 
 	# Audio and VFX
 	AudioManager.play_ui_blip("select")

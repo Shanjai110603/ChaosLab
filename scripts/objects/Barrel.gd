@@ -185,7 +185,7 @@ func _on_body_entered(body: Node) -> void:
 		return
 
 	if body is RigidBody2D:
-		var rel_speed := (linear_velocity - body.linear_velocity).length()
+		var rel_speed: float = (linear_velocity - (body as RigidBody2D).linear_velocity).length()
 		if rel_speed >= min_impact_velocity:
 			explode()
 	elif body is BombObject:

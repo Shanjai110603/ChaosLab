@@ -31,6 +31,8 @@ const MAX_UNDO: int = 20
 var _is_being_dragged: bool = false
 ## Visual node for selection/hover highlight.
 var _highlight: Node2D = null
+## The main visual sprite/shape for this object.
+var _visual: Node2D = null
 
 
 ## Whether this object's current placement position is valid.
