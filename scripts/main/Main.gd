@@ -140,6 +140,10 @@ func _ready() -> void:
 	if result_screen:
 		if result_screen.has_signal("level_select_requested"):
 			result_screen.level_select_requested.connect(_show_level_select)
+		if result_screen.has_signal("retry_requested"):
+			result_screen.retry_requested.connect(_on_retry_requested)
+		if result_screen.has_signal("next_requested"):
+			result_screen.next_requested.connect(_on_next_requested)
 
 	# Connect experiment result to result screen
 	await get_tree().process_frame
@@ -271,6 +275,26 @@ func _on_level_select_back() -> void:
 		arena.visible = true
 	if gameplay_ui:
 		gameplay_ui.visible = true
+
+
+func _on_retry_requested() -> void:
+	if result_screen:
+		result_screen.visible = false
+	if arena:
+		arena.visible = true
+	if gameplay_ui:
+		gameplay_ui.visible = true
+	GameManager.trigger_reset()
+
+
+func _on_next_requested() -> void:
+	if result_screen:
+		result_screen.visible = false
+	var next_id: int = GameManager.current_level_id + 1
+	if next_id <= 20:
+		_on_level_chosen(next_id)
+	else:
+		_show_level_select()
 
 
 func _on_experiment_result(result: Dictionary) -> void:
