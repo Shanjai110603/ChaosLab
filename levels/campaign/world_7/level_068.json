@@ -1,0 +1,77 @@
+{
+    "level_id": 68,
+    "world": 7,
+    "world_title": "Hazard Control",
+    "title": "Hazard Trench",
+    "description": "World 7 Stage 8: Narrow apertures, hazardous obstacles, and surgical timing.",
+    "par_objects": 4,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 365,
+            "y": 200,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "box",
+            "x": 580,
+            "y": 520,
+            "rotation": 0,
+            "draggable": false
+        },
+        {
+            "type": "box",
+            "x": 580,
+            "y": 420,
+            "rotation": 0,
+            "draggable": false
+        },
+        {
+            "type": "bomb",
+            "x": 580,
+            "y": 320,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 760,
+            "y": 270
+        },
+        {
+            "x": 1060,
+            "y": 440
+        },
+        {
+            "x": 1180,
+            "y": 360
+        }
+    ],
+    "score_targets": [
+        1390,
+        2780,
+        5004
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp",
+        "bomb",
+        "box"
+    ],
+    "inventory": {
+        "ball": 1,
+        "ramp": 1,
+        "bomb": 1,
+        "box": 1
+    },
+    "hints": [
+        "Analyze the path towards target zones in Hazard Control",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

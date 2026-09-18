@@ -23,6 +23,7 @@ for root, _, files in os.walk(levels_dir):
                 json_count += 1
                 print(f"  [PASS] {f} - Level {data['level_id']}: '{data['title']}' ({len(data['objects'])} objects, {len(data['targets'])} targets)")
 print(f"Total valid level files: {json_count}")
+assert json_count >= 101, f"Expected at least 101 level files, found {json_count}"
 
 # 2. Check all Scene files
 print("\n[2] Checking Scene (.tscn) files...")
@@ -43,12 +44,16 @@ print(f"Total valid scene files: {scene_count}")
 print("\n[3] Checking GDScript (.gd) files...")
 scripts_dir = "scripts"
 script_count = 0
-phase_4_features = {
+required_features = {
     "AudioSynthesizer.gd": "AudioStreamGenerator",
     "ScreenVignette.gd": "flash_explosion",
     "ImpactSpark.gd": "ImpactSpark",
     "ConfettiEffect.gd": "ConfettiEffect",
     "CameraShake.gd": "hit_stop",
+    "CosmeticManager.gd": "CATALOG",
+    "ShopScreen.gd": "_create_skin_card",
+    "SaveManager.gd": "can_afford",
+    "LevelSelectScreen.gd": "MAX_WORLDS",
 }
 found_features = set()
 
@@ -67,16 +72,16 @@ for root, _, files in os.walk(scripts_dir):
                         f"Mismatched {b_open}{b_close} in {f}: {content.count(b_open)} vs {content.count(b_close)}"
                     )
                 
-                if f in phase_4_features:
-                    assert phase_4_features[f] in content, f"Missing feature keyword {phase_4_features[f]} in {f}"
+                if f in required_features:
+                    assert required_features[f] in content, f"Missing feature keyword {required_features[f]} in {f}"
                     found_features.add(f)
                     
                 script_count += 1
                 print(f"  [PASS] {f} ({len(lines)} lines)")
 
-assert len(found_features) == len(phase_4_features), f"Missing phase 4 scripts: {set(phase_4_features.keys()) - found_features}"
+assert len(found_features) == len(required_features), f"Missing required feature scripts: {set(required_features.keys()) - found_features}"
 print(f"Total valid script files: {script_count}")
-print(f"All Phase 4 procedural systems verified: {', '.join(sorted(found_features))}")
+print(f"All Phase 4 & 5 core systems verified: {', '.join(sorted(found_features))}")
 
 print("\n" + "=" * 60)
 print(">>> ALL INTEGRITY CHECKS PASSED SUCCESSFULLY <<<")

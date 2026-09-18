@@ -1,0 +1,73 @@
+{
+    "level_id": 61,
+    "world": 7,
+    "world_title": "Hazard Control",
+    "title": "Needle's Eye",
+    "description": "World 7 Stage 1: Narrow apertures, hazardous obstacles, and surgical timing.",
+    "par_objects": 2,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 260,
+            "y": 160,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "box",
+            "x": 580,
+            "y": 520,
+            "rotation": 0,
+            "draggable": false
+        },
+        {
+            "type": "box",
+            "x": 580,
+            "y": 420,
+            "rotation": 0,
+            "draggable": false
+        },
+        {
+            "type": "bomb",
+            "x": 580,
+            "y": 320,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 650,
+            "y": 280
+        },
+        {
+            "x": 1150,
+            "y": 420
+        }
+    ],
+    "score_targets": [
+        1267,
+        2535,
+        4563
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp",
+        "bomb",
+        "box"
+    ],
+    "inventory": {
+        "ball": 1,
+        "ramp": 1,
+        "bomb": 1,
+        "box": 1
+    },
+    "hints": [
+        "Analyze the path towards target zones in Hazard Control",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

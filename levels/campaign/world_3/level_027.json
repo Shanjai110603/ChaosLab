@@ -1,0 +1,68 @@
+{
+    "level_id": 27,
+    "world": 3,
+    "world_title": "Chain Catalyst",
+    "title": "Dual Volley",
+    "description": "World 3 Stage 7: Sequential and synchronized multi-point detonations.",
+    "par_objects": 3,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 350,
+            "y": 160,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "barrel",
+            "x": 680,
+            "y": 580,
+            "rotation": 0,
+            "draggable": false
+        },
+        {
+            "type": "bomb",
+            "x": 920,
+            "y": 580,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 730,
+            "y": 220
+        },
+        {
+            "x": 1040,
+            "y": 480
+        },
+        {
+            "x": 1200,
+            "y": 300
+        }
+    ],
+    "score_targets": [
+        672,
+        1345,
+        2421
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp",
+        "bomb"
+    ],
+    "inventory": {
+        "ball": 1,
+        "ramp": 1,
+        "bomb": 1
+    },
+    "hints": [
+        "Analyze the path towards target zones in Chain Catalyst",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

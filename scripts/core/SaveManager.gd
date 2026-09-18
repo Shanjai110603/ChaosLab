@@ -89,6 +89,11 @@ func _create_default_data() -> void:
 			"cosmetics": [],
 			"lab_themes": [],
 		},
+		"equipped": {
+			"bomb": "bomb_default",
+			"ball": "ball_default",
+			"theme": "theme_default",
+		},
 		"settings": {
 			"music_enabled": true,
 			"sfx_enabled": true,
@@ -228,6 +233,52 @@ func add_coins(amount: int) -> void:
 ## Get current coin balance.
 func get_coins() -> int:
 	return data.get("currency", {}).get("coins", 0)
+
+
+## Whether player can afford a given coin cost.
+func can_afford(cost: int) -> bool:
+	return get_coins() >= cost
+
+
+## Spend coins if affordable. Returns true on success.
+func spend_coins(amount: int) -> bool:
+	if not can_afford(amount):
+		return false
+	data["currency"]["coins"] = get_coins() - amount
+	save_data()
+	return true
+
+
+## Check if a specific cosmetic skin is unlocked.
+func is_skin_unlocked(skin_id: String) -> bool:
+	if skin_id.ends_with("_default"):
+		return true
+	var skins: Array = data.get("unlocks", {}).get("cosmetics", [])
+	return skin_id in skins
+
+
+## Unlock a specific cosmetic skin.
+func unlock_skin(skin_id: String) -> void:
+	if not data.has("unlocks"):
+		data["unlocks"] = {"cosmetics": []}
+	if not data["unlocks"].has("cosmetics"):
+		data["unlocks"]["cosmetics"] = []
+	if skin_id not in data["unlocks"]["cosmetics"]:
+		data["unlocks"]["cosmetics"].append(skin_id)
+		save_data()
+
+
+## Equip a cosmetic skin to a slot.
+func equip_cosmetic(slot: String, skin_id: String) -> void:
+	if not data.has("equipped"):
+		data["equipped"] = {}
+	data["equipped"][slot] = skin_id
+	save_data()
+
+
+## Get the currently equipped cosmetic for a slot.
+func get_equipped_cosmetic(slot: String) -> String:
+	return data.get("equipped", {}).get(slot, "%s_default" % slot)
 
 
 ## Get a setting value.

@@ -1,0 +1,64 @@
+{
+    "level_id": 84,
+    "world": 9,
+    "world_title": "Chaos Chamber",
+    "title": "Scattershot",
+    "description": "World 9 Stage 4: High-density clusters, multi-target splits, and domino cascades.",
+    "par_objects": 3,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 305,
+            "y": 200,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "barrel",
+            "x": 680,
+            "y": 580,
+            "rotation": 0,
+            "draggable": false
+        },
+        {
+            "type": "bomb",
+            "x": 920,
+            "y": 580,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 770,
+            "y": 280
+        },
+        {
+            "x": 1240,
+            "y": 340
+        }
+    ],
+    "score_targets": [
+        1670,
+        3340,
+        6012
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp",
+        "bomb"
+    ],
+    "inventory": {
+        "ball": 2,
+        "ramp": 1,
+        "bomb": 1
+    },
+    "hints": [
+        "Analyze the path towards target zones in Chaos Chamber",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

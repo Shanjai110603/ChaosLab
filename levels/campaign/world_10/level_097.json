@@ -1,0 +1,77 @@
+{
+    "level_id": 97,
+    "world": 10,
+    "world_title": "The Omniverse Collider",
+    "title": "Antigravity Bridge",
+    "description": "World 10 Stage 7: The ultimate pinnacle puzzle chambers demanding mastery of all physical forces.",
+    "par_objects": 3,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 350,
+            "y": 160,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "ramp",
+            "x": 440,
+            "y": 380,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "rocket",
+            "x": 820,
+            "y": 560,
+            "rotation": -60,
+            "draggable": false
+        },
+        {
+            "type": "bomb",
+            "x": 1100,
+            "y": 480,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 730,
+            "y": 220
+        },
+        {
+            "x": 1040,
+            "y": 480
+        },
+        {
+            "x": 1200,
+            "y": 300
+        }
+    ],
+    "score_targets": [
+        1897,
+        3795,
+        6831
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp",
+        "bomb",
+        "box"
+    ],
+    "inventory": {
+        "ball": 1,
+        "ramp": 2,
+        "bomb": 1,
+        "box": 1
+    },
+    "hints": [
+        "Analyze the path towards target zones in The Omniverse Collider",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

@@ -1,0 +1,62 @@
+{
+    "level_id": 35,
+    "world": 4,
+    "world_title": "Precision Angles",
+    "title": "Geometric Corridor",
+    "description": "World 4 Stage 5: Deflective geometries, ricochets, and acute angle navigation.",
+    "par_objects": 3,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 320,
+            "y": 160,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "ramp",
+            "x": 420,
+            "y": 360,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "barrel",
+            "x": 840,
+            "y": 560,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 810,
+            "y": 340
+        },
+        {
+            "x": 1270,
+            "y": 420
+        }
+    ],
+    "score_targets": [
+        812,
+        1625,
+        2925
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp"
+    ],
+    "inventory": {
+        "ball": 2,
+        "ramp": 2
+    },
+    "hints": [
+        "Analyze the path towards target zones in Precision Angles",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

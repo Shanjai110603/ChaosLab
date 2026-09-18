@@ -1,0 +1,88 @@
+{
+    "level_id": 50,
+    "world": 5,
+    "world_title": "Structural Demolition",
+    "title": "World 5 Finale: Citadel's Fall",
+    "description": "World 5 Stage 10: High-rise crate fortresses, load-bearing pillars, and controlled collapses.",
+    "par_objects": 4,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 395,
+            "y": 200,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "box",
+            "x": 580,
+            "y": 520,
+            "rotation": 0,
+            "draggable": false
+        },
+        {
+            "type": "box",
+            "x": 580,
+            "y": 420,
+            "rotation": 0,
+            "draggable": false
+        },
+        {
+            "type": "bomb",
+            "x": 580,
+            "y": 320,
+            "rotation": 0,
+            "draggable": false
+        },
+        {
+            "type": "barrel",
+            "x": 1050,
+            "y": 520,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 480,
+            "y": 220
+        },
+        {
+            "x": 780,
+            "y": 520
+        },
+        {
+            "x": 1120,
+            "y": 260
+        },
+        {
+            "x": 1420,
+            "y": 480
+        }
+    ],
+    "score_targets": [
+        1075,
+        2150,
+        3870
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp",
+        "bomb",
+        "box"
+    ],
+    "inventory": {
+        "ball": 1,
+        "ramp": 1,
+        "bomb": 1,
+        "box": 1
+    },
+    "hints": [
+        "Analyze the path towards target zones in Structural Demolition",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

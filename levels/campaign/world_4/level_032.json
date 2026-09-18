@@ -1,0 +1,62 @@
+{
+    "level_id": 32,
+    "world": 4,
+    "world_title": "Precision Angles",
+    "title": "Triple Ricochet",
+    "description": "World 4 Stage 2: Deflective geometries, ricochets, and acute angle navigation.",
+    "par_objects": 2,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 275,
+            "y": 200,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "ramp",
+            "x": 420,
+            "y": 360,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "barrel",
+            "x": 840,
+            "y": 560,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 690,
+            "y": 340
+        },
+        {
+            "x": 1180,
+            "y": 340
+        }
+    ],
+    "score_targets": [
+        760,
+        1520,
+        2736
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp"
+    ],
+    "inventory": {
+        "ball": 2,
+        "ramp": 2
+    },
+    "hints": [
+        "Analyze the path towards target zones in Precision Angles",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

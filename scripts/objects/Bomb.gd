@@ -76,11 +76,40 @@ func _create_visual() -> void:
 
 
 func _draw_bomb(node: Node2D) -> void:
+	var skin_id: String = "bomb_default"
+	if get_node_or_null("/root/CosmeticManager"):
+		skin_id = CosmeticManager.get_equipped(CosmeticManager.SLOT_BOMB)
+
 	# Drop shadow
 	node.draw_circle(Vector2(2, 3), bomb_radius, Color(0.02, 0.04, 0.08, 0.5))
 
-	# Cast iron body
-	var body_color: Color = Color(0.9, 0.18, 0.18) if _flash_on else object_color
+	var body_color: Color = object_color
+	var outline_col: Color = outline_color
+	var accent_col: Color = Color(0.9, 0.18, 0.18)
+	var spark_core: Color = Color(1.0, 1.0, 0.85)
+
+	match skin_id:
+		"bomb_neon":
+			body_color = Color(0.06, 0.04, 0.18) if not _flash_on else Color(0.1, 0.8, 1.0)
+			outline_col = Color(0.0, 0.9, 1.0)
+			accent_col = Color(1.0, 0.15, 0.85)
+			spark_core = Color(0.4, 0.9, 1.0)
+		"bomb_gold":
+			body_color = Color(0.95, 0.82, 0.25) if not _flash_on else Color(1.0, 0.96, 0.7)
+			outline_col = Color(0.55, 0.4, 0.1)
+			accent_col = Color(0.9, 0.1, 0.25)
+			spark_core = Color(1.0, 0.95, 0.5)
+		"bomb_radioactive":
+			body_color = Color(0.1, 0.24, 0.1) if not _flash_on else Color(0.3, 1.0, 0.4)
+			outline_col = Color(0.15, 0.65, 0.2)
+			accent_col = Color(0.3, 1.0, 0.3)
+			spark_core = Color(0.7, 1.0, 0.3)
+		_:
+			body_color = Color(0.9, 0.18, 0.18) if _flash_on else object_color
+			outline_col = outline_color
+			accent_col = Color(0.65, 0.2, 0.2)
+
+	# Main spherical body
 	node.draw_circle(Vector2.ZERO, bomb_radius, body_color)
 
 	# 3D spherical specular highlight
@@ -88,10 +117,30 @@ func _draw_bomb(node: Node2D) -> void:
 	node.draw_circle(spec_pos, bomb_radius * 0.3, Color(1.0, 1.0, 1.0, 0.25 if not _flash_on else 0.6))
 	node.draw_circle(spec_pos + Vector2(1, 1), bomb_radius * 0.12, Color(1.0, 1.0, 1.0, 0.6 if not _flash_on else 0.9))
 
-	# Brass neck collar
+	# Skin-specific interior detail
+	if skin_id == "bomb_neon":
+		# High-tech glowing core ring
+		node.draw_arc(Vector2.ZERO, bomb_radius * 0.55, 0, TAU, 28, accent_col, 2.0, true)
+		node.draw_circle(Vector2.ZERO, bomb_radius * 0.2, accent_col)
+	elif skin_id == "bomb_radioactive":
+		# Tri-blade isotope symbol
+		for k in 3:
+			var angle: float = k * (TAU / 3.0) + (PI / 2.0)
+			var tip := Vector2(cos(angle), sin(angle)) * (bomb_radius * 0.5)
+			node.draw_line(Vector2.ZERO, tip, accent_col, 3.0)
+		node.draw_circle(Vector2.ZERO, bomb_radius * 0.2, accent_col)
+	else:
+		# Hazardous skull / cross emblem
+		var emblem_col: Color = Color(1.0, 1.0, 1.0, 0.85) if _flash_on else accent_col
+		var es := bomb_radius * 0.35
+		node.draw_line(Vector2(-es, -es), Vector2(es, es), emblem_col, 2.5)
+		node.draw_line(Vector2(-es, es), Vector2(es, -es), emblem_col, 2.5)
+
+	# Brass / metallic neck collar
 	var neck_rect := Rect2(-5, -bomb_radius - 4, 10, 5)
-	node.draw_rect(neck_rect, Color(0.75, 0.6, 0.25))
-	node.draw_rect(neck_rect, Color(0.35, 0.25, 0.1), false, 1.0)
+	var neck_col := Color(0.75, 0.6, 0.25) if skin_id != "bomb_neon" else Color(0.2, 0.7, 0.9)
+	node.draw_rect(neck_rect, neck_col)
+	node.draw_rect(neck_rect, outline_col, false, 1.0)
 
 	# Curved fuse wick
 	if not has_exploded:
@@ -107,21 +156,12 @@ func _draw_bomb(node: Node2D) -> void:
 		# Animated sparkling flame at fuse tip
 		if is_fuse_active:
 			var flame_size := 4.0 + sin(_spark_flicker) * 1.5
-			# Outer yellow glow
-			node.draw_circle(fuse_end, flame_size + 3.0, Color(1.0, 0.8, 0.0, 0.35))
-			# Mid orange flame
-			node.draw_circle(fuse_end, flame_size, Color(1.0, 0.4, 0.05, 0.9))
-			# White hot core
-			node.draw_circle(fuse_end, flame_size * 0.4, Color(1.0, 1.0, 0.85, 1.0))
-
-	# Hazardous skull / cross emblem
-	var emblem_col := Color(1.0, 1.0, 1.0, 0.85) if _flash_on else Color(0.65, 0.2, 0.2, 0.7)
-	var es := bomb_radius * 0.35
-	node.draw_line(Vector2(-es, -es), Vector2(es, es), emblem_col, 2.5)
-	node.draw_line(Vector2(-es, es), Vector2(es, -es), emblem_col, 2.5)
+			node.draw_circle(fuse_end, flame_size + 3.0, Color(accent_col.r, accent_col.g, accent_col.b, 0.35))
+			node.draw_circle(fuse_end, flame_size, accent_col)
+			node.draw_circle(fuse_end, flame_size * 0.4, spark_core)
 
 	# Outer outline
-	node.draw_arc(Vector2.ZERO, bomb_radius, 0, TAU, 36, outline_color, outline_width, true)
+	node.draw_arc(Vector2.ZERO, bomb_radius, 0, TAU, 36, outline_col, outline_width, true)
 
 
 func _create_collision() -> void:

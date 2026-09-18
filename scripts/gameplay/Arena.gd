@@ -40,6 +40,8 @@ func _ready() -> void:
 	# Connect signals
 	GameManager.state_changed.connect(_on_state_changed)
 	GameManager.level_started.connect(_on_level_started)
+	if get_node_or_null("/root/CosmeticManager"):
+		CosmeticManager.skin_equipped.connect(func(_slot, _id): queue_redraw())
 
 	# Find GameplayUI and connect object spawn signal
 	var ui := get_tree().root.find_child("GameplayUI", true, false)
@@ -59,12 +61,25 @@ func _ready() -> void:
 func _draw() -> void:
 	var bg_rect := Rect2(arena_offset, Vector2(arena_width, arena_height))
 	
-	# Deep laboratory background with subtle inner vignette
-	draw_rect(bg_rect, Color(0.04, 0.06, 0.09, 1.0))
-	
-	# Blueprint laboratory grid
+	var bg_col := Color(0.04, 0.06, 0.09, 1.0)
 	var grid_color := Color(0.08, 0.16, 0.24, 0.45)
 	var major_grid_color := Color(0.12, 0.28, 0.42, 0.65)
+	var border_color := Color(0.0, 0.65, 0.95, 0.75)
+	var corner_color := Color(0.0, 1.0, 0.85, 0.95)
+
+	if get_node_or_null("/root/CosmeticManager"):
+		var theme_data: Dictionary = CosmeticManager.get_active_theme()
+		bg_col = theme_data.get("bg_color", bg_col)
+		var base_gc: Color = theme_data.get("grid_color", grid_color)
+		grid_color = Color(base_gc.r, base_gc.g, base_gc.b, 0.35)
+		major_grid_color = Color(base_gc.r, base_gc.g, base_gc.b, 0.65)
+		border_color = theme_data.get("border_color", border_color)
+		corner_color = theme_data.get("bracket_color", corner_color)
+
+	# Deep laboratory background with subtle inner vignette
+	draw_rect(bg_rect, bg_col)
+	
+	# Blueprint laboratory grid
 	var grid_spacing := 60.0
 	
 	var col_idx := 0
@@ -85,13 +100,12 @@ func _draw() -> void:
 		y += grid_spacing
 		row_idx += 1
 	
-	# Soft neon cyan inner aura
-	draw_rect(bg_rect.grow(-2), Color(0.0, 0.85, 1.0, 0.04), false, 4.0)
-	draw_rect(bg_rect, Color(0.0, 0.65, 0.95, 0.75), false, 2.0)
+	# Soft neon inner aura & border
+	draw_rect(bg_rect.grow(-2), Color(border_color.r, border_color.g, border_color.b, 0.05), false, 4.0)
+	draw_rect(bg_rect, border_color, false, 2.0)
 	
 	# Cybernetic corner brackets
 	var bracket_len := 32.0
-	var corner_color := Color(0.0, 1.0, 0.85, 0.95)
 	var corners := [
 		arena_offset,
 		Vector2(arena_offset.x + arena_width, arena_offset.y),

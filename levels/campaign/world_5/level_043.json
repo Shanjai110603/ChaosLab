@@ -1,0 +1,73 @@
+{
+    "level_id": 43,
+    "world": 5,
+    "world_title": "Structural Demolition",
+    "title": "Suspended Beam",
+    "description": "World 5 Stage 3: High-rise crate fortresses, load-bearing pillars, and controlled collapses.",
+    "par_objects": 2,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 290,
+            "y": 160,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "box",
+            "x": 580,
+            "y": 520,
+            "rotation": 0,
+            "draggable": false
+        },
+        {
+            "type": "box",
+            "x": 580,
+            "y": 420,
+            "rotation": 0,
+            "draggable": false
+        },
+        {
+            "type": "bomb",
+            "x": 580,
+            "y": 320,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 730,
+            "y": 400
+        },
+        {
+            "x": 1210,
+            "y": 420
+        }
+    ],
+    "score_targets": [
+        952,
+        1905,
+        3429
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp",
+        "bomb",
+        "box"
+    ],
+    "inventory": {
+        "ball": 1,
+        "ramp": 1,
+        "bomb": 1,
+        "box": 1
+    },
+    "hints": [
+        "Analyze the path towards target zones in Structural Demolition",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

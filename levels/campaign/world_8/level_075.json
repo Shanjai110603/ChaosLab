@@ -1,0 +1,69 @@
+{
+    "level_id": 75,
+    "world": 8,
+    "world_title": "Rocket Guidance",
+    "title": "Mid-Air Strike",
+    "description": "World 8 Stage 5: Directional flight, multi-stage boosters, and aerial strikes.",
+    "par_objects": 3,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 320,
+            "y": 160,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "ramp",
+            "x": 440,
+            "y": 380,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "rocket",
+            "x": 820,
+            "y": 560,
+            "rotation": -60,
+            "draggable": false
+        },
+        {
+            "type": "bomb",
+            "x": 1100,
+            "y": 480,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 810,
+            "y": 340
+        },
+        {
+            "x": 1270,
+            "y": 420
+        }
+    ],
+    "score_targets": [
+        1512,
+        3025,
+        5445
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp"
+    ],
+    "inventory": {
+        "ball": 1,
+        "ramp": 1
+    },
+    "hints": [
+        "Analyze the path towards target zones in Rocket Guidance",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

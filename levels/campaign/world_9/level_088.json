@@ -1,0 +1,68 @@
+{
+    "level_id": 88,
+    "world": 9,
+    "world_title": "Chaos Chamber",
+    "title": "The Atom Smasher",
+    "description": "World 9 Stage 8: High-density clusters, multi-target splits, and domino cascades.",
+    "par_objects": 4,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 365,
+            "y": 200,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "barrel",
+            "x": 680,
+            "y": 580,
+            "rotation": 0,
+            "draggable": false
+        },
+        {
+            "type": "bomb",
+            "x": 920,
+            "y": 580,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 760,
+            "y": 270
+        },
+        {
+            "x": 1060,
+            "y": 440
+        },
+        {
+            "x": 1180,
+            "y": 360
+        }
+    ],
+    "score_targets": [
+        1740,
+        3480,
+        6264
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp",
+        "bomb"
+    ],
+    "inventory": {
+        "ball": 2,
+        "ramp": 1,
+        "bomb": 1
+    },
+    "hints": [
+        "Analyze the path towards target zones in Chaos Chamber",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

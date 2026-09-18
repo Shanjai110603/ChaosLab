@@ -13,6 +13,8 @@ var pause_menu: CanvasLayer = null
 var result_screen: CanvasLayer = null
 ## The level select screen.
 var level_select_screen: Control = null
+## The shop screen.
+var shop_screen: Control = null
 ## Camera.
 var camera: Camera2D = null
 ## Camera shake component.
@@ -73,6 +75,18 @@ func _ready() -> void:
 		add_child(level_select_screen)
 		level_select_screen.level_chosen.connect(_on_level_chosen)
 		level_select_screen.back_to_menu_requested.connect(_on_level_select_back)
+		if level_select_screen.has_signal("shop_requested"):
+			level_select_screen.shop_requested.connect(_show_shop)
+
+	# Create Shop screen
+	var shop_scene := load("res://scenes/ui/ShopScreen.tscn") as PackedScene
+	if shop_scene:
+		shop_screen = shop_scene.instantiate() as Control
+		shop_screen.name = "ShopScreen"
+		shop_screen.visible = false
+		add_child(shop_screen)
+		if shop_screen.has_signal("closed"):
+			shop_screen.closed.connect(_on_shop_closed)
 
 	# Create ScreenVignette for chromatic impact flashes
 	var vignette := ScreenVignette.new()
@@ -103,6 +117,32 @@ func _show_level_select() -> void:
 		gameplay_ui.visible = false
 	if arena:
 		arena.visible = false
+	if shop_screen:
+		shop_screen.visible = false
+
+
+func _show_shop() -> void:
+	if shop_screen:
+		shop_screen.visible = true
+		shop_screen._refresh_display()
+	if level_select_screen:
+		level_select_screen.visible = false
+	if gameplay_ui:
+		gameplay_ui.visible = false
+	if arena:
+		arena.visible = false
+
+
+func _on_shop_closed() -> void:
+	if shop_screen:
+		shop_screen.visible = false
+	if level_select_screen:
+		level_select_screen.visible = true
+		level_select_screen._refresh_display()
+	elif gameplay_ui:
+		gameplay_ui.visible = true
+		if arena:
+			arena.visible = true
 
 
 func _on_level_chosen(level_id: int) -> void:

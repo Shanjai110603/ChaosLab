@@ -59,31 +59,66 @@ func _create_visual() -> void:
 
 
 func _draw_ball(node: Node2D) -> void:
+	var skin_id: String = "ball_default"
+	if get_node_or_null("/root/CosmeticManager"):
+		skin_id = CosmeticManager.get_equipped(CosmeticManager.SLOT_BALL)
+
 	# Outer shadow base
 	node.draw_circle(Vector2(1, 2), radius, Color(0.02, 0.08, 0.18, 0.5))
-	
+
+	var base_color := object_color
+	var out_color := outline_color
+	var highlight_tint := Color(1.0, 1.0, 1.0, 0.85)
+
+	match skin_id:
+		"ball_magma":
+			base_color = Color(0.2, 0.08, 0.05)
+			out_color = Color(0.6, 0.2, 0.05)
+			highlight_tint = Color(1.0, 0.6, 0.2, 0.9)
+		"ball_plasma":
+			base_color = Color(0.06, 0.18, 0.38)
+			out_color = Color(0.1, 0.85, 1.0)
+			highlight_tint = Color(0.5, 0.95, 1.0, 0.95)
+		"ball_chrome":
+			base_color = Color(0.86, 0.88, 0.94)
+			out_color = Color(0.35, 0.45, 0.6)
+			highlight_tint = Color(1.0, 1.0, 1.0, 0.95)
+		_:
+			base_color = object_color
+			out_color = outline_color
+
 	# Base shaded body
-	node.draw_circle(Vector2.ZERO, radius, object_color)
-	
-	# Dark lower crescent for 3D depth
-	var dark_color := Color(object_color.r * 0.45, object_color.g * 0.45, object_color.b * 0.6)
-	node.draw_arc(Vector2(0, 3), radius * 0.85, PI * 0.15, PI * 0.85, 24, dark_color, 4.0, true)
-	
-	# Inner illuminated glow
-	var light_color := Color(object_color.r * 1.3, object_color.g * 1.3, object_color.b * 1.3, 0.4)
-	node.draw_circle(Vector2(-radius * 0.2, -radius * 0.2), radius * 0.65, light_color)
-	
-	# Equator rotation stripe (reveals rolling spin)
-	var stripe_col := Color(1.0, 1.0, 1.0, 0.35)
-	node.draw_line(Vector2(-radius * 0.85, 0), Vector2(radius * 0.85, 0), stripe_col, 2.5)
-	
-	# Dynamic glossy specular highlight dot
+	node.draw_circle(Vector2.ZERO, radius, base_color)
+
+	# Skin-specific stylized details
+	if skin_id == "ball_magma":
+		# Molten lava core & glowing magma fractures
+		node.draw_circle(Vector2.ZERO, radius * 0.55, Color(1.0, 0.3, 0.02, 0.6))
+		node.draw_circle(Vector2.ZERO, radius * 0.25, Color(1.0, 0.8, 0.1, 0.9))
+		node.draw_line(Vector2(-radius * 0.7, -radius * 0.2), Vector2(radius * 0.4, radius * 0.5), Color(1.0, 0.5, 0.0), 2.5)
+	elif skin_id == "ball_plasma":
+		# Electric forcefield aura
+		node.draw_arc(Vector2.ZERO, radius * 0.75, 0, TAU, 24, Color(0.0, 0.9, 1.0, 0.6), 2.0, true)
+		node.draw_circle(Vector2.ZERO, radius * 0.35, Color(0.4, 0.95, 1.0, 0.85))
+		node.draw_line(Vector2(-radius * 0.6, 0), Vector2(radius * 0.6, 0), Color(1.0, 1.0, 1.0, 0.9), 2.0)
+	elif skin_id == "ball_chrome":
+		# Iridescent rainbow prism equator stripe
+		node.draw_line(Vector2(-radius * 0.85, -2), Vector2(radius * 0.85, -2), Color(1.0, 0.2, 0.6, 0.75), 2.5)
+		node.draw_line(Vector2(-radius * 0.85, 2), Vector2(radius * 0.85, 2), Color(0.1, 0.9, 0.8, 0.75), 2.5)
+	else:
+		# Standard depth crescent & equator line
+		var dark_color := Color(base_color.r * 0.45, base_color.g * 0.45, base_color.b * 0.6)
+		node.draw_arc(Vector2(0, 3), radius * 0.85, PI * 0.15, PI * 0.85, 24, dark_color, 4.0, true)
+		var stripe_col := Color(1.0, 1.0, 1.0, 0.35)
+		node.draw_line(Vector2(-radius * 0.85, 0), Vector2(radius * 0.85, 0), stripe_col, 2.5)
+
+	# Dynamic glossy specular highlight
 	var spec_pos := Vector2(-radius * 0.35, -radius * 0.35)
-	node.draw_circle(spec_pos, radius * 0.28, Color(1.0, 1.0, 1.0, 0.85))
+	node.draw_circle(spec_pos, radius * 0.28, highlight_tint)
 	node.draw_circle(spec_pos + Vector2(radius * 0.1, radius * 0.1), radius * 0.12, Color(1.0, 1.0, 1.0, 0.95))
-	
+
 	# Crisp outline
-	node.draw_arc(Vector2.ZERO, radius, 0, TAU, 36, outline_color, outline_width, true)
+	node.draw_arc(Vector2.ZERO, radius, 0, TAU, 36, out_color, outline_width, true)
 
 
 func _create_collision() -> void:

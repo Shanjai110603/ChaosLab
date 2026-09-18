@@ -1,0 +1,66 @@
+{
+    "level_id": 39,
+    "world": 4,
+    "world_title": "Precision Angles",
+    "title": "Zig-Zag Descent",
+    "description": "World 4 Stage 9: Deflective geometries, ricochets, and acute angle navigation.",
+    "par_objects": 4,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 380,
+            "y": 160,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "ramp",
+            "x": 420,
+            "y": 360,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "barrel",
+            "x": 840,
+            "y": 560,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 790,
+            "y": 220
+        },
+        {
+            "x": 1080,
+            "y": 400
+        },
+        {
+            "x": 1160,
+            "y": 300
+        }
+    ],
+    "score_targets": [
+        882,
+        1765,
+        3177
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp"
+    ],
+    "inventory": {
+        "ball": 2,
+        "ramp": 2
+    },
+    "hints": [
+        "Analyze the path towards target zones in Precision Angles",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

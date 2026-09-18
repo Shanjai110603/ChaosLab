@@ -1,0 +1,73 @@
+{
+    "level_id": 91,
+    "world": 10,
+    "world_title": "The Omniverse Collider",
+    "title": "The First Harmonic",
+    "description": "World 10 Stage 1: The ultimate pinnacle puzzle chambers demanding mastery of all physical forces.",
+    "par_objects": 2,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 260,
+            "y": 160,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "ramp",
+            "x": 440,
+            "y": 380,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "rocket",
+            "x": 820,
+            "y": 560,
+            "rotation": -60,
+            "draggable": false
+        },
+        {
+            "type": "bomb",
+            "x": 1100,
+            "y": 480,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 650,
+            "y": 280
+        },
+        {
+            "x": 1150,
+            "y": 420
+        }
+    ],
+    "score_targets": [
+        1792,
+        3585,
+        6453
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp",
+        "bomb",
+        "box"
+    ],
+    "inventory": {
+        "ball": 1,
+        "ramp": 2,
+        "bomb": 1,
+        "box": 1
+    },
+    "hints": [
+        "Analyze the path towards target zones in The Omniverse Collider",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

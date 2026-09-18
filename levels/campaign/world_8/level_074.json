@@ -1,0 +1,69 @@
+{
+    "level_id": 74,
+    "world": 8,
+    "world_title": "Rocket Guidance",
+    "title": "Ascent Vector",
+    "description": "World 8 Stage 4: Directional flight, multi-stage boosters, and aerial strikes.",
+    "par_objects": 3,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 305,
+            "y": 200,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "ramp",
+            "x": 440,
+            "y": 380,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "rocket",
+            "x": 820,
+            "y": 560,
+            "rotation": -60,
+            "draggable": false
+        },
+        {
+            "type": "bomb",
+            "x": 1100,
+            "y": 480,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 770,
+            "y": 280
+        },
+        {
+            "x": 1240,
+            "y": 340
+        }
+    ],
+    "score_targets": [
+        1495,
+        2990,
+        5382
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp"
+    ],
+    "inventory": {
+        "ball": 1,
+        "ramp": 1
+    },
+    "hints": [
+        "Analyze the path towards target zones in Rocket Guidance",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

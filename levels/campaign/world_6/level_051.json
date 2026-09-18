@@ -1,0 +1,62 @@
+{
+    "level_id": 51,
+    "world": 6,
+    "world_title": "Volatile Momentum",
+    "title": "Speedway Launch",
+    "description": "World 6 Stage 1: High-velocity ramps, kinetic bowling, and heavy inertia transfers.",
+    "par_objects": 2,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 260,
+            "y": 160,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "ramp",
+            "x": 420,
+            "y": 360,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "barrel",
+            "x": 840,
+            "y": 560,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 650,
+            "y": 280
+        },
+        {
+            "x": 1150,
+            "y": 420
+        }
+    ],
+    "score_targets": [
+        1092,
+        2185,
+        3933
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp"
+    ],
+    "inventory": {
+        "ball": 2,
+        "ramp": 2
+    },
+    "hints": [
+        "Analyze the path towards target zones in Volatile Momentum",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

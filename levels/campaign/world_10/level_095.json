@@ -1,0 +1,73 @@
+{
+    "level_id": 95,
+    "world": 10,
+    "world_title": "The Omniverse Collider",
+    "title": "Symphonic Ignition",
+    "description": "World 10 Stage 5: The ultimate pinnacle puzzle chambers demanding mastery of all physical forces.",
+    "par_objects": 3,
+    "arena_width": 1600,
+    "arena_height": 800,
+    "objects": [
+        {
+            "type": "ball",
+            "x": 320,
+            "y": 160,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "ramp",
+            "x": 440,
+            "y": 380,
+            "rotation": 0,
+            "draggable": true
+        },
+        {
+            "type": "rocket",
+            "x": 820,
+            "y": 560,
+            "rotation": -60,
+            "draggable": false
+        },
+        {
+            "type": "bomb",
+            "x": 1100,
+            "y": 480,
+            "rotation": 0,
+            "draggable": false
+        }
+    ],
+    "targets": [
+        {
+            "x": 810,
+            "y": 340
+        },
+        {
+            "x": 1270,
+            "y": 420
+        }
+    ],
+    "score_targets": [
+        1862,
+        3725,
+        6705
+    ],
+    "time_limit": 20,
+    "allowed_objects": [
+        "ball",
+        "ramp",
+        "bomb",
+        "box"
+    ],
+    "inventory": {
+        "ball": 1,
+        "ramp": 2,
+        "bomb": 1,
+        "box": 1
+    },
+    "hints": [
+        "Analyze the path towards target zones in The Omniverse Collider",
+        "Position kinetic triggers to initiate the optimal chain reaction",
+        "Conserve inventory tools to earn the maximum par efficiency bonus"
+    ]
+}

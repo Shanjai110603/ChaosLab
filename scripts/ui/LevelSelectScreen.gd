@@ -5,14 +5,31 @@ extends Control
 
 signal level_chosen(level_id: int)
 signal back_to_menu_requested()
+signal shop_requested()
 
 var current_world: int = 1
+const MAX_WORLDS: int = 10
+
+const WORLD_NAMES: Array[String] = [
+	"THE MECHANICS LAB",
+	"KINETIC BALLISTICS",
+	"CHAIN CATALYST",
+	"PRECISION ANGLES",
+	"STRUCTURAL DEMOLITION",
+	"VOLATILE MOMENTUM",
+	"HAZARD CONTROL",
+	"ROCKET GUIDANCE",
+	"CHAOS CHAMBER",
+	"THE OMNIVERSE COLLIDER",
+]
+
 var _grid_container: GridContainer = null
 var _stars_label: Label = null
 var _coins_label: Label = null
 var _world_title_label: Label = null
-var _tab_world1: Button = null
-var _tab_world2: Button = null
+var _world_stars_label: Label = null
+var _btn_prev_world: Button = null
+var _btn_next_world: Button = null
 
 const COLOR_BG := Color(0.04, 0.06, 0.09, 0.96)
 const COLOR_GOLD := Color(1.0, 0.85, 0.25)
@@ -56,7 +73,10 @@ func _create_ui() -> void:
 	back_btn.custom_minimum_size = Vector2(120, 44)
 	back_btn.add_theme_font_size_override("font_size", 16)
 	back_btn.focus_mode = Control.FOCUS_NONE
-	back_btn.pressed.connect(func(): back_to_menu_requested.emit())
+	back_btn.pressed.connect(func():
+		AudioManager.play_ui_blip("select")
+		back_to_menu_requested.emit()
+	)
 	top_bar.add_child(back_btn)
 
 	var title_lbl := Label.new()
@@ -69,9 +89,9 @@ func _create_ui() -> void:
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top_bar.add_child(spacer)
 
-	# Stars pill
+	# Total Stars pill
 	_stars_label = Label.new()
-	_stars_label.text = "★ 0 / 60"
+	_stars_label.text = "★ 0 / 300"
 	_stars_label.add_theme_font_size_override("font_size", 18)
 	_stars_label.add_theme_color_override("font_color", COLOR_GOLD)
 	top_bar.add_child(_stars_label)
@@ -83,27 +103,69 @@ func _create_ui() -> void:
 	_coins_label.add_theme_color_override("font_color", Color(1.0, 0.75, 0.2))
 	top_bar.add_child(_coins_label)
 
-	# World selector tabs
-	var tabs_box := HBoxContainer.new()
-	tabs_box.alignment = BoxContainer.ALIGNMENT_CENTER
-	tabs_box.add_theme_constant_override("separation", 24)
-	vbox.add_child(tabs_box)
+	# Shop Button
+	var shop_btn := Button.new()
+	shop_btn.text = "🛒 ARMORY"
+	shop_btn.custom_minimum_size = Vector2(130, 44)
+	shop_btn.add_theme_font_size_override("font_size", 15)
+	shop_btn.focus_mode = Control.FOCUS_NONE
+	var shop_style := StyleBoxFlat.new()
+	shop_style.bg_color = Color(0.12, 0.35, 0.55, 0.85)
+	shop_style.border_color = COLOR_CYAN
+	shop_style.set_border_width_all(1)
+	shop_style.set_corner_radius_all(8)
+	shop_btn.add_theme_stylebox_override("normal", shop_style)
+	shop_btn.pressed.connect(func():
+		AudioManager.play_ui_blip("select")
+		shop_requested.emit()
+	)
+	top_bar.add_child(shop_btn)
 
-	_tab_world1 = Button.new()
-	_tab_world1.text = "WORLD 1: THE MECHANICS LAB"
-	_tab_world1.custom_minimum_size = Vector2(300, 48)
-	_tab_world1.add_theme_font_size_override("font_size", 15)
-	_tab_world1.focus_mode = Control.FOCUS_NONE
-	_tab_world1.pressed.connect(func(): _select_world(1))
-	tabs_box.add_child(_tab_world1)
+	# World selector carousel
+	var world_box := HBoxContainer.new()
+	world_box.alignment = BoxContainer.ALIGNMENT_CENTER
+	world_box.add_theme_constant_override("separation", 20)
+	vbox.add_child(world_box)
 
-	_tab_world2 = Button.new()
-	_tab_world2.text = "WORLD 2: KINETIC BALLISTICS"
-	_tab_world2.custom_minimum_size = Vector2(300, 48)
-	_tab_world2.add_theme_font_size_override("font_size", 15)
-	_tab_world2.focus_mode = Control.FOCUS_NONE
-	_tab_world2.pressed.connect(func(): _select_world(2))
-	tabs_box.add_child(_tab_world2)
+	_btn_prev_world = Button.new()
+	_btn_prev_world.text = "◀"
+	_btn_prev_world.custom_minimum_size = Vector2(48, 48)
+	_btn_prev_world.add_theme_font_size_override("font_size", 20)
+	_btn_prev_world.focus_mode = Control.FOCUS_NONE
+	_btn_prev_world.pressed.connect(func():
+		if current_world > 1:
+			_select_world(current_world - 1)
+	)
+	world_box.add_child(_btn_prev_world)
+
+	var world_center_vbox := VBoxContainer.new()
+	world_center_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	world_box.add_child(world_center_vbox)
+
+	_world_title_label = Label.new()
+	_world_title_label.text = "WORLD 1: THE MECHANICS LAB"
+	_world_title_label.add_theme_font_size_override("font_size", 18)
+	_world_title_label.add_theme_color_override("font_color", COLOR_CYAN)
+	_world_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	world_center_vbox.add_child(_world_title_label)
+
+	_world_stars_label = Label.new()
+	_world_stars_label.text = "★ 0 / 30"
+	_world_stars_label.add_theme_font_size_override("font_size", 14)
+	_world_stars_label.add_theme_color_override("font_color", COLOR_GOLD)
+	_world_stars_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	world_center_vbox.add_child(_world_stars_label)
+
+	_btn_next_world = Button.new()
+	_btn_next_world.text = "▶"
+	_btn_next_world.custom_minimum_size = Vector2(48, 48)
+	_btn_next_world.add_theme_font_size_override("font_size", 20)
+	_btn_next_world.focus_mode = Control.FOCUS_NONE
+	_btn_next_world.pressed.connect(func():
+		if current_world < MAX_WORLDS:
+			_select_world(current_world + 1)
+	)
+	world_box.add_child(_btn_next_world)
 
 	# Grid Container for Level Cards (5 columns x 2 rows)
 	var scroll := ScrollContainer.new()
@@ -126,22 +188,25 @@ func _create_ui() -> void:
 
 
 func _select_world(world: int) -> void:
-	current_world = world
+	current_world = clampi(world, 1, MAX_WORLDS)
+	AudioManager.play_ui_blip("select")
 	_refresh_display()
 
 
 func _refresh_display() -> void:
 	# Update pills
-	_stars_label.text = "★ %d / 60" % SaveManager.get_total_stars()
+	_stars_label.text = "★ %d / 300" % SaveManager.get_total_stars()
 	_coins_label.text = "🪙 %d" % SaveManager.get_coins()
 
-	# Highlight active tab
-	if current_world == 1:
-		_tab_world1.modulate = Color(0.0, 1.0, 0.85, 1.0)
-		_tab_world2.modulate = Color(0.7, 0.75, 0.85, 0.7)
-	else:
-		_tab_world1.modulate = Color(0.7, 0.75, 0.85, 0.7)
-		_tab_world2.modulate = Color(0.0, 1.0, 0.85, 1.0)
+	# Update world title and stars
+	var world_name: String = WORLD_NAMES[current_world - 1]
+	_world_title_label.text = "WORLD %d: %s" % [current_world, world_name]
+	var world_stars := SaveManager.get_world_stars(current_world)
+	_world_stars_label.text = "★ %d / 30 STARS" % world_stars
+
+	# Update arrow button states
+	_btn_prev_world.disabled = (current_world <= 1)
+	_btn_next_world.disabled = (current_world >= MAX_WORLDS)
 
 	# Clear and rebuild level cards
 	for child in _grid_container.get_children():
