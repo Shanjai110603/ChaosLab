@@ -61,7 +61,7 @@ func _rebuild_cards() -> void:
 		child.queue_free()
 	_cards.clear()
 
-	var item_order := ["ball", "box", "barrel", "bomb", "rocket", "ramp"]
+	var item_order := ["ball", "box", "barrel", "bomb", "rocket", "ramp", "magnet", "portal", "gravity_pad", "laser"]
 	for item_type in item_order:
 		if inventory.has(item_type):
 			var count: int = inventory[item_type]
@@ -118,6 +118,18 @@ func _create_item_card(item_type: String, count: int) -> void:
 		"ramp":
 			icon_label.text = "◢"
 			icon_label.add_theme_color_override("font_color", Color(0.0, 0.9, 0.9))
+		"magnet":
+			icon_label.text = "🧲"
+			icon_label.add_theme_color_override("font_color", Color(0.9, 0.25, 0.4))
+		"portal":
+			icon_label.text = "🌀"
+			icon_label.add_theme_color_override("font_color", Color(0.0, 0.85, 1.0))
+		"gravity_pad":
+			icon_label.text = "🔼"
+			icon_label.add_theme_color_override("font_color", Color(0.0, 0.95, 0.75))
+		"laser":
+			icon_label.text = "⚡"
+			icon_label.add_theme_color_override("font_color", Color(1.0, 0.15, 0.3))
 
 	vbox.add_child(icon_label)
 

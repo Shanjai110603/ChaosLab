@@ -11,6 +11,10 @@ const OBJECT_SCENES: Dictionary = {
 	"bomb": "res://scenes/objects/Bomb.tscn",
 	"rocket": "res://scenes/objects/Rocket.tscn",
 	"ramp": "res://scenes/objects/Ramp.tscn",
+	"magnet": "res://scenes/objects/Magnet.tscn",
+	"portal": "res://scenes/objects/Portal.tscn",
+	"gravity_pad": "res://scenes/objects/GravityPad.tscn",
+	"laser": "res://scenes/objects/Laser.tscn",
 }
 
 const TARGET_SCENE: String = "res://scenes/objects/Target.tscn"

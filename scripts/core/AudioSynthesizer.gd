@@ -220,3 +220,57 @@ func play_fanfare() -> void:
 		frames[i] = Vector2(sample, sample)
 
 	pb.push_buffer(frames)
+
+
+## Play quantum portal teleport whoosh waveform.
+func play_teleport() -> void:
+	if not SaveManager.get_setting("sfx_enabled", true):
+		return
+
+	var pb := _get_next_playback()
+	if not pb:
+		return
+
+	var duration: float = 0.22
+	var num_samples := int(SAMPLE_RATE * duration)
+	var frames := PackedVector2Array()
+	frames.resize(num_samples)
+
+	var phase: float = 0.0
+	for i in num_samples:
+		var t: float = float(i) / SAMPLE_RATE
+		var progress: float = t / duration
+		var freq := lerpf(1200.0, 300.0, progress)
+		phase += freq * TAU / SAMPLE_RATE
+		var env: float = sin(progress * PI) * 0.7
+		var sample := clampf(sin(phase) * env, -1.0, 1.0)
+		frames[i] = Vector2(sample, sample)
+
+	pb.push_buffer(frames)
+
+
+## Play high-frequency laser beam emission pulse.
+func play_laser() -> void:
+	if not SaveManager.get_setting("sfx_enabled", true):
+		return
+
+	var pb := _get_next_playback()
+	if not pb:
+		return
+
+	var duration: float = 0.12
+	var num_samples := int(SAMPLE_RATE * duration)
+	var frames := PackedVector2Array()
+	frames.resize(num_samples)
+
+	var phase: float = 0.0
+	for i in num_samples:
+		var t: float = float(i) / SAMPLE_RATE
+		var progress: float = t / duration
+		var freq := 880.0 + sin(t * 120.0) * 80.0
+		phase += freq * TAU / SAMPLE_RATE
+		var env: float = pow(1.0 - progress, 2.5) * 0.6
+		var sample := clampf(sin(phase) * env, -1.0, 1.0)
+		frames[i] = Vector2(sample, sample)
+
+	pb.push_buffer(frames)

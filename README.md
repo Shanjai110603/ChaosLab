@@ -114,8 +114,8 @@ MENU → LOADING → PLACING → SIMULATING → RESULT → PAUSED
 - **Phase 3**: Core gameplay (objectives, scoring, 20 levels) ✓ Complete
 - **Phase 4**: Polish (VFX, audio synthesis, camera juice, haptics) ✓ Complete
 - **Phase 5**: Progression (coins, shop/unlocks, 100 levels) ✓ Complete
-- **Phase 6**: Additional mechanics (magnets, portals, lasers, anti-gravity) ← Next
-- **Phase 7**: Retention (Chaos Mode, Daily)
+- **Phase 6**: Additional mechanics (magnets, portals, lasers, anti-gravity) ✓ Complete
+- **Phase 7**: Retention (Daily Experiments, Endless Chaos Mode, Streaks) ← Next
 - **Phase 8**: Monetization
 - **Phase 9**: Cross-platform QA
 - **Phase 10**: Release preparation
@@ -126,4 +126,4 @@ All original code is proprietary. Third-party assets are documented in `assets/A
 
 ## Version
 
-0.5.0 — Phase 5: Progression (Coins, Shop/Cosmetics & 100 Campaign Levels)
+0.6.0 — Phase 6: Advanced Mechanics (Magnets, Portals, Anti-Gravity & Lasers)

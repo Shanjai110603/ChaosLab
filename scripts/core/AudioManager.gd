@@ -89,6 +89,18 @@ func play_fanfare() -> void:
 		synth.play_fanfare()
 
 
+## Play procedural portal teleport sound.
+func play_teleport() -> void:
+	if synth:
+		synth.play_teleport()
+
+
+## Play procedural laser beam sound.
+func play_laser() -> void:
+	if synth:
+		synth.play_laser()
+
+
 # --- Stream Playback ---
 
 func play_sfx(sound_path: String, volume_db: float = 0.0, pitch: float = 1.0) -> AudioStreamPlayer:
