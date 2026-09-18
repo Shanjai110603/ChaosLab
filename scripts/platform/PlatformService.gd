@@ -89,6 +89,21 @@ func haptic(intensity: float = 0.5) -> void:
 		_platform.haptic(intensity)
 
 
+## Light haptic feedback for UI clicks and mild bumps.
+func haptic_light() -> void:
+	haptic(0.2)
+
+
+## Medium haptic feedback for kinetic impacts and chain reactions.
+func haptic_medium() -> void:
+	haptic(0.5)
+
+
+## Heavy haptic feedback for explosions and target completions.
+func haptic_heavy() -> void:
+	haptic(1.0)
+
+
 ## Share text/image.
 func share(text: String, image_path: String = "") -> void:
 	_platform.share(text, image_path)

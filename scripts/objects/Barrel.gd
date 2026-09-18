@@ -163,8 +163,10 @@ func explode() -> void:
 	if get_parent():
 		ExplosionEffect.create_at(global_position, get_parent(), explosion_radius)
 
-	# Trigger camera shake & floating boom text
+	# Trigger camera shake & hit-stop micro-pause
 	CameraShake.shake(0.6, 0.25)
+	CameraShake.hit_stop(0.035)
+	PlatformService.haptic_heavy()
 
 	# Visual hide & reset ready
 	if _visual:

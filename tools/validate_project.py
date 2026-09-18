@@ -3,7 +3,7 @@ import json
 import re
 
 print("=" * 60)
-print("CHAOS LAB — Project Integrity & Syntax Verification")
+print("CHAOS LAB - Project Integrity & Syntax Verification")
 print("=" * 60)
 
 # 1. Validate all Level JSON files
@@ -43,16 +43,40 @@ print(f"Total valid scene files: {scene_count}")
 print("\n[3] Checking GDScript (.gd) files...")
 scripts_dir = "scripts"
 script_count = 0
+phase_4_features = {
+    "AudioSynthesizer.gd": "AudioStreamGenerator",
+    "ScreenVignette.gd": "flash_explosion",
+    "ImpactSpark.gd": "ImpactSpark",
+    "ConfettiEffect.gd": "ConfettiEffect",
+    "CameraShake.gd": "hit_stop",
+}
+found_features = set()
+
 for root, _, files in os.walk(scripts_dir):
     for f in sorted(files):
         if f.endswith(".gd"):
             p = os.path.join(root, f)
             with open(p, "r", encoding="utf-8") as fh:
-                lines = fh.readlines()
+                content = fh.read()
+                lines = content.splitlines()
                 assert len(lines) > 0, f"Empty script: {p}"
+                
+                # Check bracket balance
+                for b_open, b_close in [("(", ")"), ("[", "]"), ("{", "}")]:
+                    assert content.count(b_open) == content.count(b_close), (
+                        f"Mismatched {b_open}{b_close} in {f}: {content.count(b_open)} vs {content.count(b_close)}"
+                    )
+                
+                if f in phase_4_features:
+                    assert phase_4_features[f] in content, f"Missing feature keyword {phase_4_features[f]} in {f}"
+                    found_features.add(f)
+                    
                 script_count += 1
                 print(f"  [PASS] {f} ({len(lines)} lines)")
+
+assert len(found_features) == len(phase_4_features), f"Missing phase 4 scripts: {set(phase_4_features.keys()) - found_features}"
 print(f"Total valid script files: {script_count}")
+print(f"All Phase 4 procedural systems verified: {', '.join(sorted(found_features))}")
 
 print("\n" + "=" * 60)
 print(">>> ALL INTEGRITY CHECKS PASSED SUCCESSFULLY <<<")

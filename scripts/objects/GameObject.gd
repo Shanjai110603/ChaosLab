@@ -226,6 +226,29 @@ func _on_body_entered(body: Node) -> void:
 	if body is GameObject:
 		chain_event.emit("collision", body)
 
+	# Compute impact speed for audio and visual sparks
+	var impact_speed := linear_velocity.length()
+	var contact_pos := global_position
+	if body is RigidBody2D:
+		impact_speed = (linear_velocity - body.linear_velocity).length()
+		contact_pos = (global_position + body.global_position) * 0.5
+	elif body is Node2D:
+		contact_pos = (global_position + body.global_position) * 0.5
+
+	if impact_speed > 130.0:
+		var mat := "wood"
+		if object_type in ["ball", "metal_ball", "magnet", "seesaw"]:
+			mat = "metal"
+		elif object_type in ["bouncy_pad", "balloon"]:
+			mat = "rubber"
+		elif object_type in ["laser", "target"]:
+			mat = "glass"
+		AudioManager.play_impact(mat, impact_speed)
+		if get_parent():
+			ImpactSpark.create_at(contact_pos, get_parent())
+		if impact_speed > 350.0:
+			PlatformService.haptic_light()
+
 
 ## Create highlight/selection visual overlay.
 func _create_highlight() -> void:

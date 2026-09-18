@@ -153,6 +153,9 @@ func _register_hit(body: Node2D) -> void:
 		if _visual:
 			_visual.queue_redraw()
 
+		ScreenVignette.flash_bullseye(0.3)
+		PlatformService.haptic_medium()
+
 	if body is RigidBody2D:
 		var vel: float = body.linear_velocity.length()
 		if vel > min_hit_velocity * 2.8:
@@ -165,6 +168,10 @@ func _destroy() -> void:
 	is_destroyed = true
 	target_destroyed.emit(self)
 	
+	ScreenVignette.flash_bullseye(0.5)
+	CameraShake.hit_stop(0.035)
+	PlatformService.haptic_heavy()
+
 	if _visual:
 		_visual.queue_redraw()
 

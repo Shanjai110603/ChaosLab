@@ -61,5 +61,16 @@ static func shake(amount: float = 0.5, _duration: float = 0.25) -> void:
 		instance._add_trauma(amount)
 
 
+## Trigger hit-stop impact freeze frame (physics micro-slowdown for visceral punch).
+static func hit_stop(duration: float = 0.04) -> void:
+	if instance and instance.is_inside_tree():
+		var prev_scale := Engine.time_scale
+		Engine.time_scale = 0.08
+		var timer := instance.get_tree().create_timer(duration, true, false, true)
+		timer.timeout.connect(func():
+			Engine.time_scale = prev_scale
+		)
+
+
 func _add_trauma(amount: float) -> void:
 	_trauma = clampf(_trauma + amount, 0.0, 1.0)

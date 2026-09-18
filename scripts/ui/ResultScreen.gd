@@ -175,6 +175,13 @@ func show_result(result: Dictionary) -> void:
 
 	_animate_stars(stars)
 
+	# 3-Star Celebration Juice
+	if complete and stars >= 3:
+		ConfettiEffect.spawn(self)
+		AudioManager.play_fanfare()
+	elif complete:
+		AudioManager.play_chime(4)
+
 	_next_btn.visible = complete
 	_next_btn.disabled = not complete
 

@@ -202,8 +202,10 @@ func explode() -> void:
 	if get_parent():
 		ExplosionEffect.create_at(global_position, get_parent(), explosion_radius)
 
-	# Heavy camera shake trauma
+	# Heavy camera shake trauma & hit-stop micro-pause
 	CameraShake.shake(0.85, 0.35)
+	CameraShake.hit_stop(0.045)
+	PlatformService.haptic_heavy()
 
 	if _visual:
 		_visual.visible = false

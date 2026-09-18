@@ -74,6 +74,11 @@ func _ready() -> void:
 		level_select_screen.level_chosen.connect(_on_level_chosen)
 		level_select_screen.back_to_menu_requested.connect(_on_level_select_back)
 
+	# Create ScreenVignette for chromatic impact flashes
+	var vignette := ScreenVignette.new()
+	vignette.name = "ScreenVignette"
+	add_child(vignette)
+
 	# Connect result screen signals
 	if result_screen:
 		if result_screen.has_signal("level_select_requested"):
@@ -141,3 +146,28 @@ func _on_chain_event(event: Dictionary) -> void:
 			CameraShake.shake(0.2)
 		"launch":
 			CameraShake.shake(0.35)
+
+
+func _physics_process(delta: float) -> void:
+	if not camera:
+		return
+
+	var default_cam_pos := Vector2(960, 540)
+	if GameManager.current_state == GameManager.GameState.SIMULATING and arena and arena.objects_container:
+		var total_pos := Vector2.ZERO
+		var active_count := 0
+		for child in arena.objects_container.get_children():
+			if child is RigidBody2D and not child.freeze and child.visible:
+				if child.linear_velocity.length() > 30.0:
+					total_pos += child.global_position
+					active_count += 1
+
+		if active_count > 0:
+			var target_pos := total_pos / float(active_count)
+			target_pos.x = clampf(target_pos.x, 760.0, 1160.0)
+			target_pos.y = clampf(target_pos.y, 440.0, 640.0)
+			camera.position = camera.position.lerp(target_pos, delta * 3.5)
+		else:
+			camera.position = camera.position.lerp(default_cam_pos, delta * 2.0)
+	else:
+		camera.position = camera.position.lerp(default_cam_pos, delta * 4.0)

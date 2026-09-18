@@ -134,6 +134,14 @@ func register_event(event_type: String, source: Node = null, target_node: Node =
 			
 		FloatingText.spawn(source.get_parent(), text, spawn_pos, col)
 
+	# Trigger procedural audio feedback
+	if event_type == "explosion":
+		AudioManager.play_explosion(1.0)
+	elif event_type in ["target_hit", "target_destroyed"]:
+		AudioManager.play_chime(int(_combo_multiplier * 1.5))
+	else:
+		AudioManager.play_chime(int(_combo_multiplier))
+
 	# Notify UI
 	var label_text := get_chain_label()
 	var ui := get_tree().root.find_child("GameplayUI", true, false)

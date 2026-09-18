@@ -42,7 +42,11 @@ func restore_purchases(callback: Callable) -> void:
 func haptic(intensity: float) -> void:
 	# Use Godot's vibration API on Android
 	if intensity > 0.0:
-		var duration_ms: int = int(intensity * 50.0)  # 0-50ms based on intensity
+		var duration_ms: int = 15
+		if intensity > 0.7:
+			duration_ms = 85
+		elif intensity > 0.3:
+			duration_ms = 40
 		Input.vibrate_handheld(duration_ms)
 
 
