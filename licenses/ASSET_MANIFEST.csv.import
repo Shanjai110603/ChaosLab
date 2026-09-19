@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bi1mho32p8nq5"
+
+[deps]
+
+files=["res://licenses/ASSET_MANIFEST.license.translation", "res://licenses/ASSET_MANIFEST.asset.translation", "res://licenses/ASSET_MANIFEST.asset.translation", "res://licenses/ASSET_MANIFEST.type.translation", "res://licenses/ASSET_MANIFEST.source.translation", "res://licenses/ASSET_MANIFEST.source.translation", "res://licenses/ASSET_MANIFEST.author.translation", "res://licenses/ASSET_MANIFEST.commercial.translation", "res://licenses/ASSET_MANIFEST.modification.translation", "res://licenses/ASSET_MANIFEST.attribution.translation", "res://licenses/ASSET_MANIFEST.date.translation", "res://licenses/ASSET_MANIFEST.notes.translation"]
+
+source_file="res://licenses/ASSET_MANIFEST.csv"
+dest_files=["res://licenses/ASSET_MANIFEST.license.translation", "res://licenses/ASSET_MANIFEST.asset.translation", "res://licenses/ASSET_MANIFEST.asset.translation", "res://licenses/ASSET_MANIFEST.type.translation", "res://licenses/ASSET_MANIFEST.source.translation", "res://licenses/ASSET_MANIFEST.source.translation", "res://licenses/ASSET_MANIFEST.author.translation", "res://licenses/ASSET_MANIFEST.commercial.translation", "res://licenses/ASSET_MANIFEST.modification.translation", "res://licenses/ASSET_MANIFEST.attribution.translation", "res://licenses/ASSET_MANIFEST.date.translation", "res://licenses/ASSET_MANIFEST.notes.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

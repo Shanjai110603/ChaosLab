@@ -135,7 +135,7 @@ func _build_ui() -> void:
 	v_box.add_child(header)
 
 	name_label = Label.new()
-	name_label.text = "🤖 NIX • LAB ASSISTANT AI"
+	name_label.text = "[AI] NIX // LAB ASSISTANT"
 	name_label.add_theme_font_size_override("font_size", 10)
 	name_label.add_theme_color_override("font_color", COLOR_CYAN)
 	header.add_child(name_label)
@@ -145,7 +145,7 @@ func _build_ui() -> void:
 	header.add_child(spacer)
 
 	dismiss_btn = Button.new()
-	dismiss_btn.text = "✕"
+	dismiss_btn.text = "X"
 	dismiss_btn.custom_minimum_size = Vector2(18, 16)
 	dismiss_btn.add_theme_font_size_override("font_size", 9)
 	dismiss_btn.focus_mode = Control.FOCUS_NONE

@@ -17,25 +17,25 @@ const MODIFIER_DATA: Dictionary = {
 	Modifier.MOON_GRAVITY: {
 		"name": "Moon Gravity",
 		"desc": "Arena gravity reduced to 35%. Objects float gracefully across chasms.",
-		"icon": "🌙",
+		"icon": "[GRAVITY]",
 		"color": Color(0.4, 0.8, 1.0)
 	},
 	Modifier.HYPER_FUSE: {
 		"name": "Hyper Fuse",
 		"desc": "Bomb fuses burn at 200% speed. Quick reactions required!",
-		"icon": "⚡",
+		"icon": "[FUSE]",
 		"color": Color(1.0, 0.4, 0.2)
 	},
 	Modifier.SUPER_BOUNCE: {
 		"name": "Super Elasticity",
 		"desc": "All laboratory bodies gain 140% rebound restitution. Maximum ricochets!",
-		"icon": "🏀",
+		"icon": "[ELASTIC]",
 		"color": Color(0.2, 1.0, 0.5)
 	},
 	Modifier.HEAVY_MASS: {
 		"name": "Heavy Inertia",
 		"desc": "Interactive bodies have double mass. High kinetic demolition power!",
-		"icon": "🏋",
+		"icon": "[MASS]",
 		"color": Color(1.0, 0.85, 0.2)
 	}
 }

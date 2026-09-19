@@ -24,6 +24,8 @@ func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	_build_ui()
 	_load_settings()
+	# Apply spring-physics micro-animations to all buttons
+	UIAnimations.setup_all_buttons(self)
 
 
 func _load_settings() -> void:
@@ -58,7 +60,7 @@ func _build_ui() -> void:
 
 	# Title
 	var title := Label.new()
-	title.text = "⚙️ SETTINGS & PREFERENCES"
+	title.text = "SETTINGS & PREFERENCES"
 	title.add_theme_font_size_override("font_size", 36)
 	title.add_theme_color_override("font_color", COLOR_CYAN)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -93,7 +95,7 @@ func _build_ui() -> void:
 	var h_sfx := HBoxContainer.new()
 	v_items.add_child(h_sfx)
 	var lbl_sfx := Label.new()
-	lbl_sfx.text = "🔊 Sound Effects (SFX)"
+	lbl_sfx.text = "Sound Effects (SFX)"
 	lbl_sfx.add_theme_font_size_override("font_size", 16)
 	lbl_sfx.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	h_sfx.add_child(lbl_sfx)
@@ -111,7 +113,7 @@ func _build_ui() -> void:
 	var h_mus := HBoxContainer.new()
 	v_items.add_child(h_mus)
 	var lbl_mus := Label.new()
-	lbl_mus.text = "🎵 Laboratory Music"
+	lbl_mus.text = "Laboratory Music"
 	lbl_mus.add_theme_font_size_override("font_size", 16)
 	lbl_mus.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	h_mus.add_child(lbl_mus)
@@ -129,7 +131,7 @@ func _build_ui() -> void:
 	var h_hap := HBoxContainer.new()
 	v_items.add_child(h_hap)
 	var lbl_hap := Label.new()
-	lbl_hap.text = "📳 Haptic Feedback (Touch / Collisions)"
+	lbl_hap.text = "Haptic Feedback (Touch / Collisions)"
 	lbl_hap.add_theme_font_size_override("font_size", 16)
 	lbl_hap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	h_hap.add_child(lbl_hap)
@@ -147,7 +149,7 @@ func _build_ui() -> void:
 	var h_qual := HBoxContainer.new()
 	v_items.add_child(h_qual)
 	var lbl_qual := Label.new()
-	lbl_qual.text = "✨ Graphics Quality"
+	lbl_qual.text = "Graphics Quality"
 	lbl_qual.add_theme_font_size_override("font_size", 16)
 	lbl_qual.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	h_qual.add_child(lbl_qual)
@@ -177,7 +179,7 @@ func _build_ui() -> void:
 	var h_reset := HBoxContainer.new()
 	v_items.add_child(h_reset)
 	var lbl_data := Label.new()
-	lbl_data.text = "🗑️ Local Save Data"
+	lbl_data.text = "Local Save Data"
 	lbl_data.add_theme_font_size_override("font_size", 16)
 	lbl_data.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	h_reset.add_child(lbl_data)
@@ -262,3 +264,13 @@ func _highlight_quality(p: String) -> void:
 			btn.modulate = COLOR_CYAN
 		else:
 			btn.modulate = Color(0.6, 0.6, 0.6)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_ESCAPE:
+			if get_node_or_null("/root/AudioManager"):
+				AudioManager.play_ui_click()
+			closed.emit()

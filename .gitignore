@@ -27,3 +27,6 @@ desktop.ini
 # Web
 *.wasm
 *.js.map
+
+# Generated CSV Translations
+*.translation

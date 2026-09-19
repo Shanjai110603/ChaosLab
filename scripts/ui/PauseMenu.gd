@@ -11,6 +11,8 @@ func _ready() -> void:
 	visible = false
 
 	GameManager.state_changed.connect(_on_state_changed)
+	# Apply spring-physics micro-animations to all buttons
+	UIAnimations.setup_all_buttons(self)
 
 
 func _create_ui() -> void:

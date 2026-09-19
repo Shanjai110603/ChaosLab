@@ -20,7 +20,7 @@ config/name="Chaos Lab"
 config/description="Build it. Trigger it. Cause chaos. A physics experiment puzzle game."
 config/version="1.0.0"
 config/tags=PackedStringArray("2d", "physics", "puzzle")
-run/main_scene="res://scenes/main/Main.tscn"
+run/main_scene="res://scenes/ui/LoadingScreen.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://icon.svg"
 
@@ -30,11 +30,16 @@ GameManager="*res://scripts/core/GameManager.gd"
 InputManager="*res://scripts/core/InputManager.gd"
 PlatformService="*res://scripts/platform/PlatformService.gd"
 AudioManager="*res://scripts/core/AudioManager.gd"
+AudioFilterController="*res://scripts/core/AudioFilterController.gd"
 SaveManager="*res://scripts/core/SaveManager.gd"
 CosmeticManager="*res://scripts/core/CosmeticManager.gd"
 DailyChallengeManager="*res://scripts/core/DailyChallengeManager.gd"
 AchievementManager="*res://scripts/core/AchievementManager.gd"
 DebugManager="*res://scripts/core/DebugManager.gd"
+UIAnimations="*res://scripts/ui/UIAnimations.gd"
+SlowMotionController="*res://scripts/vfx/SlowMotionController.gd"
+DebrisManager="*res://scripts/vfx/DebrisManager.gd"
+ScreenTransition="*res://scripts/ui/ScreenTransition.gd"
 
 [display]
 
@@ -84,6 +89,7 @@ debug_skip_level={
 2d_physics/layer_3="targets"
 2d_physics/layer_4="blast_zones"
 2d_physics/layer_5="draggable"
+2d_physics/layer_8="debris"
 
 [physics]
 
@@ -91,6 +97,10 @@ debug_skip_level={
 2d/sleep_threshold_angular=0.15
 2d/time_before_sleep=0.4
 2d/solver/solver_iterations=10
+
+[gui]
+
+theme/custom_font="res://assets/fonts/Inter-Bold.ttf"
 
 [rendering]
 

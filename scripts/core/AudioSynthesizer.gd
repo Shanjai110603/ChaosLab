@@ -125,10 +125,21 @@ func play_chime(combo_tier: int = 1) -> void:
 	if not pb:
 		return
 
-	# Pentatonic frequencies: C5, D5, E5, G5, A5, C6
-	var scale_freqs := [523.25, 587.33, 659.25, 783.99, 880.0, 1046.50]
-	var freq_idx := clampi(combo_tier - 1, 0, scale_freqs.size() - 1)
-	var target_freq: float = scale_freqs[freq_idx]
+	## Extended pentatonic scale: C5, D5, E5, G5, A5, C6, D6, E6
+	## Each combo tier maps to +1 semitone step (capped at E6)
+	const PENTATONIC_FREQS: Array[float] = [
+		523.25,   # C5
+		587.33,   # D5
+		659.25,   # E5
+		783.99,   # G5
+		880.00,   # A5
+		1046.50,  # C6
+		1174.66,  # D6
+		1318.51,  # E6 (cap — prevents shrieking)
+	]
+	const MAX_TIER: int = 8
+	var freq_idx := clampi(combo_tier - 1, 0, MAX_TIER - 1)
+	var target_freq: float = PENTATONIC_FREQS[freq_idx]
 
 	var duration: float = 0.28
 	var num_samples := int(SAMPLE_RATE * duration)

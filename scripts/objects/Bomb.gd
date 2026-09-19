@@ -241,8 +241,20 @@ func explode() -> void:
 	if get_parent():
 		ExplosionEffect.create_at(global_position, get_parent(), explosion_radius)
 
+	# Damage BreakableWall nodes within shockwave radius
+	var walls := get_tree().get_nodes_in_group("breakable_walls")
+	const WALL_DAMAGE_RADIUS: float = 150.0
+	const WALL_DAMAGE_AMOUNT: float = 80.0
+	for wall in walls:
+		if not is_instance_valid(wall):
+			continue
+		var dist: float = global_position.distance_to(wall.global_position)
+		if dist <= WALL_DAMAGE_RADIUS:
+			var dmg := WALL_DAMAGE_AMOUNT * (1.0 - dist / WALL_DAMAGE_RADIUS)
+			wall.take_explosion_damage(dmg, global_position)
+
 	# Heavy camera shake trauma & hit-stop micro-pause
-	CameraShake.shake(0.85, 0.35)
+	CameraShake.shake(0.75, 0.35)  # Refined from 0.85 — impactful but not nauseating
 	CameraShake.hit_stop(0.045)
 	PlatformService.haptic_heavy()
 

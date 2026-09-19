@@ -79,7 +79,7 @@ func _create_ui() -> void:
 	header.add_child(header_vbox)
 
 	_title_label = Label.new()
-	_title_label.text = "⚡ SPONSORED TRANSMISSION"
+	_title_label.text = "SPONSORED TRANSMISSION"
 	_title_label.add_theme_font_size_override("font_size", 16)
 	_title_label.add_theme_color_override("font_color", Color(0.0, 0.85, 1.0))
 	header_vbox.add_child(_title_label)
@@ -91,7 +91,7 @@ func _create_ui() -> void:
 	header_vbox.add_child(_placement_label)
 
 	_skip_btn = Button.new()
-	_skip_btn.text = "✕"
+	_skip_btn.text = "X"
 	_skip_btn.custom_minimum_size = Vector2(36, 36)
 	_skip_btn.focus_mode = Control.FOCUS_NONE
 	var skip_style := StyleBoxFlat.new()
@@ -118,9 +118,10 @@ func _create_ui() -> void:
 	video_box.add_child(video_content)
 
 	_brand_icon = Label.new()
-	_brand_icon.text = "⚛️"
+	_brand_icon.text = "[CORE SPONSOR]"
 	_brand_icon.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_brand_icon.add_theme_font_size_override("font_size", 54)
+	_brand_icon.add_theme_font_size_override("font_size", 18)
+	_brand_icon.add_theme_color_override("font_color", Color(0.0, 0.85, 1.0))
 	video_content.add_child(_brand_icon)
 
 	_sponsor_tag = Label.new()
@@ -159,13 +160,13 @@ func play_ad(type: AdType, placement: String, callback: Callable = Callable()) -
 	if ad_type == AdType.REWARDED:
 		_total_duration = 3.0
 		_timer_remaining = 3.0
-		_title_label.text = "⚡ REWARDED TRANSMISSION"
+		_title_label.text = "REWARDED TRANSMISSION"
 		_title_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.25))
 		_placement_label.text = "[REWARD SPONSOR: %s]" % placement.to_upper()
 		_countdown_label.text = "Reward in 3s..."
 		_countdown_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.25))
 		_skip_btn.visible = true
-		_skip_btn.text = "✕"
+		_skip_btn.text = "X"
 	else:
 		_total_duration = 2.0
 		_timer_remaining = 2.0
@@ -175,7 +176,7 @@ func play_ad(type: AdType, placement: String, callback: Callable = Callable()) -
 		_countdown_label.text = "Ad ends in 2s..."
 		_countdown_label.add_theme_color_override("font_color", Color(0.7, 0.8, 0.95))
 		_skip_btn.visible = true
-		_skip_btn.text = "✕"
+		_skip_btn.text = "X"
 
 	_progress_bar.value = 0.0
 	visible = true
@@ -195,11 +196,11 @@ func _process(delta: float) -> void:
 	if ad_type == AdType.REWARDED:
 		if _timer_remaining > 0.0:
 			_countdown_label.text = "Reward unlocks in %ds..." % seconds_left
-		else:
+		if _timer_remaining <= 0.0:
 			_reward_earned = true
-			_countdown_label.text = "✓ REWARD GRANTED! YOU MAY CLOSE NOW"
-			_countdown_label.add_theme_color_override("font_color", Color(0.2, 1.0, 0.5))
-			_skip_btn.text = "✓ CLOSE"
+			_countdown_label.text = "REWARD GRANTED! YOU MAY CLOSE NOW"
+			_countdown_label.add_theme_color_override("font_color", Color(0.2, 0.9, 0.4))
+			_skip_btn.text = "CLOSE"
 			_skip_btn.custom_minimum_size = Vector2(80, 36)
 	else:
 		if _timer_remaining > 0.0:

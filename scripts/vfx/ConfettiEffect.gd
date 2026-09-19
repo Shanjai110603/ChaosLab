@@ -30,7 +30,14 @@ func _ready() -> void:
 
 func _init_confetti() -> void:
 	var vp_size := get_viewport().get_visible_rect().size
-	var count := 90
+	# Scale count with graphics quality (default 60, max 90, min 30 on low)
+	var quality: String = "medium"
+	if SaveManager:
+		quality = SaveManager.get_setting("graphics_quality", "medium")
+	var count: int = 60  # Default medium
+	match quality:
+		"low":   count = 30
+		"high":  count = 90
 
 	for i in count:
 		_pieces.append({

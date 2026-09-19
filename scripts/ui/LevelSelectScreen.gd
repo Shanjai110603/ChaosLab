@@ -42,6 +42,8 @@ const COLOR_LOCKED := Color(0.2, 0.25, 0.32, 0.6)
 func _ready() -> void:
 	_create_ui()
 	_refresh_display()
+	# Apply spring-physics micro-animations to all buttons
+	UIAnimations.setup_all_buttons(self)
 
 
 func _create_ui() -> void:
@@ -94,23 +96,23 @@ func _create_ui() -> void:
 
 	# Total Stars pill
 	_stars_label = Label.new()
-	_stars_label.text = "★ 0 / 300"
-	_stars_label.add_theme_font_size_override("font_size", 18)
+	_stars_label.text = "STARS: 0 / 300"
+	_stars_label.add_theme_font_size_override("font_size", 16)
 	_stars_label.add_theme_color_override("font_color", COLOR_GOLD)
 	top_bar.add_child(_stars_label)
 
 	# Coins pill
 	_coins_label = Label.new()
-	_coins_label.text = "🪙 0"
-	_coins_label.add_theme_font_size_override("font_size", 18)
+	_coins_label.text = "COINS: 0"
+	_coins_label.add_theme_font_size_override("font_size", 16)
 	_coins_label.add_theme_color_override("font_color", Color(1.0, 0.75, 0.2))
 	top_bar.add_child(_coins_label)
 
 	# Shop Button
 	var shop_btn := Button.new()
-	shop_btn.text = "🛒 ARMORY"
-	shop_btn.custom_minimum_size = Vector2(120, 44)
-	shop_btn.add_theme_font_size_override("font_size", 15)
+	shop_btn.text = "ARMORY"
+	shop_btn.custom_minimum_size = Vector2(110, 44)
+	shop_btn.add_theme_font_size_override("font_size", 14)
 	shop_btn.focus_mode = Control.FOCUS_NONE
 	var shop_style := StyleBoxFlat.new()
 	shop_style.bg_color = Color(0.12, 0.35, 0.55, 0.85)
@@ -126,9 +128,9 @@ func _create_ui() -> void:
 
 	# Daily Button
 	var daily_btn := Button.new()
-	daily_btn.text = "🔥 DAILY"
-	daily_btn.custom_minimum_size = Vector2(110, 44)
-	daily_btn.add_theme_font_size_override("font_size", 15)
+	daily_btn.text = "DAILY"
+	daily_btn.custom_minimum_size = Vector2(100, 44)
+	daily_btn.add_theme_font_size_override("font_size", 14)
 	daily_btn.focus_mode = Control.FOCUS_NONE
 	var daily_style := StyleBoxFlat.new()
 	daily_style.bg_color = Color(0.35, 0.15, 0.05, 0.9)
@@ -144,9 +146,9 @@ func _create_ui() -> void:
 
 	# Trophies Button
 	var ach_btn := Button.new()
-	ach_btn.text = "🏆 TROPHIES"
-	ach_btn.custom_minimum_size = Vector2(130, 44)
-	ach_btn.add_theme_font_size_override("font_size", 15)
+	ach_btn.text = "AWARDS"
+	ach_btn.custom_minimum_size = Vector2(110, 44)
+	ach_btn.add_theme_font_size_override("font_size", 14)
 	ach_btn.focus_mode = Control.FOCUS_NONE
 	var ach_style := StyleBoxFlat.new()
 	ach_style.bg_color = Color(0.28, 0.22, 0.05, 0.9)
@@ -189,7 +191,7 @@ func _create_ui() -> void:
 	world_center_vbox.add_child(_world_title_label)
 
 	_world_stars_label = Label.new()
-	_world_stars_label.text = "★ 0 / 30"
+	_world_stars_label.text = "STARS: 0 / 30"
 	_world_stars_label.add_theme_font_size_override("font_size", 14)
 	_world_stars_label.add_theme_color_override("font_color", COLOR_GOLD)
 	_world_stars_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -236,14 +238,14 @@ func _select_world(world: int) -> void:
 
 func _refresh_display() -> void:
 	# Update pills
-	_stars_label.text = "★ %d / 300" % SaveManager.get_total_stars()
-	_coins_label.text = "🪙 %d" % SaveManager.get_coins()
+	_stars_label.text = "STARS: %d / 300" % SaveManager.get_total_stars()
+	_coins_label.text = "COINS: %d" % SaveManager.get_coins()
 
 	# Update world title and stars
 	var world_name: String = WORLD_NAMES[current_world - 1]
 	_world_title_label.text = "WORLD %d: %s" % [current_world, world_name]
 	var world_stars := SaveManager.get_world_stars(current_world)
-	_world_stars_label.text = "★ %d / 30 STARS" % world_stars
+	_world_stars_label.text = "STARS: %d / 30" % world_stars
 
 	# Update arrow button states
 	_btn_prev_world.disabled = (current_world <= 1)
@@ -258,6 +260,9 @@ func _refresh_display() -> void:
 
 	for id in range(start_id, end_id + 1):
 		_create_level_card(id)
+
+	UIAnimations.animate_cards_in(_grid_container)
+	UIAnimations.setup_all_buttons(_grid_container)
 
 
 func _create_level_card(level_id: int) -> void:
@@ -307,16 +312,44 @@ func _create_level_card(level_id: int) -> void:
 		num_lbl.add_theme_color_override("font_color", Color(0.9, 0.95, 1.0))
 		vbox.add_child(num_lbl)
 
-		# Star symbols
-		var star_str := ""
+		# Procedural vector stars container
+		var stars_row := HBoxContainer.new()
+		stars_row.alignment = BoxContainer.ALIGNMENT_CENTER
+		stars_row.add_theme_constant_override("separation", 6)
+		vbox.add_child(stars_row)
+
+		var star_tex_path := "res://assets/sprites/ui/icon_star.png"
+		var star_tex: Texture2D = load(star_tex_path) if ResourceLoader.exists(star_tex_path) else null
+
 		for s in range(3):
-			star_str += "★ " if s < stars else "☆ "
-		var star_lbl := Label.new()
-		star_lbl.text = star_str.strip_edges()
-		star_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		star_lbl.add_theme_font_size_override("font_size", 20)
-		star_lbl.add_theme_color_override("font_color", COLOR_GOLD if stars > 0 else Color(0.4, 0.45, 0.55))
-		vbox.add_child(star_lbl)
+			var earned: bool = (s < stars)
+			if star_tex:
+				var tr := TextureRect.new()
+				tr.texture = star_tex
+				tr.custom_minimum_size = Vector2(18, 18)
+				tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+				tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				tr.modulate = COLOR_GOLD if earned else Color(0.25, 0.3, 0.4, 0.5)
+				stars_row.add_child(tr)
+			else:
+				var star_box := Control.new()
+				star_box.custom_minimum_size = Vector2(18, 18)
+				star_box.draw.connect(func():
+					var center := Vector2(9, 9)
+					var radius: float = 8.0
+					var inner: float = radius * 0.42
+					var pts := PackedVector2Array()
+					for i in range(10):
+						var ang := -PI * 0.5 + i * (PI / 5.0)
+						var r := radius if (i % 2 == 0) else inner
+						pts.append(center + Vector2(cos(ang), sin(ang)) * r)
+					if earned:
+						star_box.draw_colored_polygon(pts, COLOR_GOLD)
+						star_box.draw_polyline(pts, Color(1.0, 1.0, 0.6), 1.2, true)
+					else:
+						star_box.draw_polyline(pts, Color(0.3, 0.35, 0.45), 1.2, true)
+				)
+				stars_row.add_child(star_box)
 
 		var score_lbl := Label.new()
 		score_lbl.text = "BEST: %d" % best_score if best_score > 0 else "NOT CLEARED"
@@ -326,9 +359,10 @@ func _create_level_card(level_id: int) -> void:
 		vbox.add_child(score_lbl)
 	else:
 		var lock_icon := Label.new()
-		lock_icon.text = "🔒"
+		lock_icon.text = "[ LOCKED ]"
 		lock_icon.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		lock_icon.add_theme_font_size_override("font_size", 28)
+		lock_icon.add_theme_font_size_override("font_size", 14)
+		lock_icon.add_theme_color_override("font_color", Color(0.45, 0.5, 0.6))
 		vbox.add_child(lock_icon)
 
 		var lock_lbl := Label.new()

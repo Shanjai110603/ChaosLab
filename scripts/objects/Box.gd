@@ -35,10 +35,17 @@ func _create_visual() -> void:
 
 func _draw_box(node: Node2D) -> void:
 	var rect := Rect2(-half_size, half_size * 2)
-	
+
 	# Drop shadow
 	node.draw_rect(Rect2(-half_size + Vector2(2, 3), half_size * 2), Color(0.02, 0.05, 0.1, 0.45))
-	
+
+	var tex_path := "res://assets/sprites/objects/crate_wood.png"
+	if ResourceLoader.exists(tex_path):
+		var tex := load(tex_path) as Texture2D
+		node.draw_texture_rect(tex, rect, false, object_color.lerp(Color.WHITE, 0.35))
+		node.draw_rect(rect, outline_color, false, 1.5)
+		return
+
 	# Main crate plank body
 	node.draw_rect(rect, object_color)
 	

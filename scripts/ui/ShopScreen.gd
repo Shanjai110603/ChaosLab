@@ -25,8 +25,8 @@ const COLOR_PURPLE := Color(0.75, 0.35, 1.0)
 const IAP_PRODUCTS: Array = [
 	{
 		"id": "coin_pack_small",
-		"name": "Beaker of Coins",
-		"icon": "🪙",
+		"name": "Test Tube of Coins",
+		"icon": "[+] COINS",
 		"color": Color(1.0, 0.85, 0.25),
 		"amount": "+500 COINS",
 		"desc": "Quick injection of research capital for immediate laboratory unlocks.",
@@ -35,7 +35,7 @@ const IAP_PRODUCTS: Array = [
 	{
 		"id": "coin_pack_medium",
 		"name": "Flask of Coins",
-		"icon": "🧪",
+		"icon": "[++] FLASK",
 		"color": Color(0.0, 0.85, 1.0),
 		"amount": "+1,500 COINS",
 		"desc": "Generous research grant for high-grade apparatus & skins.",
@@ -44,7 +44,7 @@ const IAP_PRODUCTS: Array = [
 	{
 		"id": "coin_pack_large",
 		"name": "Quantum Vault",
-		"icon": "⚡",
+		"icon": "[+++] VAULT",
 		"color": Color(0.8, 0.4, 1.0),
 		"amount": "+5,000 COINS",
 		"desc": "Massive corporate laboratory treasury reserve.",
@@ -53,7 +53,7 @@ const IAP_PRODUCTS: Array = [
 	{
 		"id": "remove_ads",
 		"name": "Remove Ads",
-		"icon": "🚫",
+		"icon": "[NO ADS]",
 		"color": Color(0.95, 0.35, 0.35),
 		"amount": "NO INTERSTITIALS",
 		"desc": "Permanently eliminates all interstitial advertisements forever.",
@@ -62,7 +62,7 @@ const IAP_PRODUCTS: Array = [
 	{
 		"id": "vip_pass",
 		"name": "VIP Scientist Pass",
-		"icon": "👑",
+		"icon": "[VIP PASS]",
 		"color": Color(1.0, 0.82, 0.15),
 		"amount": "2X COINS FOREVER",
 		"desc": "Permanent 2x coins on all levels + Ad-Free + Atomic & Quantum skins + 1,000 bonus coins!",
@@ -74,6 +74,8 @@ const IAP_PRODUCTS: Array = [
 func _ready() -> void:
 	_create_ui()
 	_refresh_display()
+	# Apply spring-physics micro-animations to all buttons
+	UIAnimations.setup_all_buttons(self)
 
 
 func _create_ui() -> void:
@@ -149,7 +151,7 @@ func _create_ui() -> void:
 	vbox.add_child(tabs_box)
 
 	_tab_bombs = Button.new()
-	_tab_bombs.text = "💣 BOMBS"
+	_tab_bombs.text = "BOMBS"
 	_tab_bombs.custom_minimum_size = Vector2(170, 44)
 	_tab_bombs.add_theme_font_size_override("font_size", 15)
 	_tab_bombs.focus_mode = Control.FOCUS_NONE
@@ -157,7 +159,7 @@ func _create_ui() -> void:
 	tabs_box.add_child(_tab_bombs)
 
 	_tab_balls = Button.new()
-	_tab_balls.text = "⚽ SPHERES"
+	_tab_balls.text = "SPHERES"
 	_tab_balls.custom_minimum_size = Vector2(170, 44)
 	_tab_balls.add_theme_font_size_override("font_size", 15)
 	_tab_balls.focus_mode = Control.FOCUS_NONE
@@ -165,7 +167,7 @@ func _create_ui() -> void:
 	tabs_box.add_child(_tab_balls)
 
 	_tab_themes = Button.new()
-	_tab_themes.text = "🔬 THEMES"
+	_tab_themes.text = "THEMES"
 	_tab_themes.custom_minimum_size = Vector2(170, 44)
 	_tab_themes.add_theme_font_size_override("font_size", 15)
 	_tab_themes.focus_mode = Control.FOCUS_NONE
@@ -173,7 +175,7 @@ func _create_ui() -> void:
 	tabs_box.add_child(_tab_themes)
 
 	_tab_supplies = Button.new()
-	_tab_supplies.text = "💎 SUPPLIES"
+	_tab_supplies.text = "SUPPLIES"
 	_tab_supplies.custom_minimum_size = Vector2(180, 44)
 	_tab_supplies.add_theme_font_size_override("font_size", 15)
 	_tab_supplies.focus_mode = Control.FOCUS_NONE
@@ -264,6 +266,9 @@ func _refresh_display() -> void:
 			var card := _create_skin_card(item, equipped_id, player_coins)
 			_cards_container.add_child(card)
 
+	UIAnimations.animate_cards_in(_cards_container)
+	UIAnimations.setup_all_buttons(_cards_container)
+
 
 func _create_skin_card(item: Dictionary, equipped_id: String, player_coins: int) -> Control:
 	var skin_id: String = item["id"]
@@ -339,7 +344,7 @@ func _create_skin_card(item: Dictionary, equipped_id: String, player_coins: int)
 	act_btn.focus_mode = Control.FOCUS_NONE
 
 	if is_equipped:
-		act_btn.text = "✓ EQUIPPED"
+		act_btn.text = "EQUIPPED"
 		act_btn.disabled = true
 		var eq_style := StyleBoxFlat.new()
 		eq_style.bg_color = Color(0.0, 0.35, 0.5, 0.4)
@@ -430,10 +435,10 @@ func _create_iap_card(product: Dictionary) -> Control:
 	cvbox.add_child(icon_box)
 
 	var icon_lbl := Label.new()
-	icon_lbl.text = product.get("icon", "💎")
+	icon_lbl.text = product.get("icon", "[SUPPLY]")
 	icon_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	icon_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	icon_lbl.add_theme_font_size_override("font_size", 50)
+	icon_lbl.add_theme_font_size_override("font_size", 28)
 	icon_box.add_child(icon_lbl)
 
 	# Title & Reward Amount
@@ -470,7 +475,7 @@ func _create_iap_card(product: Dictionary) -> Control:
 	buy_btn.focus_mode = Control.FOCUS_NONE
 
 	if is_owned:
-		buy_btn.text = "👑 ACTIVE VIP" if prod_id == "vip_pass" else "✓ OWNED"
+		buy_btn.text = "ACTIVE VIP" if prod_id == "vip_pass" else "OWNED"
 		buy_btn.disabled = true
 		var own_style := StyleBoxFlat.new()
 		own_style.bg_color = Color(0.05, 0.35, 0.2, 0.5)

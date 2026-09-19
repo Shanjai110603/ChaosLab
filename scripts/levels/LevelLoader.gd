@@ -15,6 +15,7 @@ const OBJECT_SCENES: Dictionary = {
 	"portal": "res://scenes/objects/Portal.tscn",
 	"gravity_pad": "res://scenes/objects/GravityPad.tscn",
 	"laser": "res://scenes/objects/Laser.tscn",
+	"breakable_wall": "res://scenes/objects/BreakableWall.tscn",  # NEW: destructible barrier
 }
 
 const TARGET_SCENE: String = "res://scenes/objects/Target.tscn"
@@ -100,29 +101,32 @@ func get_total_level_count() -> int:
 ## Instantiate all objects from a level definition into a parent node.
 ## Returns arrays of game_objects and targets.
 func instantiate_level(level_def: LevelDefinition, parent: Node2D) -> Dictionary:
-	var game_objects: Array[GameObject] = []
+	var game_objects: Array[Node2D] = []
 	var targets: Array[TargetObject] = []
 
 	# Spawn objects
 	for obj_data in level_def.objects:
 		var obj_type: String = obj_data.get("type", "ball")
-		var obj: GameObject = _spawn_object(obj_type, obj_data)
+		var obj: Node2D = _spawn_object(obj_type, obj_data)
 		if obj:
 			parent.add_child(obj)
 			obj.global_position = Vector2(obj_data.get("x", 0), obj_data.get("y", 0))
 			obj.global_rotation = deg_to_rad(obj_data.get("rotation", 0))
 
 			# Apply optional property overrides
-			if obj_data.has("draggable"):
+			if "draggable" in obj and obj_data.has("draggable"):
 				obj.draggable = obj_data["draggable"]
 			if obj_data.has("mass") and obj is PhysicalObject:
 				obj.object_mass = obj_data["mass"]
 				obj.mass = obj_data["mass"]
 
 			# Store initial position after setting it
-			obj.initial_position = obj.global_position
-			obj.initial_rotation = obj.global_rotation
-			obj.freeze = true
+			if "initial_position" in obj:
+				obj.initial_position = obj.global_position
+			if "initial_rotation" in obj:
+				obj.initial_rotation = obj.global_rotation
+			if "freeze" in obj:
+				obj.freeze = true
 
 			game_objects.append(obj)
 
@@ -151,13 +155,13 @@ func instantiate_level(level_def: LevelDefinition, parent: Node2D) -> Dictionary
 
 
 ## Spawn a game object by type.
-func _spawn_object(obj_type: String, data: Dictionary) -> GameObject:
+func _spawn_object(obj_type: String, data: Dictionary) -> Node2D:
 	if not _scene_cache.has(obj_type):
 		push_warning("[LevelLoader] Unknown object type: %s" % obj_type)
 		return null
 
 	var scene: PackedScene = _scene_cache[obj_type]
-	var instance: GameObject = scene.instantiate() as GameObject
+	var instance: Node2D = scene.instantiate() as Node2D
 	return instance
 
 

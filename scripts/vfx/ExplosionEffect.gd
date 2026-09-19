@@ -75,41 +75,62 @@ func _draw() -> void:
 		draw_circle(sm["pos"], sm["size"], col)
 
 	# 4. Incandescent Shrapnel Sparks
+	var spark_tex_path := "res://assets/sprites/vfx/particle_star.png"
+	var spark_tex: Texture2D = load(spark_tex_path) if ResourceLoader.exists(spark_tex_path) else null
+
 	for s in _sparks:
 		var alpha: float = s["life"]
 		var col: Color = s["color"]
 		col.a = alpha
-		var sz: float = s["size"] * alpha
-		draw_circle(s["pos"], sz, col)
+		var sz: float = s["size"] * alpha * 2.4
+		if spark_tex:
+			draw_texture_rect(spark_tex, Rect2(s["pos"] - Vector2(sz, sz) * 0.5, Vector2(sz, sz)), false, col)
+		else:
+			draw_circle(s["pos"], s["size"] * alpha, col)
 
 
 func _spawn_particles() -> void:
-	# Sparks (incandescent hot embers)
-	var spark_count := 26
+	# --- Sparks: 24 max (budget-aware) ---
+	const SPARK_COUNT_IDEAL: int = 24
+	const SPARK_COUNT_MIN: int = 8
+	var spark_count: int = SPARK_COUNT_IDEAL
+
+	if not DebrisManager.request(SPARK_COUNT_IDEAL):
+		spark_count = SPARK_COUNT_MIN
+		DebrisManager.request(SPARK_COUNT_MIN)  # Always allow minimum
+
 	for i in spark_count:
 		var angle := randf() * TAU
-		var speed := randf_range(160.0, 520.0)
-		var spark_color := Color(1.0, randf_range(0.6, 0.9), 0.1) if randf() < 0.7 else Color(1.0, 0.3, 0.05)
+		# Enhanced velocity range: 200-480 px/s (was 160-520)
+		var speed := randf_range(200.0, 480.0)
+		var spark_color := Color(1.0, randf_range(0.55, 0.9), 0.08) if randf() < 0.7 \
+			else Color(1.0, 0.28, 0.04)
 		_sparks.append({
 			"pos": Vector2.ZERO,
 			"vel": Vector2(cos(angle), sin(angle)) * speed,
-			"size": randf_range(2.5, 5.5),
+			"size": randf_range(2.5, 6.0),
 			"color": spark_color,
-			"life": 1.0
+			"life": 1.0,
 		})
 
-	# Volumetric Smoke
-	var smoke_count := 12
-	for i in smoke_count:
+	# --- Smoke: 12 puffs, 0.7s lifetime ---
+	const SMOKE_COUNT: int = 12
+	for i in SMOKE_COUNT:
 		var angle := randf() * TAU
-		var dist := randf_range(5.0, 30.0)
+		var dist := randf_range(5.0, 35.0)
 		_smoke.append({
 			"pos": Vector2(cos(angle), sin(angle)) * dist,
-			"vel": Vector2(randf_range(-30, 30), randf_range(-20, 20)),
-			"size": randf_range(12.0, 24.0),
-			"color": Color(0.2, 0.22, 0.26),
-			"life": 1.0
+			"vel": Vector2(randf_range(-28, 28), randf_range(-25, -5)),
+			"size": randf_range(14.0, 26.0),
+			"color": Color(0.18, 0.20, 0.24),
+			"life": 1.0,
 		})
+
+	# Release sparks from budget after their lifetime expires
+	var release_timer := get_tree().create_timer(duration + 0.1, false)
+	release_timer.timeout.connect(func():
+		DebrisManager.release(spark_count)
+	)
 
 
 static func create_at(pos: Vector2, parent: Node, size: float = 140.0) -> ExplosionEffect:
@@ -118,3 +139,4 @@ static func create_at(pos: Vector2, parent: Node, size: float = 140.0) -> Explos
 	effect.global_position = pos
 	parent.add_child(effect)
 	return effect
+

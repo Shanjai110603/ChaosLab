@@ -58,6 +58,13 @@ func _draw_barrel(node: Node2D) -> void:
 	# Drop shadow
 	node.draw_rect(Rect2(-barrel_radius + 2, -half_h + 3, barrel_radius * 2, barrel_height), Color(0.02, 0.05, 0.1, 0.4))
 
+	var tex_path := "res://assets/sprites/objects/barrel_explosive.png"
+	if ResourceLoader.exists(tex_path):
+		var tex := load(tex_path) as Texture2D
+		node.draw_texture_rect(tex, rect, false)
+		node.draw_rect(rect, outline_color, false, 1.5)
+		return
+
 	# Main drum body
 	node.draw_rect(rect, object_color)
 

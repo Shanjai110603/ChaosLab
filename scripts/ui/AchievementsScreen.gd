@@ -18,6 +18,8 @@ const COLOR_GREEN := Color(0.2, 0.9, 0.4)
 func _ready() -> void:
 	_create_ui()
 	_refresh_display()
+	# Apply spring-physics micro-animations to all buttons
+	UIAnimations.setup_all_buttons(self)
 
 
 func _create_ui() -> void:
@@ -70,14 +72,14 @@ func _create_ui() -> void:
 
 	# Unlocked Counter
 	_unlocked_counter_label = Label.new()
-	_unlocked_counter_label.text = "🏆 0 / 12"
+	_unlocked_counter_label.text = "0 / 12 UNLOCKED"
 	_unlocked_counter_label.add_theme_font_size_override("font_size", 18)
 	_unlocked_counter_label.add_theme_color_override("font_color", COLOR_GOLD)
 	top_bar.add_child(_unlocked_counter_label)
 
 	# Coins pill
 	_coins_label = Label.new()
-	_coins_label.text = "🪙 0"
+	_coins_label.text = "0 COINS"
 	_coins_label.add_theme_font_size_override("font_size", 18)
 	_coins_label.add_theme_color_override("font_color", Color(1.0, 0.75, 0.2))
 	top_bar.add_child(_coins_label)
@@ -101,10 +103,10 @@ func _refresh_display() -> void:
 	var ach_mgr = get_node_or_null("/root/AchievementManager")
 
 	if _coins_label:
-		_coins_label.text = "🪙 %d" % SaveManager.get_coins()
+		_coins_label.text = "%d COINS" % SaveManager.get_coins()
 
 	if _unlocked_counter_label:
-		_unlocked_counter_label.text = "🏆 %d / %d UNLOCKED" % [ach_mgr.get_completed_count(), ach_mgr.get_catalog().size()]
+		_unlocked_counter_label.text = "%d / %d UNLOCKED" % [ach_mgr.get_completed_count(), ach_mgr.get_catalog().size()]
 
 	# Clear and rebuild achievement cards
 	for child in _cards_container.get_children():
@@ -154,8 +156,9 @@ func _create_achievement_card(item: Dictionary, ach_mgr: Node) -> Control:
 
 	# Icon
 	var icon_lbl := Label.new()
-	icon_lbl.text = item.get("icon", "🏆")
-	icon_lbl.add_theme_font_size_override("font_size", 34)
+	icon_lbl.text = item.get("icon", "[ACH]")
+	icon_lbl.add_theme_font_size_override("font_size", 16)
+	icon_lbl.add_theme_color_override("font_color", COLOR_GOLD if is_done else COLOR_CYAN)
 	hbox.add_child(icon_lbl)
 
 	# Info VBox
@@ -200,10 +203,10 @@ func _create_achievement_card(item: Dictionary, ach_mgr: Node) -> Control:
 	act_btn.add_theme_font_size_override("font_size", 14)
 
 	if is_claimed:
-		act_btn.text = "✓ CLAIMED"
+		act_btn.text = "CLAIMED"
 		act_btn.disabled = true
 	elif is_done:
-		act_btn.text = "CLAIM 🪙 %d" % reward
+		act_btn.text = "CLAIM %d COINS" % reward
 		var claim_style := StyleBoxFlat.new()
 		claim_style.bg_color = Color(0.8, 0.65, 0.1, 0.95)
 		claim_style.set_corner_radius_all(8)

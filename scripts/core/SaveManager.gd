@@ -1,14 +1,17 @@
 ## Versioned local save system.
 ## Autoload singleton — handles save/load with migration support.
+## v2: Added MD5 checksum integrity field to detect save tampering.
 class_name SaveManagerClass
 extends Node
 
 ## Current save data version. Increment when save format changes.
-const SAVE_VERSION: int = 1
+const SAVE_VERSION: int = 2
 ## Save file path.
 const SAVE_PATH: String = "user://save_data.json"
 ## Backup save path.
 const BACKUP_PATH: String = "user://save_data_backup.json"
+## Salt for checksum (obscures trivial tampering; not cryptographic).
+const CHECKSUM_SALT: String = "ChaosLab_v2_integrity_2026"
 
 ## Emitted when save data is loaded.
 signal data_loaded()
@@ -36,6 +39,10 @@ func load_data() -> void:
 			var parse_result := json.parse(json_string)
 			if parse_result == OK:
 				data = json.data
+				# Validate integrity (gracefully upgrade v1 saves with no checksum)
+				if data.has("_checksum"):
+					if not _validate_checksum():
+						push_warning("[SaveManager] Checksum mismatch detected — possible tampering or corruption. Data accepted, checksum recomputed.")
 				_migrate_if_needed()
 				data_loaded.emit()
 				print("[SaveManager] Data loaded successfully")
@@ -49,7 +56,7 @@ func load_data() -> void:
 	data_loaded.emit()
 
 
-## Save current data to disk.
+## Save current data to disk with integrity checksum.
 func save_data() -> void:
 	# Create backup of existing save
 	if FileAccess.file_exists(SAVE_PATH):
@@ -63,6 +70,12 @@ func save_data() -> void:
 
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file:
+		# Compute checksum over data (without existing checksum field)
+		var temp := data.duplicate(true)
+		temp.erase("_checksum")
+		var json_for_checksum := JSON.stringify(temp)
+		data["_checksum"] = _compute_checksum(json_for_checksum)
+
 		var json_string := JSON.stringify(data, "\t")
 		file.store_string(json_string)
 		file.close()
@@ -130,20 +143,43 @@ func _migrate_if_needed() -> void:
 
 	print("[SaveManager] Migrating from v%d to v%d" % [version, SAVE_VERSION])
 
-	# Add migration steps here as save format evolves:
-	# if version < 2:
-	#     _migrate_v1_to_v2()
-	# if version < 3:
-	#     _migrate_v2_to_v3()
+	# v1 → v2: Introduced checksum field. No schema changes, just recompute.
+	if version < 2:
+		data["save_version"] = 2
+		# Purchases block may not exist in very old v0 saves
+		if not data.has("purchases"):
+			data["purchases"] = {
+				"remove_ads": false,
+				"vip_pass": false,
+				"order_history": [],
+			}
+		# Checksum will be computed and embedded on next save_data() call
 
 	data["save_version"] = SAVE_VERSION
-	if not data.has("purchases"):
-		data["purchases"] = {
-			"remove_ads": false,
-			"vip_pass": false,
-			"order_history": [],
-		}
 	save_data()
+
+
+# -------------------------------------------------------------------------
+# Integrity / Checksum Helpers
+# -------------------------------------------------------------------------
+
+## Compute an MD5 checksum string over the given JSON content.
+func _compute_checksum(json_content: String) -> String:
+	return (json_content + CHECKSUM_SALT).md5_text()
+
+
+## Validate the stored checksum against recomputed value.
+## Returns true if valid (or no checksum stored), false if mismatch detected.
+func _validate_checksum() -> bool:
+	var stored_checksum: String = data.get("_checksum", "")
+	if stored_checksum.is_empty():
+		return true  # No checksum = old save, accept gracefully
+
+	var temp := data.duplicate(true)
+	temp.erase("_checksum")
+	var expected := _compute_checksum(JSON.stringify(temp))
+	return stored_checksum == expected
+
 
 
 # --- Convenience accessors ---

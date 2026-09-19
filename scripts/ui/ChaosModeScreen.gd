@@ -25,6 +25,8 @@ func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	_build_ui()
 	_generate_next()
+	# Apply spring-physics micro-animations to all buttons
+	UIAnimations.setup_all_buttons(self)
 
 
 func _generate_next() -> void:
@@ -34,7 +36,7 @@ func _generate_next() -> void:
 
 func _refresh_display() -> void:
 	if _mutator_label:
-		_mutator_label.text = "⚡ MUTATOR: %s" % _current_scenario.get("mutator", "STANDARD")
+		_mutator_label.text = "MUTATOR: %s" % _current_scenario.get("mutator", "STANDARD")
 	if _desc_label:
 		_desc_label.text = _current_scenario.get("description", "")
 
@@ -43,14 +45,14 @@ func _refresh_display() -> void:
 		var items: Array[String] = []
 		for k in inv:
 			items.append("%s ×%d" % [k, inv[k]])
-		_inventory_label.text = "📦 APPARATUS GRANTED: %s" % ", ".join(items)
+		_inventory_label.text = "APPARATUS GRANTED: %s" % ", ".join(items)
 
 	if _best_score_label and get_node_or_null("/root/SaveManager"):
 		var stats: Dictionary = SaveManager.data.get("stats", {})
-		_best_score_label.text = "🏆 HIGH SCORE: %d" % stats.get("best_score", 0)
+		_best_score_label.text = "HIGH SCORE: %d" % stats.get("best_score", 0)
 	if _best_chain_label and get_node_or_null("/root/SaveManager"):
 		var stats: Dictionary = SaveManager.data.get("stats", {})
-		_best_chain_label.text = "🔗 BEST CHAIN: ×%d" % stats.get("best_chain", 0)
+		_best_chain_label.text = "BEST CHAIN: ×%d" % stats.get("best_chain", 0)
 
 
 func _build_ui() -> void:
@@ -70,7 +72,7 @@ func _build_ui() -> void:
 
 	# Title
 	var title_lbl := Label.new()
-	title_lbl.text = "⚡ CHAOS MODE"
+	title_lbl.text = "CHAOS MODE"
 	title_lbl.add_theme_font_size_override("font_size", 48)
 	title_lbl.add_theme_color_override("font_color", COLOR_PURPLE)
 	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -90,13 +92,13 @@ func _build_ui() -> void:
 	vbox.add_child(stats_h)
 
 	_best_score_label = Label.new()
-	_best_score_label.text = "🏆 HIGH SCORE: 0"
+	_best_score_label.text = "HIGH SCORE: 0"
 	_best_score_label.add_theme_font_size_override("font_size", 14)
 	_best_score_label.add_theme_color_override("font_color", COLOR_GOLD)
 	stats_h.add_child(_best_score_label)
 
 	_best_chain_label = Label.new()
-	_best_chain_label.text = "🔗 BEST CHAIN: ×0"
+	_best_chain_label.text = "BEST CHAIN: ×0"
 	_best_chain_label.add_theme_font_size_override("font_size", 14)
 	_best_chain_label.add_theme_color_override("font_color", COLOR_CYAN)
 	stats_h.add_child(_best_chain_label)
@@ -127,7 +129,7 @@ func _build_ui() -> void:
 	card.add_child(card_v)
 
 	_mutator_label = Label.new()
-	_mutator_label.text = "⚡ MUTATOR: HYPER RESTITUTION"
+	_mutator_label.text = "MUTATOR: HYPER RESTITUTION"
 	_mutator_label.add_theme_font_size_override("font_size", 18)
 	_mutator_label.add_theme_color_override("font_color", COLOR_PURPLE)
 	card_v.add_child(_mutator_label)
@@ -140,7 +142,7 @@ func _build_ui() -> void:
 	card_v.add_child(_desc_label)
 
 	_inventory_label = Label.new()
-	_inventory_label.text = "📦 APPARATUS: Ball x2, Bomb x1, Rocket x1, Barrel x1"
+	_inventory_label.text = "APPARATUS: Ball x2, Bomb x1, Rocket x1, Barrel x1"
 	_inventory_label.add_theme_font_size_override("font_size", 13)
 	_inventory_label.add_theme_color_override("font_color", COLOR_CYAN)
 	_inventory_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -152,7 +154,7 @@ func _build_ui() -> void:
 	vbox.add_child(btn_v)
 
 	var btn_start := Button.new()
-	btn_start.text = "▶  INITIATE EXPERIMENT"
+	btn_start.text = "INITIATE EXPERIMENT"
 	btn_start.custom_minimum_size = Vector2(360, 60)
 	btn_start.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	btn_start.add_theme_font_size_override("font_size", 18)
@@ -181,7 +183,7 @@ func _build_ui() -> void:
 	btn_v.add_child(btn_start)
 
 	var btn_reroll := Button.new()
-	btn_reroll.text = "🎲 REROLL SCENARIO"
+	btn_reroll.text = "REROLL SCENARIO"
 	btn_reroll.custom_minimum_size = Vector2(240, 42)
 	btn_reroll.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	btn_reroll.focus_mode = Control.FOCUS_NONE

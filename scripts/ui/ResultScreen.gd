@@ -29,6 +29,8 @@ func _ready() -> void:
 	_create_ui()
 	visible = false
 	GameManager.state_changed.connect(_on_state_changed)
+	# Apply spring-physics micro-animations to all buttons
+	UIAnimations.setup_all_buttons(self)
 
 
 func _create_ui() -> void:
@@ -114,7 +116,7 @@ func _create_ui() -> void:
 
 	# 2X Rewarded Ad Doubler Button
 	_double_btn = Button.new()
-	_double_btn.text = "🎬 DOUBLE COINS (2X)"
+	_double_btn.text = "2X DOUBLE COINS"
 	_double_btn.custom_minimum_size = Vector2(240, 42)
 	_double_btn.focus_mode = Control.FOCUS_NONE
 	var d_style := StyleBoxFlat.new()
@@ -136,15 +138,15 @@ func _create_ui() -> void:
 	btn_container.add_theme_constant_override("separation", 14)
 	vbox.add_child(btn_container)
 
-	_retry_btn = _make_button("⟳ RETRY", Color(0.85, 0.5, 0.15))
+	_retry_btn = _make_button("RETRY", Color(0.85, 0.5, 0.15))
 	_retry_btn.pressed.connect(_on_retry)
 	btn_container.add_child(_retry_btn)
 
-	_select_btn = _make_button("☰ LEVELS", Color(0.3, 0.45, 0.65))
+	_select_btn = _make_button("LEVELS", Color(0.3, 0.45, 0.65))
 	_select_btn.pressed.connect(_on_level_select)
 	btn_container.add_child(_select_btn)
 
-	_next_btn = _make_button("▶ NEXT", Color(0.18, 0.82, 0.45))
+	_next_btn = _make_button("NEXT", Color(0.18, 0.82, 0.45))
 	_next_btn.pressed.connect(_on_next)
 	btn_container.add_child(_next_btn)
 
@@ -198,7 +200,7 @@ func show_result(result: Dictionary) -> void:
 	if complete and coins > 0:
 		_double_btn.visible = true
 		_double_btn.disabled = false
-		_double_btn.text = "🎬 DOUBLE (+%d 🪙)" % coins
+		_double_btn.text = "2X DOUBLE (+%d COINS)" % coins
 	else:
 		_double_btn.visible = false
 
@@ -223,7 +225,7 @@ func _on_double_pressed() -> void:
 		if success:
 			SaveManager.add_coins(_earned_coins)
 			_double_claimed = true
-			_double_btn.text = "✓ 2X CLAIMED"
+			_double_btn.text = "2X CLAIMED"
 			_double_btn.disabled = true
 			_coins_label.text = "+%d COINS (DOUBLED! 2X)" % (_earned_coins * 2)
 			ConfettiEffect.spawn(self)
@@ -236,22 +238,35 @@ func _animate_stars(star_count: int) -> void:
 		child.queue_free()
 
 	for i in 3:
-		var star := Label.new()
+		var star_box := Control.new()
+		star_box.custom_minimum_size = Vector2(52, 52)
+		star_box.pivot_offset = Vector2(26, 26)
+		star_box.scale = Vector2.ZERO
 		var is_earned := (i < star_count)
-		star.text = "★" if is_earned else "☆"
-		star.add_theme_font_size_override("font_size", 46)
-		star.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2) if is_earned else Color(0.3, 0.35, 0.45))
-		star.scale = Vector2.ZERO
-		star.pivot_offset = Vector2(23, 23)
-		_stars_container.add_child(star)
+		star_box.draw.connect(func():
+			var center := Vector2(26, 26)
+			var radius: float = 24.0
+			var inner: float = radius * 0.42
+			var pts := PackedVector2Array()
+			for j in range(10):
+				var ang := -PI * 0.5 + j * (PI / 5.0)
+				var r := radius if (j % 2 == 0) else inner
+				pts.append(center + Vector2(cos(ang), sin(ang)) * r)
+			if is_earned:
+				star_box.draw_colored_polygon(pts, Color(1.0, 0.85, 0.2))
+				star_box.draw_polyline(pts, Color(1.0, 1.0, 0.6), 2.0, true)
+			else:
+				star_box.draw_polyline(pts, Color(0.3, 0.35, 0.45), 2.0, true)
+		)
+		_stars_container.add_child(star_box)
 
 		if is_earned:
 			var tween := create_tween()
 			tween.tween_interval(0.15 * (i + 1))
-			tween.tween_property(star, "scale", Vector2(1.3, 1.3), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-			tween.tween_property(star, "scale", Vector2.ONE, 0.1)
+			tween.tween_property(star_box, "scale", Vector2(1.3, 1.3), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+			tween.tween_property(star_box, "scale", Vector2.ONE, 0.1)
 		else:
-			star.scale = Vector2.ONE
+			star_box.scale = Vector2.ONE
 
 
 func _on_state_changed(_old: GameManager.GameState, new: GameManager.GameState) -> void:

@@ -25,6 +25,8 @@ const COLOR_FLAME := Color(1.0, 0.45, 0.1)
 func _ready() -> void:
 	_create_ui()
 	_refresh_display()
+	# Apply spring-physics micro-animations to all buttons
+	UIAnimations.setup_all_buttons(self)
 
 
 func _create_ui() -> void:
@@ -100,8 +102,9 @@ func _create_ui() -> void:
 	streak_card.add_child(sc_hbox)
 
 	var flame_icon := Label.new()
-	flame_icon.text = "🔥"
-	flame_icon.add_theme_font_size_override("font_size", 42)
+	flame_icon.text = "[STREAK]"
+	flame_icon.add_theme_font_size_override("font_size", 20)
+	flame_icon.add_theme_color_override("font_color", COLOR_FLAME)
 	sc_hbox.add_child(flame_icon)
 
 	var sc_vbox := VBoxContainer.new()
@@ -157,8 +160,9 @@ func _create_ui() -> void:
 	mod_panel.add_child(mp_hbox)
 
 	_modifier_icon_label = Label.new()
-	_modifier_icon_label.text = "⚡"
-	_modifier_icon_label.add_theme_font_size_override("font_size", 38)
+	_modifier_icon_label.text = "[MOD]"
+	_modifier_icon_label.add_theme_font_size_override("font_size", 24)
+	_modifier_icon_label.add_theme_color_override("font_color", COLOR_CYAN)
 	mp_hbox.add_child(_modifier_icon_label)
 
 	var mp_vbox := VBoxContainer.new()
@@ -244,7 +248,7 @@ func _refresh_display() -> void:
 	# Active Modifier
 	var mod_info: Dictionary = daily_mgr.get_modifier_info()
 	if _modifier_icon_label:
-		_modifier_icon_label.text = mod_info.get("icon", "⚡")
+		_modifier_icon_label.text = mod_info.get("icon", "[MOD]")
 	if _modifier_title_label:
 		_modifier_title_label.text = mod_info.get("name", "Daily Modifier")
 		_modifier_title_label.add_theme_color_override("font_color", mod_info.get("color", Color.WHITE))
@@ -297,16 +301,16 @@ func _refresh_display() -> void:
 		cvbox.add_child(d_lbl)
 
 		var r_lbl := Label.new()
-		r_lbl.text = "🪙 %d" % reward_val
+		r_lbl.text = "%d COINS" % reward_val
 		r_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		r_lbl.add_theme_font_size_override("font_size", 14)
+		r_lbl.add_theme_font_size_override("font_size", 13)
 		r_lbl.add_theme_color_override("font_color", COLOR_GOLD if (is_past or is_current) else Color(0.6, 0.6, 0.6))
 		cvbox.add_child(r_lbl)
 
 		var status_lbl := Label.new()
 		status_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		status_lbl.add_theme_font_size_override("font_size", 16)
-		status_lbl.text = "✓" if is_past else ("★" if is_current else "🔒")
+		status_lbl.add_theme_font_size_override("font_size", 13)
+		status_lbl.text = "DONE" if is_past else ("TODAY" if is_current else "LOCKED")
 		status_lbl.add_theme_color_override("font_color", Color(0.2, 0.9, 0.4) if is_past else (COLOR_GOLD if is_current else Color(0.4, 0.4, 0.4)))
 		cvbox.add_child(status_lbl)
 
@@ -314,17 +318,17 @@ func _refresh_display() -> void:
 
 	# Action Buttons
 	if completed_today:
-		_start_button.text = "✓ EXPERIMENT COMPLETED TODAY"
+		_start_button.text = "EXPERIMENT COMPLETED TODAY"
 		_start_button.disabled = true
 		_double_bonus_btn.visible = true
 		if _bonus_doubled_today:
-			_double_bonus_btn.text = "✓ 2X BONUS CLAIMED"
+			_double_bonus_btn.text = "2X BONUS CLAIMED"
 			_double_bonus_btn.disabled = true
 		else:
-			_double_bonus_btn.text = "🎬 DOUBLE TODAY'S BONUS (2X)"
+			_double_bonus_btn.text = "DOUBLE TODAY'S BONUS (2X)"
 			_double_bonus_btn.disabled = false
 	else:
-		_start_button.text = "▶ START DAILY EXPERIMENT"
+		_start_button.text = "START DAILY EXPERIMENT"
 		_start_button.disabled = false
 		_double_bonus_btn.visible = false
 		var start_style := StyleBoxFlat.new()

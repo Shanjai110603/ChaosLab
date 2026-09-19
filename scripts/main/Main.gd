@@ -224,126 +224,155 @@ func _hide_all_screens() -> void:
 		result_screen.visible = false
 
 
+func _transition_to(switch_func: Callable) -> void:
+	if ScreenTransition.instance:
+		ScreenTransition.fade_to(switch_func)
+	else:
+		switch_func.call()
+
+
 func _show_main_menu() -> void:
-	_hide_all_screens()
-	if arena:
-		arena.visible = false
-	if gameplay_ui:
-		gameplay_ui.visible = false
-	if main_menu_screen:
-		main_menu_screen.visible = true
-		if main_menu_screen.has_method("_refresh_data"):
-			main_menu_screen._refresh_data()
-	GameManager.go_to_menu()
+	_transition_to(func():
+		_hide_all_screens()
+		if arena:
+			arena.visible = false
+		if gameplay_ui:
+			gameplay_ui.visible = false
+		if main_menu_screen:
+			main_menu_screen.visible = true
+			if main_menu_screen.has_method("_refresh_data"):
+				main_menu_screen._refresh_data()
+		GameManager.go_to_menu()
+	)
 
 
 func _show_level_select() -> void:
-	_hide_all_screens()
-	if arena:
-		arena.visible = false
-	if gameplay_ui:
-		gameplay_ui.visible = false
-	if level_select_screen:
-		level_select_screen.visible = true
-		level_select_screen._refresh_display()
+	_transition_to(func():
+		_hide_all_screens()
+		if arena:
+			arena.visible = false
+		if gameplay_ui:
+			gameplay_ui.visible = false
+		if level_select_screen:
+			level_select_screen.visible = true
+			level_select_screen._refresh_display()
+	)
 
 
 func _show_lab_hub() -> void:
-	_hide_all_screens()
-	if arena:
-		arena.visible = false
-	if gameplay_ui:
-		gameplay_ui.visible = false
-	if lab_hub_screen:
-		lab_hub_screen.visible = true
-		lab_hub_screen._refresh_display()
+	_transition_to(func():
+		_hide_all_screens()
+		if arena:
+			arena.visible = false
+		if gameplay_ui:
+			gameplay_ui.visible = false
+		if lab_hub_screen:
+			lab_hub_screen.visible = true
+			lab_hub_screen._refresh_display()
+	)
 
 
 func _show_chaos_mode() -> void:
-	_hide_all_screens()
-	if arena:
-		arena.visible = false
-	if gameplay_ui:
-		gameplay_ui.visible = false
-	if chaos_mode_screen:
-		chaos_mode_screen.visible = true
-		chaos_mode_screen._generate_next()
+	_transition_to(func():
+		_hide_all_screens()
+		if arena:
+			arena.visible = false
+		if gameplay_ui:
+			gameplay_ui.visible = false
+		if chaos_mode_screen:
+			chaos_mode_screen.visible = true
+			chaos_mode_screen._generate_next()
+	)
 
 
 func _show_shop() -> void:
-	_hide_all_screens()
-	if arena:
-		arena.visible = false
-	if gameplay_ui:
-		gameplay_ui.visible = false
-	if shop_screen:
-		shop_screen.visible = true
-		shop_screen._refresh_display()
+	_transition_to(func():
+		_hide_all_screens()
+		if arena:
+			arena.visible = false
+		if gameplay_ui:
+			gameplay_ui.visible = false
+		if shop_screen:
+			shop_screen.visible = true
+			shop_screen._refresh_display()
+	)
 
 
 func _show_daily() -> void:
-	_hide_all_screens()
-	if arena:
-		arena.visible = false
-	if gameplay_ui:
-		gameplay_ui.visible = false
-	if daily_screen:
-		daily_screen.visible = true
-		daily_screen._refresh_display()
+	_transition_to(func():
+		_hide_all_screens()
+		if arena:
+			arena.visible = false
+		if gameplay_ui:
+			gameplay_ui.visible = false
+		if daily_screen:
+			daily_screen.visible = true
+			daily_screen._refresh_display()
+	)
 
 
 func _show_achievements() -> void:
-	_hide_all_screens()
-	if arena:
-		arena.visible = false
-	if gameplay_ui:
-		gameplay_ui.visible = false
-	if achievements_screen:
-		achievements_screen.visible = true
-		achievements_screen._refresh_display()
+	_transition_to(func():
+		_hide_all_screens()
+		if arena:
+			arena.visible = false
+		if gameplay_ui:
+			gameplay_ui.visible = false
+		if achievements_screen:
+			achievements_screen.visible = true
+			achievements_screen._refresh_display()
+	)
 
 
 func _show_settings() -> void:
-	_hide_all_screens()
-	if arena:
-		arena.visible = false
-	if gameplay_ui:
-		gameplay_ui.visible = false
-	if settings_screen:
-		settings_screen.visible = true
-		settings_screen._load_settings()
+	_transition_to(func():
+		_hide_all_screens()
+		if arena:
+			arena.visible = false
+		if gameplay_ui:
+			gameplay_ui.visible = false
+		if settings_screen:
+			settings_screen.visible = true
+			settings_screen._load_settings()
+	)
 
 
 func _on_level_chosen(level_id: int) -> void:
-	_hide_all_screens()
-	if arena:
-		arena.visible = true
-		arena._load_level(level_id)
-	if gameplay_ui:
-		gameplay_ui.visible = true
-		_sync_gameplay_ui_to_level()
+	_transition_to(func():
+		_hide_all_screens()
+		if arena:
+			arena.visible = true
+			arena._load_level(level_id)
+		if gameplay_ui:
+			gameplay_ui.visible = true
+			_sync_gameplay_ui_to_level()
+	)
 
 
 func _on_start_chaos_requested(level_def: Dictionary) -> void:
-	_hide_all_screens()
-	if arena:
-		arena.visible = true
-		arena.load_custom_level(level_def)
-	if gameplay_ui:
-		gameplay_ui.visible = true
-		_sync_gameplay_ui_to_level()
+	_transition_to(func():
+		_hide_all_screens()
+		if arena:
+			arena.visible = true
+			arena.load_custom_level(level_def)
+		if gameplay_ui:
+			gameplay_ui.visible = true
+			_sync_gameplay_ui_to_level()
+	)
 
 
 func _on_start_daily_requested() -> void:
-	_hide_all_screens()
-	if arena and get_node_or_null("/root/DailyChallengeManager"):
-		var daily_mgr = get_node_or_null("/root/DailyChallengeManager")
-		var def: Dictionary = daily_mgr.generate_daily_level_definition()
-		arena.visible = true
-		arena.load_custom_level(def)
-	if gameplay_ui:
-		gameplay_ui.visible = true
-		_sync_gameplay_ui_to_level()
+	_transition_to(func():
+		_hide_all_screens()
+		if arena and get_node_or_null("/root/DailyChallengeManager"):
+			var daily_mgr = get_node_or_null("/root/DailyChallengeManager")
+			var def: Dictionary = daily_mgr.generate_daily_level_definition()
+			arena.visible = true
+			arena.load_custom_level(def)
+		if gameplay_ui:
+			gameplay_ui.visible = true
+			_sync_gameplay_ui_to_level()
+	)
 
 
 func _sync_gameplay_ui_to_level() -> void:
@@ -353,9 +382,11 @@ func _sync_gameplay_ui_to_level() -> void:
 		if gameplay_ui.level_label:
 			gameplay_ui.level_label.text = "EXPERIMENT %d: %s" % [arena.current_level.level_id, arena.current_level.title.to_upper()]
 		if gameplay_ui.hint_banner and not arena.current_level.description.is_empty():
-			gameplay_ui.hint_banner.text = "🎯 Objective: %s" % arena.current_level.description
+			gameplay_ui.hint_banner.text = "Objective: %s" % arena.current_level.description
 		if gameplay_ui.has_method("greet_level"):
 			gameplay_ui.greet_level(arena.current_level.level_id, arena.current_level.title, arena.current_level.description)
+		if gameplay_ui.has_method("show_mission_banner") and not arena.current_level.description.is_empty():
+			gameplay_ui.show_mission_banner("OBJECTIVE: %s" % arena.current_level.description.to_upper())
 
 
 func _on_retry_requested() -> void:

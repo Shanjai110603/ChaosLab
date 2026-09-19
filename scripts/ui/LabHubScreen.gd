@@ -24,7 +24,7 @@ const SECTORS_DATA: Array[Dictionary] = [
 		"name": "THE MECHANICS SECTOR",
 		"desc": "Primary kinetic testing chamber. Ordinary physical interaction and chain reactions.",
 		"mechanic": "Ballistics & Collision",
-		"icon": "⚙️",
+		"icon": "[01]",
 		"log": "Log #01: The Core reacts to momentum! Roll a ball into a barrel, and the output energy triples. I must keep testing."
 	},
 	{
@@ -32,7 +32,7 @@ const SECTORS_DATA: Array[Dictionary] = [
 		"name": "KINETIC BALLISTICS BAY",
 		"desc": "Angular deflection corridors and high-velocity incline ramps.",
 		"mechanic": "Ramps & Friction",
-		"icon": "📐",
+		"icon": "[02]",
 		"log": "Log #14: Angles matter. A 45-degree slope yields maximum kinetic transfer. Note: Don't stand at the bottom of the ramp."
 	},
 	{
@@ -40,7 +40,7 @@ const SECTORS_DATA: Array[Dictionary] = [
 		"name": "DEMOLITION & EXPLOSIVES",
 		"desc": "Reinforced blast containment chamber for explosive chains.",
 		"mechanic": "Chained Detonations",
-		"icon": "💣",
+		"icon": "[03]",
 		"log": "Log #27: Everything exploded again. Progress! A single bomb triggered five barrels across the hall."
 	},
 	{
@@ -48,7 +48,7 @@ const SECTORS_DATA: Array[Dictionary] = [
 		"name": "MAGNETIC RESONANCE LAB",
 		"desc": "High-gauss polarized magnetic fields and electromagnetic switches.",
 		"mechanic": "Attraction & Repulsion",
-		"icon": "🧲",
+		"icon": "[04]",
 		"log": "Log #39: The magnets don't just pull steel—they bend the Core's local field lines. Fascinating."
 	},
 	{
@@ -56,7 +56,7 @@ const SECTORS_DATA: Array[Dictionary] = [
 		"name": "PNEUMATIC WIND TUNNEL",
 		"desc": "Continuous airflow turbines and pressurized aerodynamic chutes.",
 		"mechanic": "Vector Airflow",
-		"icon": "💨",
+		"icon": "[05]",
 		"log": "Log #48: You don't always have to touch an object to move it. The wind turbine blew my coffee cup through the portal."
 	},
 	{
@@ -64,7 +64,7 @@ const SECTORS_DATA: Array[Dictionary] = [
 		"name": "ELEMENTAL REACTION VAT",
 		"desc": "Thermal crystallization vats. Fire melts ice; ice reduces friction to zero.",
 		"mechanic": "Thermal Dynamics",
-		"icon": "🔥",
+		"icon": "[06]",
 		"log": "Log #56: Friction is a suggestion here. Objects glide across frozen platforms with zero resistance."
 	},
 	{
@@ -72,7 +72,7 @@ const SECTORS_DATA: Array[Dictionary] = [
 		"name": "ENERGY & TESLA GRID",
 		"desc": "High-voltage conductive wire circuits and laser relay arrays.",
 		"mechanic": "Laser & Circuitry",
-		"icon": "⚡",
+		"icon": "[07]",
 		"log": "Log #69: Energy relays online. Laser beams reflect off mirrored prisms. Wear protective goggles at all times."
 	},
 	{
@@ -80,7 +80,7 @@ const SECTORS_DATA: Array[Dictionary] = [
 		"name": "SPATIAL PORTAL NEXUS",
 		"desc": "Einstein-Rosen gateway conduits preserving absolute velocity.",
 		"mechanic": "Quantum Portals",
-		"icon": "🌀",
+		"icon": "[08]",
 		"log": "Log #81: The portals preserve momentum! Drop a bomb in one end, it shoots out the other like a cannon."
 	},
 	{
@@ -88,7 +88,7 @@ const SECTORS_DATA: Array[Dictionary] = [
 		"name": "GRAVITATIONAL WELL",
 		"desc": "Localized anti-gravity fields and orbital deflection pads.",
 		"mechanic": "Gravitational Inversion",
-		"icon": "🌌",
+		"icon": "[09]",
 		"log": "Log #92: Up is down, down is sideways. Gravity is completely pliable under the Core's influence."
 	},
 	{
@@ -96,7 +96,7 @@ const SECTORS_DATA: Array[Dictionary] = [
 		"name": "CHAOS CORE SINGULARITY",
 		"desc": "The central nexus. The culmination of all combined physical systems.",
 		"mechanic": "Omniverse Collider",
-		"icon": "⚛️",
+		"icon": "[10]",
 		"log": "Log #100: The Core does not create chaos. It AMPLIFIES interactions. Whoever controls this controls the future."
 	}
 ]
@@ -107,17 +107,19 @@ func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	_build_ui()
 	_refresh_display()
+	# Apply spring-physics micro-animations to all buttons
+	UIAnimations.setup_all_buttons(self)
 
 
 func _refresh_display() -> void:
 	if _coins_label and get_node_or_null("/root/SaveManager"):
-		_coins_label.text = "🪙 %d" % SaveManager.get_coins()
+		_coins_label.text = "COINS: %d" % SaveManager.get_coins()
 	if _stars_label and get_node_or_null("/root/SaveManager"):
-		_stars_label.text = "⭐ %d / 300" % SaveManager.get_total_stars()
+		_stars_label.text = "STARS: %d / 300" % SaveManager.get_total_stars()
 	if _lab_level_label and get_node_or_null("/root/SaveManager"):
 		var total_stars: int = SaveManager.get_total_stars()
 		var level: int = maxi(1, int(total_stars / 10) + 1)
-		_lab_level_label.text = "🔬 FACILITY LEVEL %d" % level
+		_lab_level_label.text = "FACILITY LVL %d" % level
 
 
 func _build_ui() -> void:
@@ -149,7 +151,7 @@ func _build_ui() -> void:
 	top_panel.add_child(top_h)
 
 	var back_btn := Button.new()
-	back_btn.text = "←  MAIN MENU"
+	back_btn.text = "BACK TO MENU"
 	back_btn.custom_minimum_size = Vector2(160, 42)
 	back_btn.focus_mode = Control.FOCUS_NONE
 	back_btn.pressed.connect(func():
@@ -164,7 +166,7 @@ func _build_ui() -> void:
 	top_h.add_child(spacer)
 
 	var title := Label.new()
-	title.text = "🔬 CHAOS LAB • FACILITY SECTOR RESTORATION"
+	title.text = "RESEARCH FACILITY // SECTOR RESTORATION"
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", COLOR_CYAN)
 	top_h.add_child(title)
@@ -174,7 +176,7 @@ func _build_ui() -> void:
 	top_h.add_child(spacer2)
 
 	_lab_level_label = Label.new()
-	_lab_level_label.text = "🔬 FACILITY LEVEL 1"
+	_lab_level_label.text = "FACILITY LVL 1"
 	_lab_level_label.add_theme_font_size_override("font_size", 14)
 	_lab_level_label.add_theme_color_override("font_color", COLOR_CYAN)
 	top_h.add_child(_lab_level_label)
@@ -184,7 +186,7 @@ func _build_ui() -> void:
 	top_h.add_child(sep1)
 
 	_stars_label = Label.new()
-	_stars_label.text = "⭐ 0 / 300"
+	_stars_label.text = "STARS: 0 / 300"
 	_stars_label.add_theme_font_size_override("font_size", 14)
 	_stars_label.add_theme_color_override("font_color", COLOR_GOLD)
 	top_h.add_child(_stars_label)
@@ -194,7 +196,7 @@ func _build_ui() -> void:
 	top_h.add_child(sep2)
 
 	_coins_label = Label.new()
-	_coins_label.text = "🪙 0"
+	_coins_label.text = "COINS: 0"
 	_coins_label.add_theme_font_size_override("font_size", 14)
 	_coins_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.4))
 	top_h.add_child(_coins_label)
@@ -238,7 +240,7 @@ func _build_ui() -> void:
 	_audio_log_panel.add_child(log_v)
 
 	_log_title_label = Label.new()
-	_log_title_label.text = "📻 DR. NOVA'S AUDIO LOG"
+	_log_title_label.text = "DR. NOVA'S AUDIO LOG"
 	_log_title_label.add_theme_font_size_override("font_size", 13)
 	_log_title_label.add_theme_color_override("font_color", COLOR_CYAN)
 	log_v.add_child(_log_title_label)
@@ -298,8 +300,9 @@ func _create_sector_card(data: Dictionary) -> PanelContainer:
 
 	# Icon
 	var icon_lbl := Label.new()
-	icon_lbl.text = data.get("icon", "🧪")
-	icon_lbl.add_theme_font_size_override("font_size", 38)
+	icon_lbl.text = "[%02d]" % world_id
+	icon_lbl.add_theme_font_size_override("font_size", 24)
+	icon_lbl.add_theme_color_override("font_color", COLOR_CYAN if is_unlocked else Color(0.4, 0.45, 0.5))
 	h_box.add_child(icon_lbl)
 
 	# Info
@@ -325,7 +328,7 @@ func _create_sector_card(data: Dictionary) -> PanelContainer:
 	v_info.add_child(status_h)
 
 	var stars_lbl := Label.new()
-	stars_lbl.text = "⭐ %d / 30 Stars" % world_stars
+	stars_lbl.text = "STARS: %d / 30" % world_stars
 	stars_lbl.add_theme_font_size_override("font_size", 12)
 	stars_lbl.add_theme_color_override("font_color", COLOR_GOLD if is_unlocked else Color(0.4, 0.45, 0.5))
 	status_h.add_child(stars_lbl)
@@ -343,8 +346,8 @@ func _create_sector_card(data: Dictionary) -> PanelContainer:
 	# Action: Audio Log Button
 	if is_unlocked:
 		var log_btn := Button.new()
-		log_btn.text = "📻 PLAY LOG"
-		log_btn.custom_minimum_size = Vector2(110, 36)
+		log_btn.text = "PLAY LOG"
+		log_btn.custom_minimum_size = Vector2(100, 36)
 		log_btn.focus_mode = Control.FOCUS_NONE
 		log_btn.add_theme_font_size_override("font_size", 11)
 		log_btn.pressed.connect(func():
@@ -353,7 +356,7 @@ func _create_sector_card(data: Dictionary) -> PanelContainer:
 		h_box.add_child(log_btn)
 	else:
 		var lock_lbl := Label.new()
-		lock_lbl.text = "🔒 LOCKED"
+		lock_lbl.text = "[ LOCKED ]"
 		lock_lbl.add_theme_font_size_override("font_size", 12)
 		lock_lbl.add_theme_color_override("font_color", Color(0.5, 0.55, 0.6))
 		h_box.add_child(lock_lbl)
@@ -365,7 +368,7 @@ func _show_audio_log(sector_name: String, log_text: String) -> void:
 	if _audio_log_panel:
 		_audio_log_panel.visible = true
 		if _log_title_label:
-			_log_title_label.text = "📻 DR. NOVA'S LOG • %s" % sector_name
+			_log_title_label.text = "DR. NOVA'S LOG // %s" % sector_name
 		if _log_content_label:
 			_log_content_label.text = '"%s"' % log_text
 	if get_node_or_null("/root/AudioManager"):

@@ -3,14 +3,14 @@
 class_name ScoreSystem
 extends RefCounted
 
-## Points awarded per unused inventory item.
-const PAR_BONUS_PER_ITEM: int = 250
+## Points awarded per unused inventory item (stronger incentive for efficiency).
+const PAR_BONUS_PER_ITEM: int = 350
 
-## Coin rewards.
-const COINS_PER_STAR: int = 50
-const PERFECT_BONUS: int = 100
-const CHAIN_BONUS_THRESHOLD: int = 8
-const CHAIN_BONUS_COINS: int = 75
+## Coin rewards (more rewarding progression).
+const COINS_PER_STAR: int = 75
+const PERFECT_BONUS: int = 200
+const CHAIN_BONUS_THRESHOLD: int = 10
+const CHAIN_BONUS_COINS: int = 100
 
 
 ## Calculate the star rating (1-3) based on score and level targets.
@@ -84,7 +84,8 @@ static func evaluate_level(
 	elif stars >= 1:
 		label = "EXPERIMENT COMPLETE!"
 
-	var chaos_rating: bool = chain >= 12
+	## Chaos rating requires 15 events — rare, special, celebrated.
+	var chaos_rating: bool = chain >= 15
 
 	return {
 		"complete": is_complete,

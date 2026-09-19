@@ -245,6 +245,11 @@ func _on_body_entered(body: Node) -> void:
 	if GameManager.current_state != GameManager.GameState.SIMULATING:
 		return
 
+	# Rocket hits a BreakableWall — guaranteed fracture regardless of velocity
+	if body is BreakableWall:
+		body.take_explosion_damage(999.0, global_position)  # Instant fracture
+		return
+
 	# If not yet ignited, impact will trigger ignition!
 	if not is_ignited:
 		if body is RigidBody2D or body is GameObject:

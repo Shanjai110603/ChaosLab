@@ -86,6 +86,15 @@ func _draw_ball(node: Node2D) -> void:
 		_:
 			base_color = object_color
 			out_color = outline_color
+	var tex_path := "res://assets/sprites/objects/ball_metal.png"
+	if skin_id == "ball_magma":
+		tex_path = "res://assets/sprites/objects/ball_red.png"
+	if ResourceLoader.exists(tex_path):
+		var tex := load(tex_path) as Texture2D
+		var rect := Rect2(-radius, -radius, radius * 2, radius * 2)
+		node.draw_texture_rect(tex, rect, false, base_color.lerp(Color.WHITE, 0.45))
+		node.draw_arc(Vector2.ZERO, radius, 0, TAU, 32, out_color, 1.5, true)
+		return
 
 	# Base shaded body
 	node.draw_circle(Vector2.ZERO, radius, base_color)

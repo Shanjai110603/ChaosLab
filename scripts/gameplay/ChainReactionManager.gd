@@ -18,27 +18,35 @@ var max_simultaneous: int = 0
 var affected_objects: Array[Node] = []
 
 ## Combo window duration. Events occurring within this window maintain/elevate combo.
-const COMBO_WINDOW: float = 1.6
+const COMBO_WINDOW: float = 1.8         # Extended: more forgiving, more fun
 var _last_event_time: float = 0.0
 var _combo_multiplier: float = 1.0
+## How much the multiplier increases per in-window event.
+const COMBO_INCREMENT: float = 0.4      # was 0.35
+## Maximum combo multiplier ceiling.
+const COMBO_CAP: float = 8.0            # was 6.0
 
 const SCORE_VALUES: Dictionary = {
-	"collision": 15,
-	"explosion": 80,
-	"ignition": 40,
-	"launch": 50,
-	"target_hit": 250,
-	"target_destroyed": 500,
+	"collision":        25,    # was 15
+	"explosion":        200,   # was 80
+	"ignition":         100,   # was 40
+	"launch":           120,   # was 50
+	"target_hit":       1000,  # was 250
+	"target_destroyed": 2500,  # was 500
+	"wall_broken":      350,   # NEW
 }
 
 const CHAIN_LABELS: Dictionary = {
-	2: "DOUBLE!",
-	3: "TRIPLE!",
-	5: "SUPER CHAIN!",
-	8: "CHAOS MATRIX!",
+	2:  "DOUBLE!",
+	3:  "TRIPLE!",
+	5:  "SUPER CHAIN!",
+	8:  "CHAOS MATRIX!",
 	12: "MEGA CATACLYSM!",
 	18: "TOTAL CHAOS!",
 }
+
+## Combo tiers that trigger a vignette pulse.
+const VIGNETTE_PULSE_TIERS: Array[int] = [4, 6, 8]
 
 var _frame_events: int = 0
 var _is_tracking: bool = false
@@ -84,9 +92,16 @@ func register_event(event_type: String, source: Node = null, target_node: Node =
 
 	# Combo multiplier scaling
 	if time_since_last <= COMBO_WINDOW:
-		_combo_multiplier = clampf(_combo_multiplier + 0.35, 1.0, 6.0)
+		_combo_multiplier = clampf(_combo_multiplier + COMBO_INCREMENT, 1.0, COMBO_CAP)
 	else:
 		_combo_multiplier = 1.0
+
+	# Vignette pulse at milestone combo tiers
+	var tier := int(_combo_multiplier)
+	if tier in VIGNETTE_PULSE_TIERS:
+		var vignette := get_tree().root.find_child("ScreenVignette", true, false)
+		if vignette and vignette.has_method("pulse_combo"):
+			vignette.pulse_combo(tier)
 
 	var base_score: int = SCORE_VALUES.get(event_type, 10)
 	var event_score: int = int(base_score * _combo_multiplier)

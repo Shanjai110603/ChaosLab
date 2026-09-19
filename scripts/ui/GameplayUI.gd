@@ -66,6 +66,13 @@ func _ready() -> void:
 	GameManager.state_changed.connect(_on_state_changed)
 	_update_for_state(GameManager.current_state)
 
+	# Spring-physics on all buttons (hover/press/release)
+	UIAnimations.setup_all_buttons(self)
+
+	# Pulsing glow specifically on the GO button to draw attention
+	if go_button:
+		_start_go_pulse()
+
 
 func _process(delta: float) -> void:
 	_glow_time += delta
@@ -137,18 +144,18 @@ func _create_top_bar(root: Control) -> void:
 	top_bg.add_child(top_bar)
 
 	# Pause button (left)
-	pause_button = _create_icon_button("⏸", COLOR_PAUSE, 44)
+	pause_button = _create_icon_button("||", COLOR_PAUSE, 44)
 	pause_button.pressed.connect(_on_pause_pressed)
 	top_bar.add_child(pause_button)
 
 	# Main Menu button (Home)
-	var menu_btn := _create_action_button("🏠 MENU", COLOR_PAUSE, 92, 38)
+	var menu_btn := _create_action_button("MENU", COLOR_PAUSE, 84, 38)
 	menu_btn.add_theme_font_size_override("font_size", 13)
 	menu_btn.pressed.connect(func(): main_menu_requested.emit())
 	top_bar.add_child(menu_btn)
 
 	# Levels / Campaign Menu button
-	var levels_btn := _create_action_button("☰ LEVELS", COLOR_PAUSE, 96, 38)
+	var levels_btn := _create_action_button("LEVELS", COLOR_PAUSE, 88, 38)
 	levels_btn.add_theme_font_size_override("font_size", 13)
 	levels_btn.pressed.connect(func(): level_select_requested.emit())
 	top_bar.add_child(levels_btn)
@@ -197,7 +204,7 @@ func _create_top_bar(root: Control) -> void:
 	center_box.add_child(level_label)
 
 	hint_banner = Label.new()
-	hint_banner.text = "🎯 Objective: Drag the blue ball above the barrel • Press TRIGGER CHAOS!"
+	hint_banner.text = "Objective: Drag the blue ball above the barrel • Press TRIGGER CHAOS!"
 	hint_banner.add_theme_font_size_override("font_size", 12)
 	hint_banner.add_theme_color_override("font_color", Color(0.0, 0.95, 0.85, 0.9))
 	hint_banner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -334,17 +341,17 @@ func _create_bottom_bar(root: Control) -> void:
 	var tools_box := HBoxContainer.new()
 	tools_box.add_theme_constant_override("separation", 8)
 
-	var rot_ccw := _create_action_button("↶ -45°", COLOR_UNDO, 80, 46)
+	var rot_ccw := _create_action_button("-45°", COLOR_UNDO, 72, 46)
 	rot_ccw.add_theme_font_size_override("font_size", 14)
 	rot_ccw.pressed.connect(func(): InputManager.rotate_selected_object(-45.0))
 	tools_box.add_child(rot_ccw)
 
-	var rot_cw := _create_action_button("↷ +45°", COLOR_UNDO, 80, 46)
+	var rot_cw := _create_action_button("+45°", COLOR_UNDO, 72, 46)
 	rot_cw.add_theme_font_size_override("font_size", 14)
 	rot_cw.pressed.connect(func(): InputManager.rotate_selected_object(45.0))
 	tools_box.add_child(rot_cw)
 
-	grid_button = _create_action_button("⊞ GRID", COLOR_UNDO, 85, 46)
+	grid_button = _create_action_button("GRID", COLOR_UNDO, 75, 46)
 	grid_button.add_theme_font_size_override("font_size", 13)
 	grid_button.pressed.connect(func():
 		var enabled := InputManager.toggle_grid_snap()
@@ -352,7 +359,7 @@ func _create_bottom_bar(root: Control) -> void:
 	)
 	tools_box.add_child(grid_button)
 
-	hint_button = _create_action_button("🎬 +1 ITEM", Color(0.85, 0.55, 0.1), 95, 46)
+	hint_button = _create_action_button("+1 ITEM", Color(0.85, 0.55, 0.1), 90, 46)
 	hint_button.add_theme_font_size_override("font_size", 13)
 	hint_button.pressed.connect(_on_hint_pressed)
 	tools_box.add_child(hint_button)
@@ -365,12 +372,12 @@ func _create_bottom_bar(root: Control) -> void:
 	bottom_bar.add_child(spacer1)
 
 	# UNDO button
-	undo_button = _create_action_button("↩ UNDO", COLOR_UNDO, 120, 50)
+	undo_button = _create_action_button("UNDO", COLOR_UNDO, 110, 50)
 	undo_button.pressed.connect(_on_undo_pressed)
 	bottom_bar.add_child(undo_button)
 
 	# RESET button
-	reset_button = _create_action_button("⟳ RESET", COLOR_RESET, 135, 50)
+	reset_button = _create_action_button("RESET", COLOR_RESET, 120, 50)
 	reset_button.pressed.connect(_on_reset_pressed)
 	bottom_bar.add_child(reset_button)
 
@@ -387,8 +394,8 @@ func _create_bottom_bar(root: Control) -> void:
 
 func _create_go_button() -> Button:
 	var btn := Button.new()
-	btn.text = "▶ TRIGGER CHAOS"
-	btn.custom_minimum_size = Vector2(240, 52)
+	btn.text = "TRIGGER CHAOS"
+	btn.custom_minimum_size = Vector2(230, 52)
 
 	var normal := StyleBoxFlat.new()
 	normal.bg_color = COLOR_GO
@@ -490,37 +497,39 @@ func _update_for_state(state: GameManager.GameState) -> void:
 	match state:
 		GameManager.GameState.PLACING:
 			go_button.disabled = false
-			go_button.text = "▶ TRIGGER CHAOS"
+			go_button.text = "TRIGGER CHAOS"
 			reset_button.disabled = false
 			undo_button.disabled = false
 			if hint_button:
 				hint_button.visible = true
-			state_label.text = "● READY"
+			state_label.text = "READY"
 			state_label.add_theme_color_override("font_color", COLOR_GO)
 			_hide_chain_display()
+			_start_go_pulse()
 
 		GameManager.GameState.SIMULATING:
 			go_button.disabled = true
-			go_button.text = "⚡ RUNNING"
+			go_button.text = "RUNNING..."
 			reset_button.disabled = false
 			undo_button.disabled = true
 			if hint_button:
 				hint_button.visible = false
-			state_label.text = "◉ SIMULATING"
+			state_label.text = "SIMULATING"
 			state_label.add_theme_color_override("font_color", COLOR_GOLD)
+			_stop_go_pulse()
 
 		GameManager.GameState.RESULT:
 			go_button.disabled = true
-			go_button.text = "✓ DONE"
+			go_button.text = "DONE"
 			reset_button.disabled = true
 			undo_button.disabled = true
 			if hint_button:
 				hint_button.visible = false
-			state_label.text = "★ RESULT"
+			state_label.text = "RESULT"
 			state_label.add_theme_color_override("font_color", COLOR_ACCENT)
 
 		GameManager.GameState.PAUSED:
-			state_label.text = "⏸ PAUSED"
+			state_label.text = "PAUSED"
 			state_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.65))
 
 	if GameManager.current_level_id > 0:
@@ -589,3 +598,94 @@ func _on_hint_pressed() -> void:
 				object_tray.add_item("bomb", 1)
 			FloatingText.spawn(self, "+1 BONUS BOMB!", Vector2(640, 500), Color(1.0, 0.85, 0.25))
 	)
+
+
+# ─── UIAnimations: GO Button Pulse ────────────────────────────────────────────
+
+var _go_pulse_tween: Tween = null
+
+## Start the pulsing neon-green glow on the GO button.
+func _start_go_pulse() -> void:
+	if not go_button:
+		return
+	if _go_pulse_tween and _go_pulse_tween.is_valid():
+		_go_pulse_tween.kill()
+	# Subtle scale pulse: 1.0 ↔ 1.04, period 1.2s
+	const PULSE_SCALE_MAX: float = 1.04
+	const PULSE_PERIOD: float = 1.2
+	go_button.pivot_offset = go_button.size / 2.0
+	_go_pulse_tween = go_button.create_tween().set_loops().set_process_mode(Tween.TWEEN_PROCESS_TIME)
+	_go_pulse_tween.tween_property(go_button, "scale", Vector2(PULSE_SCALE_MAX, PULSE_SCALE_MAX), PULSE_PERIOD * 0.5) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_go_pulse_tween.tween_property(go_button, "scale", Vector2.ONE, PULSE_PERIOD * 0.5) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+## Stop the GO button pulse (called when simulation starts — button goes disabled).
+func _stop_go_pulse() -> void:
+	if _go_pulse_tween and _go_pulse_tween.is_valid():
+		_go_pulse_tween.kill()
+		_go_pulse_tween = null
+	if go_button:
+		go_button.scale = Vector2.ONE
+
+
+# ─── UIAnimations: Mission Banner Slide-In ────────────────────────────────────
+
+var _mission_banner_panel: Control = null
+
+## Show the mission objective banner sliding in from the left edge of the screen.
+## Call this after the level definition is loaded and objective text is known.
+func show_mission_banner(objective_text: String) -> void:
+	# Create banner panel lazily
+	if not _mission_banner_panel or not is_instance_valid(_mission_banner_panel):
+		_mission_banner_panel = _create_mission_banner_panel()
+
+	if not _mission_banner_panel:
+		return
+
+	# Update text
+	var lbl := _mission_banner_panel.get_node_or_null("ObjectiveLabel") as Label
+	if lbl:
+		lbl.text = objective_text
+
+	# Slide in using UIAnimations utility (hold 2.0s, then slide out)
+	_mission_banner_panel.visible = true
+	UIAnimations.banner_slide(_mission_banner_panel, 2.0)
+
+
+func _create_mission_banner_panel() -> Control:
+	var root_ui := get_node_or_null("UIRoot") as Control
+	if not root_ui:
+		return null
+
+	var panel := PanelContainer.new()
+	panel.name = "MissionBanner"
+	panel.visible = false
+
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.04, 0.07, 0.12, 0.92)
+	style.border_width_left = 3
+	style.border_color = Color(0.0, 0.85, 1.0)
+	style.corner_radius_bottom_right = 10
+	style.corner_radius_top_right = 10
+	style.content_margin_left = 24
+	style.content_margin_right = 32
+	style.content_margin_top = 14
+	style.content_margin_bottom = 14
+	panel.add_theme_stylebox_override("panel", style)
+
+	# Anchor to left-center
+	panel.set_anchors_preset(Control.PRESET_CENTER_LEFT)
+	panel.position = Vector2(-600, -50)
+
+	var lbl := Label.new()
+	lbl.name = "ObjectiveLabel"
+	lbl.add_theme_color_override("font_color", Color(0.0, 0.9, 1.0))
+	lbl.add_theme_font_size_override("font_size", 22)
+	panel.add_child(lbl)
+
+	root_ui.add_child(panel)
+	_mission_banner_panel = panel
+	return panel
+

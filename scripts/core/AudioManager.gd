@@ -57,46 +57,72 @@ func _setup_audio_buses() -> void:
 		AudioServer.set_bus_send(AudioServer.bus_count - 1, BUS_MASTER)
 
 
-# --- Procedural Audio Synthesizer Triggers ---
+# --- Procedural & Hybrid Audio Stream Triggers ---
 
-## Play procedural explosion sound effect.
+## Play explosion sound effect (hybrid stream + sub-bass synthesis).
 func play_explosion(intensity: float = 1.0) -> void:
+	play_sfx("res://assets/audio/sfx/enemy_destroy.ogg", -2.0 + linear_to_db(clampf(intensity, 0.5, 2.0)), randf_range(0.88, 1.08))
 	if synth:
 		synth.play_explosion(intensity)
 
 
-## Play procedural kinetic impact sound effect.
+## Play barrier or target break sound effect.
+func play_break() -> void:
+	play_sfx("res://assets/audio/sfx/break.ogg", 0.0, randf_range(0.95, 1.08))
+
+
+## Play coin / star collection sound effect.
+func play_coin() -> void:
+	play_sfx("res://assets/audio/sfx/coin.ogg", 0.0, randf_range(0.98, 1.04))
+
+
+## Play kinetic impact sound effect.
 func play_impact(material: String = "wood", speed: float = 200.0) -> void:
+	var snd: String = "res://assets/audio/sfx/tile-land.ogg" if material in ["wood", "metal"] else "res://assets/audio/sfx/land.ogg"
+	var vol_db: float = clampf(linear_to_db(clampf(speed / 400.0, 0.2, 1.5)), -12.0, 2.0)
+	play_sfx(snd, vol_db, randf_range(0.92, 1.12))
 	if synth:
 		synth.play_impact(material, speed)
 
 
-## Play procedural musical chime arpeggio for combos.
+## Play musical chime arpeggio for combos.
 func play_chime(combo_tier: int = 1) -> void:
+	var pitch: float = clampf(1.0 + float(combo_tier) * 0.08, 1.0, 1.8)
+	play_sfx("res://assets/audio/sfx/tile-match.ogg", -2.0, pitch)
 	if synth:
 		synth.play_chime(combo_tier)
 
 
 ## Play procedural UI click blip.
 func play_ui_blip(action_type: String = "select") -> void:
+	var pitch: float = 1.25 if action_type == "select" else 1.0
+	play_sfx("res://assets/audio/sfx/tile-swap.ogg", -4.0, pitch)
 	if synth:
 		synth.play_ui_blip(action_type)
 
 
-## Play procedural victory fanfare.
+## Play procedural UI click alias.
+func play_ui_click() -> void:
+	play_ui_blip("click")
+
+
+## Play victory fanfare.
 func play_fanfare() -> void:
+	play_sfx("res://assets/audio/sfx/coin.ogg", 0.0, 1.0)
 	if synth:
 		synth.play_fanfare()
 
 
 ## Play procedural portal teleport sound.
 func play_teleport() -> void:
+	play_sfx("res://assets/audio/sfx/jump.ogg", -3.0, 1.4)
 	if synth:
 		synth.play_teleport()
 
 
-## Play procedural laser beam sound.
+## Play laser beam sound.
 func play_laser() -> void:
+	play_sfx("res://assets/audio/sfx/blaster.ogg", -3.0, randf_range(0.95, 1.05))
 	if synth:
 		synth.play_laser()
 
@@ -121,7 +147,7 @@ func play_sfx(sound_path: String, volume_db: float = 0.0, pitch: float = 1.0) ->
 	return player
 
 
-func play_music(music_path: String, volume_db: float = -10.0, fade_duration: float = 1.0) -> void:
+func play_music(music_path: String, volume_db: float = -12.0, fade_duration: float = 1.0) -> void:
 	if not SaveManager.get_setting("music_enabled", true):
 		return
 

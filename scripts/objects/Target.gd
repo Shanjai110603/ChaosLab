@@ -83,16 +83,21 @@ func _draw_target(node: Node2D) -> void:
 	for i in range(radii.size()):
 		node.draw_circle(Vector2.ZERO, radii[i], ring_colors[i])
 
-	# Sci-fi outer neon boundary with rotating tick marks
+	# Sci-fi outer neon boundary with authentic Kenney crosshair reticle
 	var rim_color := Color(0.0, 0.9, 1.0, 0.85) if not is_hit else Color(0.2, 1.0, 0.4, 0.95)
-	node.draw_arc(Vector2.ZERO, target_radius, 0, TAU, 36, rim_color, 2.5, true)
-
-	# 4 Crosshair tech ticks
-	var tick_len := 6.0
-	node.draw_line(Vector2(-target_radius - tick_len, 0), Vector2(-target_radius, 0), rim_color, 2.0)
-	node.draw_line(Vector2(target_radius, 0), Vector2(target_radius + tick_len, 0), rim_color, 2.0)
-	node.draw_line(Vector2(0, -target_radius - tick_len), Vector2(0, -target_radius), rim_color, 2.0)
-	node.draw_line(Vector2(0, target_radius), Vector2(0, target_radius + tick_len), rim_color, 2.0)
+	var reticle_path := "res://assets/sprites/ui/crosshair_cyan.png"
+	if ResourceLoader.exists(reticle_path):
+		var reticle_tex := load(reticle_path) as Texture2D
+		var r_sz := target_radius * 2.3
+		node.draw_texture_rect(reticle_tex, Rect2(-r_sz * 0.5, -r_sz * 0.5, r_sz, r_sz), false, rim_color)
+	else:
+		node.draw_arc(Vector2.ZERO, target_radius, 0, TAU, 36, rim_color, 2.5, true)
+		# 4 Crosshair tech ticks
+		var tick_len := 6.0
+		node.draw_line(Vector2(-target_radius - tick_len, 0), Vector2(-target_radius, 0), rim_color, 2.0)
+		node.draw_line(Vector2(target_radius, 0), Vector2(target_radius + tick_len, 0), rim_color, 2.0)
+		node.draw_line(Vector2(0, -target_radius - tick_len), Vector2(0, -target_radius), rim_color, 2.0)
+		node.draw_line(Vector2(0, target_radius), Vector2(0, target_radius + tick_len), rim_color, 2.0)
 
 	# Active green verified badge if target is completed
 	if is_hit:
@@ -100,9 +105,13 @@ func _draw_target(node: Node2D) -> void:
 		var offset := Vector2(target_radius * 0.55, -target_radius * 0.55)
 		node.draw_circle(offset, 9.0, check_bg)
 		node.draw_arc(offset, 9.0, 0, TAU, 20, Color.WHITE, 1.5, true)
-		# Crisp checkmark
-		node.draw_line(offset + Vector2(-4, 0), offset + Vector2(-1, 3.5), Color.WHITE, 2.5)
-		node.draw_line(offset + Vector2(-1, 3.5), offset + Vector2(4.5, -3.5), Color.WHITE, 2.5)
+		var check_path := "res://assets/sprites/ui/icon_checkmark.png"
+		if ResourceLoader.exists(check_path):
+			var check_tex := load(check_path) as Texture2D
+			node.draw_texture_rect(check_tex, Rect2(offset - Vector2(6, 6), Vector2(12, 12)), false, Color.WHITE)
+		else:
+			node.draw_line(offset + Vector2(-4, 0), offset + Vector2(-1, 3.5), Color.WHITE, 2.5)
+			node.draw_line(offset + Vector2(-1, 3.5), offset + Vector2(4.5, -3.5), Color.WHITE, 2.5)
 
 
 func _create_collision() -> void:
@@ -167,9 +176,18 @@ func _destroy() -> void:
 		return
 	is_destroyed = true
 	target_destroyed.emit(self)
-	
+
+	# Neon shard burst
+	_spawn_shatter_shards()
+
+	# Trigger slow-motion if this is the final target in the scene
+	var remaining_targets := get_tree().get_nodes_in_group("targets")
+	var all_hit := remaining_targets.all(func(t): return t.is_hit or t.is_destroyed)
+	if all_hit:
+		SlowMotionController.trigger()
+
 	ScreenVignette.flash_bullseye(0.5)
-	CameraShake.hit_stop(0.035)
+	CameraShake.hit_stop(0.05)  # More climactic: 0.05s vs previous 0.035s
 	PlatformService.haptic_heavy()
 
 	if _visual:
@@ -179,6 +197,45 @@ func _destroy() -> void:
 	tween.tween_property(self, "scale", Vector2(1.4, 1.4), 0.08)
 	tween.parallel().tween_property(self, "modulate:a", 0.0, 0.25)
 	tween.tween_property(self, "scale", Vector2.ZERO, 0.01)
+
+
+## Spawn 8 neon polygon shards that burst outward from the target center.
+func _spawn_shatter_shards() -> void:
+	const SHARD_COUNT: int = 8
+	const SHARD_LIFETIME: float = 0.6
+	const SHARD_SPEED_MIN: float = 130.0
+	const SHARD_SPEED_MAX: float = 300.0
+	const SHARD_SIZE: float = 8.0
+
+	var parent := get_parent()
+	if not parent:
+		return
+
+	# Neon cyan shards for all materials (matches target sci-fi aesthetic)
+	var shard_color := Color(0.0, 0.95, 1.0, 0.9)
+
+	for i in SHARD_COUNT:
+		var angle: float = (TAU / SHARD_COUNT) * i + randf_range(-0.15, 0.15)
+		var speed: float = randf_range(SHARD_SPEED_MIN, SHARD_SPEED_MAX)
+		var vel := Vector2.from_angle(angle) * speed
+
+		var shard := Node2D.new()
+		shard.global_position = global_position + Vector2.from_angle(angle) * target_radius * 0.3
+
+		var sv_color := shard_color
+		var sv_size := randf_range(SHARD_SIZE * 0.6, SHARD_SIZE * 1.4)
+		shard.draw.connect(func():
+			shard.draw_rect(Rect2(-sv_size * 0.5, -sv_size * 0.5, sv_size, sv_size), sv_color)
+		)
+		parent.add_child(shard)
+
+		# Animate shard flying outward then fading
+		var t := shard.create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
+		t.tween_property(shard, "position", shard.position + vel * SHARD_LIFETIME, SHARD_LIFETIME) \
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		t.parallel().tween_property(shard, "modulate:a", 0.0, SHARD_LIFETIME * 0.7) \
+			.set_delay(SHARD_LIFETIME * 0.3)
+		t.tween_callback(shard.queue_free)
 
 
 func _on_game_state_changed(_old: GameManager.GameState, new: GameManager.GameState) -> void:

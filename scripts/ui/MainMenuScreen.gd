@@ -34,6 +34,8 @@ func _ready() -> void:
 	_build_ui()
 	_refresh_data()
 	set_process(true)
+	# Apply spring-physics micro-animations to all buttons
+	UIAnimations.setup_all_buttons(self)
 
 
 func _process(delta: float) -> void:
@@ -50,13 +52,13 @@ func _process(delta: float) -> void:
 
 func _refresh_data() -> void:
 	if _coins_label and get_node_or_null("/root/SaveManager"):
-		_coins_label.text = "🪙 %d" % SaveManager.get_coins()
+		_coins_label.text = "COINS: %d" % SaveManager.get_coins()
 	if _stars_label and get_node_or_null("/root/SaveManager"):
-		_stars_label.text = "⭐ %d / 300" % SaveManager.get_total_stars()
+		_stars_label.text = "STARS: %d / 300" % SaveManager.get_total_stars()
 	if _lab_level_label and get_node_or_null("/root/SaveManager"):
 		var stars: int = SaveManager.get_total_stars()
 		var lab_lvl: int = maxi(1, int(stars / 10) + 1)
-		_lab_level_label.text = "🔬 LAB SECTOR LVL %d" % lab_lvl
+		_lab_level_label.text = "LAB SECTOR: LVL %d" % lab_lvl
 
 
 func _draw() -> void:
@@ -68,7 +70,7 @@ func _draw() -> void:
 
 	# 2. Glowing Ambient Lab Reactor Grid
 	var grid_step := 80.0
-	var center := Vector2(w * 0.5, h * 0.42)
+	var center := Vector2(w * 0.5, h * 0.48)
 
 	# Radial reactor background glow
 	var glow_radius: float = 480.0 + _pulse * 40.0
@@ -124,7 +126,7 @@ func _build_ui() -> void:
 	top_bar.add_child(top_h)
 
 	var brand_pill := Label.new()
-	brand_pill.text = "🧪 RESEARCH SECTOR 01"
+	brand_pill.text = "RESEARCH SECTOR 01"
 	brand_pill.add_theme_font_size_override("font_size", 13)
 	brand_pill.add_theme_color_override("font_color", Color(0.6, 0.8, 1.0, 0.8))
 	top_h.add_child(brand_pill)
@@ -134,7 +136,7 @@ func _build_ui() -> void:
 	top_h.add_child(sp1)
 
 	_lab_level_label = Label.new()
-	_lab_level_label.text = "🔬 LAB SECTOR LVL 1"
+	_lab_level_label.text = "LAB SECTOR: LVL 1"
 	_lab_level_label.add_theme_font_size_override("font_size", 14)
 	_lab_level_label.add_theme_color_override("font_color", COLOR_CYAN)
 	top_h.add_child(_lab_level_label)
@@ -144,7 +146,7 @@ func _build_ui() -> void:
 	top_h.add_child(sep1)
 
 	_stars_label = Label.new()
-	_stars_label.text = "⭐ 0 / 300"
+	_stars_label.text = "STARS: 0 / 300"
 	_stars_label.add_theme_font_size_override("font_size", 14)
 	_stars_label.add_theme_color_override("font_color", COLOR_GOLD)
 	top_h.add_child(_stars_label)
@@ -154,7 +156,7 @@ func _build_ui() -> void:
 	top_h.add_child(sep2)
 
 	_coins_label = Label.new()
-	_coins_label.text = "🪙 0"
+	_coins_label.text = "COINS: 0"
 	_coins_label.add_theme_font_size_override("font_size", 14)
 	_coins_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.4))
 	top_h.add_child(_coins_label)
@@ -162,15 +164,15 @@ func _build_ui() -> void:
 	# --- MAIN CENTER HERO BOX ---
 	var center_box := VBoxContainer.new()
 	center_box.set_anchors_preset(Control.PRESET_CENTER)
-	center_box.custom_minimum_size = Vector2(680, 700)
+	center_box.custom_minimum_size = Vector2(680, 500)
 	center_box.alignment = BoxContainer.ALIGNMENT_CENTER
-	center_box.add_theme_constant_override("separation", 18)
+	center_box.add_theme_constant_override("separation", 10)
 	root.add_child(center_box)
 
 	# Title & Tagline
 	var title_lbl := Label.new()
 	title_lbl.text = "CHAOS LAB"
-	title_lbl.add_theme_font_size_override("font_size", 68)
+	title_lbl.add_theme_font_size_override("font_size", 60)
 	title_lbl.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
 	title_lbl.add_theme_color_override("font_shadow_color", COLOR_CYAN)
 	title_lbl.add_theme_constant_override("shadow_offset_x", 0)
@@ -181,7 +183,7 @@ func _build_ui() -> void:
 
 	var tag_lbl := Label.new()
 	tag_lbl.text = "BUILD IT • TRIGGER IT • CAUSE CHAOS"
-	tag_lbl.add_theme_font_size_override("font_size", 15)
+	tag_lbl.add_theme_font_size_override("font_size", 14)
 	tag_lbl.add_theme_color_override("font_color", COLOR_CYAN)
 	tag_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	center_box.add_child(tag_lbl)
@@ -194,15 +196,15 @@ func _build_ui() -> void:
 	center_box.add_child(desc_lbl)
 
 	var spacer := Control.new()
-	spacer.custom_minimum_size.y = 12
+	spacer.custom_minimum_size.y = 8
 	center_box.add_child(spacer)
 
 	# --- HERO BUTTON: PLAY CAMPAIGN ---
 	_btn_play = Button.new()
-	_btn_play.text = "▶  PLAY CAMPAIGN"
-	_btn_play.custom_minimum_size = Vector2(460, 68)
+	_btn_play.text = "PLAY CAMPAIGN"
+	_btn_play.custom_minimum_size = Vector2(440, 58)
 	_btn_play.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	_btn_play.add_theme_font_size_override("font_size", 22)
+	_btn_play.add_theme_font_size_override("font_size", 20)
 	_btn_play.focus_mode = Control.FOCUS_NONE
 
 	var play_style := StyleBoxFlat.new()
@@ -212,12 +214,12 @@ func _build_ui() -> void:
 	play_style.border_width_left = 3
 	play_style.border_width_right = 3
 	play_style.border_color = COLOR_NEON_GREEN
-	play_style.corner_radius_top_left = 14
-	play_style.corner_radius_top_right = 14
-	play_style.corner_radius_bottom_left = 14
-	play_style.corner_radius_bottom_right = 14
+	play_style.corner_radius_top_left = 12
+	play_style.corner_radius_top_right = 12
+	play_style.corner_radius_bottom_left = 12
+	play_style.corner_radius_bottom_right = 12
 	play_style.shadow_color = Color(COLOR_NEON_GREEN, 0.4)
-	play_style.shadow_size = 14
+	play_style.shadow_size = 12
 	_btn_play.add_theme_stylebox_override("normal", play_style)
 
 	var play_hov := play_style.duplicate() as StyleBoxFlat
@@ -232,21 +234,21 @@ func _build_ui() -> void:
 	# --- SECONDARY BUTTONS GRID ---
 	var grid := GridContainer.new()
 	grid.columns = 2
-	grid.add_theme_constant_override("h_separation", 16)
-	grid.add_theme_constant_override("v_separation", 12)
+	grid.add_theme_constant_override("h_separation", 14)
+	grid.add_theme_constant_override("v_separation", 10)
 	grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	center_box.add_child(grid)
 
 	# 1. Chaos Mode (Endless Sandbox)
-	var btn_chaos := _create_menu_button("⚡ CHAOS MODE", COLOR_PURPLE, Vector2(222, 52))
+	var btn_chaos := _create_menu_button("CHAOS MODE", COLOR_PURPLE, Vector2(215, 46))
 	btn_chaos.pressed.connect(func():
 		_on_btn_click()
 		chaos_mode_requested.emit()
 	)
 	grid.add_child(btn_chaos)
 
-	# 2. Daily Chaos
-	var btn_daily := _create_menu_button("📅 DAILY CHAOS", Color(0.95, 0.5, 0.2), Vector2(222, 52))
+	# 2. Daily Experiment
+	var btn_daily := _create_menu_button("DAILY EXPERIMENT", Color(0.95, 0.5, 0.2), Vector2(215, 46))
 	btn_daily.pressed.connect(func():
 		_on_btn_click()
 		daily_requested.emit()
@@ -254,7 +256,7 @@ func _build_ui() -> void:
 	grid.add_child(btn_daily)
 
 	# 3. The Lab (Hub)
-	var btn_hub := _create_menu_button("🔬 THE LAB (HUB)", COLOR_CYAN, Vector2(222, 52))
+	var btn_hub := _create_menu_button("THE LAB (HUB)", COLOR_CYAN, Vector2(215, 46))
 	btn_hub.pressed.connect(func():
 		_on_btn_click()
 		lab_hub_requested.emit()
@@ -262,7 +264,7 @@ func _build_ui() -> void:
 	grid.add_child(btn_hub)
 
 	# 4. Lab Shop
-	var btn_shop := _create_menu_button("🛍️ LAB SHOP", COLOR_GOLD, Vector2(222, 52))
+	var btn_shop := _create_menu_button("ARMORY SHOP", COLOR_GOLD, Vector2(215, 46))
 	btn_shop.pressed.connect(func():
 		_on_btn_click()
 		shop_requested.emit()
@@ -270,7 +272,7 @@ func _build_ui() -> void:
 	grid.add_child(btn_shop)
 
 	# 5. Achievements
-	var btn_ach := _create_menu_button("🏆 ACHIEVEMENTS", Color(0.4, 0.75, 1.0), Vector2(222, 52))
+	var btn_ach := _create_menu_button("ACHIEVEMENTS", Color(0.4, 0.75, 1.0), Vector2(215, 46))
 	btn_ach.pressed.connect(func():
 		_on_btn_click()
 		achievements_requested.emit()
@@ -278,7 +280,7 @@ func _build_ui() -> void:
 	grid.add_child(btn_ach)
 
 	# 6. Settings
-	var btn_set := _create_menu_button("⚙️ SETTINGS", Color(0.7, 0.75, 0.85), Vector2(222, 52))
+	var btn_set := _create_menu_button("SETTINGS", Color(0.7, 0.75, 0.85), Vector2(215, 46))
 	btn_set.pressed.connect(func():
 		_on_btn_click()
 		settings_requested.emit()

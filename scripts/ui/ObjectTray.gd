@@ -103,45 +103,50 @@ func _create_item_card(item_type: String, count: int) -> void:
 	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.add_child(vbox)
 
-	# Icon placeholder / procedural symbol
-	var icon_label := Label.new()
-	icon_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	icon_label.add_theme_font_size_override("font_size", 22)
-	icon_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	const SPRITE_MAP: Dictionary = {
+		"ball": "res://assets/sprites/objects/ball_metal.png",
+		"box": "res://assets/sprites/objects/crate_wood.png",
+		"barrel": "res://assets/sprites/objects/barrel_explosive.png",
+		"bomb": "res://assets/sprites/objects/bomb_spiked.png",
+		"ramp": "res://assets/sprites/objects/ramp_wood.png",
+	}
 
-	match item_type:
-		"ball":
-			icon_label.text = "●"
-			icon_label.add_theme_color_override("font_color", Color(0.2, 0.7, 1.0))
-		"box":
-			icon_label.text = "■"
-			icon_label.add_theme_color_override("font_color", Color(0.85, 0.6, 0.3))
-		"barrel":
-			icon_label.text = "🛢"
-			icon_label.add_theme_color_override("font_color", Color(1.0, 0.3, 0.2))
-		"bomb":
-			icon_label.text = "💣"
-			icon_label.add_theme_color_override("font_color", Color(1.0, 0.2, 0.2))
-		"rocket":
-			icon_label.text = "🚀"
-			icon_label.add_theme_color_override("font_color", Color(1.0, 0.4, 0.3))
-		"ramp":
-			icon_label.text = "◢"
-			icon_label.add_theme_color_override("font_color", Color(0.0, 0.9, 0.9))
-		"magnet":
-			icon_label.text = "🧲"
-			icon_label.add_theme_color_override("font_color", Color(0.9, 0.25, 0.4))
-		"portal":
-			icon_label.text = "🌀"
-			icon_label.add_theme_color_override("font_color", Color(0.0, 0.85, 1.0))
-		"gravity_pad":
-			icon_label.text = "🔼"
-			icon_label.add_theme_color_override("font_color", Color(0.0, 0.95, 0.75))
-		"laser":
-			icon_label.text = "⚡"
-			icon_label.add_theme_color_override("font_color", Color(1.0, 0.15, 0.3))
+	var icon_path: String = SPRITE_MAP.get(item_type.to_lower(), "")
+	if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
+		var tex_rect := TextureRect.new()
+		tex_rect.texture = load(icon_path)
+		tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tex_rect.custom_minimum_size = Vector2(34, 34)
+		tex_rect.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		tex_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		vbox.add_child(tex_rect)
+	else:
+		var icon_label := Label.new()
+		icon_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		icon_label.add_theme_font_size_override("font_size", 22)
+		icon_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	vbox.add_child(icon_label)
+		match item_type.to_lower():
+			"rocket":
+				icon_label.text = "▲"
+				icon_label.add_theme_color_override("font_color", Color(1.0, 0.4, 0.3))
+			"magnet":
+				icon_label.text = "U"
+				icon_label.add_theme_color_override("font_color", Color(0.9, 0.25, 0.4))
+			"portal":
+				icon_label.text = "◎"
+				icon_label.add_theme_color_override("font_color", Color(0.0, 0.85, 1.0))
+			"gravity_pad":
+				icon_label.text = "▲"
+				icon_label.add_theme_color_override("font_color", Color(0.0, 0.95, 0.75))
+			"laser":
+				icon_label.text = "—"
+				icon_label.add_theme_color_override("font_color", Color(1.0, 0.2, 0.35))
+			_:
+				icon_label.text = "◆"
+				icon_label.add_theme_color_override("font_color", Color(0.7, 0.8, 0.9))
+		vbox.add_child(icon_label)
 
 	# Name + Count label
 	var count_label := Label.new()
